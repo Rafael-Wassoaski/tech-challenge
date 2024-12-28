@@ -1,5 +1,6 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model;
 
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.StatusPedido;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.financial.SomatoriaItem;
 
 import java.util.Optional;
@@ -11,15 +12,26 @@ public class Pedido {
     private Optional<Acompanhamento> optionalAcompanhamento;
     private Optional<Sobremesa> optionalSobremesa;
     private Usuario usuario;
+    private StatusPedido statusPedido;
+    private int id;
 
     public Pedido() {}
+
+    public Pedido(int id, Optional<Lanche> lanche, Optional<Bebida> bebida, Optional<Acompanhamento> acompanhamento, Optional<Sobremesa>  sobremesa) {
+        this.optionalLanche = lanche;
+        this.optionalBebida = bebida;
+        this.optionalAcompanhamento = acompanhamento;
+        this.optionalSobremesa = sobremesa;
+        this.statusPedido = StatusPedido.RECEBIDO;
+        this.id = id;
+    }
 
     public Pedido(Optional<Lanche> lanche, Optional<Bebida> bebida, Optional<Acompanhamento> acompanhamento, Optional<Sobremesa>  sobremesa) {
         this.optionalLanche = lanche;
         this.optionalBebida = bebida;
         this.optionalAcompanhamento = acompanhamento;
         this.optionalSobremesa = sobremesa;
-        ;
+        this.statusPedido = StatusPedido.RECEBIDO;
     }
 
     public Optional<Lanche> getLanche() {
@@ -53,7 +65,23 @@ public class Pedido {
         return usuario;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public StatusPedido getStatusPedido() {
+        return statusPedido;
+    }
+
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public void setStatusPedido(StatusPedido statusPedido) {
+        this.statusPedido = statusPedido;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

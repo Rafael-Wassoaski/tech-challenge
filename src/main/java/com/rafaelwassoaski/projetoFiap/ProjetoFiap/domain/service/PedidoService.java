@@ -1,12 +1,15 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.PersistenceItemAdapter;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.PersistencePedidoAdapter;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.StatusPedido;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
 
 import java.util.Optional;
 
 public class PedidoService {
     private PersistenceItemAdapter persistenceItemAdapter;
+    private PersistencePedidoAdapter persistencePedidoAdapter;
     private BebidaService bebidaService;
     private LancheService lancheService;
     private AcompanhamentoService acompanhamentoService;
@@ -18,8 +21,9 @@ public class PedidoService {
     private Optional<Sobremesa> optionalSobremesa;
 
 
-    public PedidoService(PersistenceItemAdapter persistenceItemAdapter) {
+    public PedidoService(PersistenceItemAdapter persistenceItemAdapter, PersistencePedidoAdapter persistencePedidoAdapter) {
         this.persistenceItemAdapter = persistenceItemAdapter;
+        this.persistencePedidoAdapter = persistencePedidoAdapter;
         this.bebidaService = new BebidaService(persistenceItemAdapter);
         this.lancheService = new LancheService(persistenceItemAdapter);
         this.acompanhamentoService = new AcompanhamentoService(persistenceItemAdapter);
@@ -67,7 +71,7 @@ public class PedidoService {
         Pedido pedido = new Pedido(optionalLanche, optionalBebiba, optionalAcompanhamento, optionalSobremesa);
         pedido.setUsuario(usuario);
 
-        return pedido;
+        return persistencePedidoAdapter.salvar(pedido);
     }
 
     public Pedido criarPedido() {
@@ -77,4 +81,48 @@ public class PedidoService {
     private boolean nomeDoItemEhVazio(String nomeItem) {
         return nomeItem == null || nomeItem.isEmpty();
     }
+
+    public Pedido pedidoEmPreparacao(int id) throws Exception {
+        Pedido pedido = buscarPedidoPorId(id);
+
+        if (pedido.getStatusPedido() != StatusPedido.RECEBIDO) {
+            throw new Exception("O status não pode ser alterado para EM PREPARAÇÃO");
+        }
+
+        pedido.setStatusPedido(StatusPedido.EM_PREPARACAO);
+
+        return persistencePedidoAdapter.atualizar(pedido);
+    }
+
+    public Pedido pedidoPronto(int id) throws Exception {
+        Pedido pedido = buscarPedidoPorId(id);
+
+        if (pedido.getStatusPedido() != StatusPedido.EM_PREPARACAO) {
+            throw new Exception("O status não pode ser alterado para PRONTO");
+        }
+
+        pedido.setStatusPedido(StatusPedido.PRONTO);
+
+        return persistencePedidoAdapter.atualizar(pedido);
+    }
+
+    public Pedido pedidoRetirado(int id) throws Exception {
+
+        Pedido pedido = buscarPedidoPorId(id);
+
+        if (pedido.getStatusPedido() != StatusPedido.PRONTO) {
+            throw new Exception("O status não pode ser alterado para RETIRADO");
+        }
+
+        pedido.setStatusPedido(StatusPedido.RETIRADO);
+
+        return persistencePedidoAdapter.atualizar(pedido);
+    }
+
+    private Pedido buscarPedidoPorId(int id) throws Exception {
+        Optional<Pedido> optionalPedido = persistencePedidoAdapter.buscarPorId(id);
+
+        return optionalPedido.orElseThrow(() -> new Exception(String.format("Pedido com id %d não localizado", id)));
+    }
+
 }
