@@ -15,25 +15,4 @@ public class LancheTest {
         Assertions.assertEquals(nomeLanche, lanche.getNome());
         Assertions.assertEquals(preco, lanche.getPreco());
     }
-
-    @Test
-    public void naoDeveriaCriarLancheComNomeNulo(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Lanche(null, preco);
-        });
-    }
-
-    @Test
-    public void naoDeveriaCriarLancheComNomeVazio(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Lanche("", preco);
-        });
-    }
-
-    @Test
-    public void naoDeveriaCriarLancheComValorZero(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Lanche(nomeLanche, 0);
-        });
-    }
 }

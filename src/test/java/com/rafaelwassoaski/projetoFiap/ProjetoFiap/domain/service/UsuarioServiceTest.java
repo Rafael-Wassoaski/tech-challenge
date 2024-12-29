@@ -14,80 +14,15 @@ public class UsuarioServiceTest {
     private String salParaTestes = "salParaTestes";
 
     @Test
-    void deveriaCriarUmUsuarioComSenhaComSenhaCriptgrafada() throws Exception {
+    void deveriaRetornarEmailComoInvalido() throws Exception {
         mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
         Encriptador encriptador = new Encriptador(salParaTestes);
-        usuarioService = new UsuarioService(mapPersistenceUsuarioForTests, encriptador);
-        String email = "teste@teste.com";
+        usuarioService = new UsuarioService(encriptador);
+        String email = "testeteste.com";
         String senha = "teste123456";
+        Usuario usuario = new Usuario(email, senha);
 
-        Usuario usuario = usuarioService.criar(email, senha);
-
-        Assertions.assertTrue(encriptador.senhasBatem(senha, usuario.getSenha()));
-        Assertions.assertNotEquals(senha, usuario.getSenha());
+        Assertions.assertThrows(Exception.class, () -> usuarioService.validarEmail(usuario));
     }
 
-    @Test
-    void deveriaRetornarOUsuarioCadastradoComBaseNoEmail() throws Exception {
-        mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
-        Encriptador encriptador = new Encriptador(salParaTestes);
-        usuarioService = new UsuarioService(mapPersistenceUsuarioForTests, encriptador);
-        String email = "teste@teste.com";
-        String senha = "teste123456";
-
-        usuarioService.criar(email, senha);
-        UserDetails userDetails = usuarioService.buscarUsuario(email);
-
-        Assertions.assertNotNull(userDetails);
-        Assertions.assertEquals(email, userDetails.getUsername());
-    }
-
-    @Test
-    void deveriaRealizarOLoginESenhaDeUmUsuarioCadastrado() throws Exception {
-        mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
-        Encriptador encriptador = new Encriptador(salParaTestes);
-        usuarioService = new UsuarioService(mapPersistenceUsuarioForTests, encriptador);
-        String email = "teste@teste.com";
-        String senha = "teste123456";
-
-        usuarioService.criar(email, senha);
-
-        Assertions.assertDoesNotThrow(() -> {
-            UserDetails userDetails = usuarioService.logar(email, senha);
-            Assertions.assertNotNull(userDetails);
-            Assertions.assertEquals(email, userDetails.getUsername());
-        });
-    }
-
-    @Test
-    void naoDeveriaRealizarLoginComSenhaIncorreta() throws Exception {
-        mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
-        Encriptador encriptador = new Encriptador(salParaTestes);
-        usuarioService = new UsuarioService(mapPersistenceUsuarioForTests, encriptador);
-        String email = "teste@teste.com";
-        String senha = "teste123456";
-        String senhaErrada = "teste654321";
-
-        usuarioService.criar(email, senha);
-
-        Assertions.assertThrows(Exception.class, () -> {
-            usuarioService.logar(email, senhaErrada);
-        });
-    }
-
-    @Test
-    void naoDeveriaRealizarLoginComEmailIncorreto() throws Exception {
-        mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
-        Encriptador encriptador = new Encriptador(salParaTestes);
-        usuarioService = new UsuarioService(mapPersistenceUsuarioForTests, encriptador);
-        String email = "teste@teste.com";
-        String emailErrado = "testeErrado@teste.com";
-        String senha = "teste123456";
-
-        usuarioService.criar(email, senha);
-
-        Assertions.assertThrows(Exception.class, () -> {
-            usuarioService.logar(emailErrado, senha);
-        });
-    }
 }

@@ -11,9 +11,6 @@ public abstract class Item {
     public Item(String nome, double preco) throws Exception {
         this.nome = nome;
         this.preco = preco;
-
-        ValidadorItem validadorItem = new ValidadorItem(this);
-        validadorItem.validar();
     }
 
     public String getNome() {

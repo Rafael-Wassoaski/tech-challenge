@@ -15,25 +15,4 @@ public class BebidaTest {
         Assertions.assertEquals(nomeBebida, Bebida.getNome());
         Assertions.assertEquals(preco, Bebida.getPreco());
     }
-
-    @Test
-    public void naoDeveriaCriarBebidaComNomeNulo(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Bebida(null, preco);
-        });
-    }
-
-    @Test
-    public void naoDeveriaCriarBebidaComNomeVazio(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Bebida("", preco);
-        });
-    }
-
-    @Test
-    public void naoDeveriaCriarBebidaComValorZero(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Bebida(nomeBebida, 0);
-        });
-    }
 }

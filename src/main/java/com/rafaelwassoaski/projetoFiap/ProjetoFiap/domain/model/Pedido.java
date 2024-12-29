@@ -50,17 +50,6 @@ public class Pedido {
         return optionalSobremesa;
     }
 
-    public double getTotal() {
-        SomatoriaItem somatoriaItem = new SomatoriaItem();
-
-        somatoriaItem.adiconarItemASoma(this.optionalLanche);
-        somatoriaItem.adiconarItemASoma(this.optionalAcompanhamento);
-        somatoriaItem.adiconarItemASoma(this.optionalBebida);
-        somatoriaItem.adiconarItemASoma(this.optionalSobremesa);
-
-        return somatoriaItem.getValorTotal();
-    }
-
     public Usuario getUsuario() {
         return usuario;
     }

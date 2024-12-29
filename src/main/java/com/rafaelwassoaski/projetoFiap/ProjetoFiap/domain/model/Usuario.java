@@ -9,12 +9,6 @@ public class Usuario {
     private Papel papel;
 
     public Usuario(String email, String senha) throws Exception {
-        ValidardorEmail validardorEmail = new ValidardorEmail();
-
-        if(!validardorEmail.validarEmail(email)){
-            throw new Exception("O e-mail não é válido");
-        }
-
         this.email = email;
         this.senha = senha;
         this.papel = Papel.CLIENTE;

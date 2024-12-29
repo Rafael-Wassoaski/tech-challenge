@@ -15,25 +15,4 @@ public class AcompanhementoTest {
         Assertions.assertEquals(nomeAcompanhamento, Acompanhamento.getNome());
         Assertions.assertEquals(preco, Acompanhamento.getPreco());
     }
-
-    @Test
-    public void naoDeveriaCriarAcompanhamentoComNomeNulo(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Acompanhamento(null, preco);
-        });
-    }
-
-    @Test
-    public void naoDeveriaCriarAcompanhamentoComNomeVazio(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Acompanhamento("", preco);
-        });
-    }
-
-    @Test
-    public void naoDeveriaCriarAcompanhamentoComValorZero(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Acompanhamento(nomeAcompanhamento, 0);
-        });
-    }
 }

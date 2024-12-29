@@ -16,24 +16,5 @@ public class SobremesaTest {
         Assertions.assertEquals(preco, Sobremesa.getPreco());
     }
 
-    @Test
-    public void naoDeveriaCriarSobremesaComNomeNulo(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Sobremesa(null, preco);
-        });
-    }
 
-    @Test
-    public void naoDeveriaCriarSobremesaComNomeVazio(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Sobremesa("", preco);
-        });
-    }
-
-    @Test
-    public void naoDeveriaCriarSobremesaComValorZero(){
-        Assertions.assertThrows(Exception.class, () -> {
-            new Sobremesa(nomeSobremesa, 0);
-        });
-    }
 }

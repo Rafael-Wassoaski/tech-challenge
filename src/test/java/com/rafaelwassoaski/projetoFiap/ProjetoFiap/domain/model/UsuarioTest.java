@@ -44,15 +44,6 @@ public class UsuarioTest {
     }
 
     @Test
-    void naoDeveriaCriarUmUsuarioSemUmEmailValido(){
-        String senha = "teste123456";
-
-        Assertions.assertThrows(Exception.class, ()-> {
-            new Usuario("naoSouUmEmailValido", senha);
-        });
-    }
-
-    @Test
     void deveriaCriarUmUsuarioComOPapelDeCliente() throws Exception {
         String email = "teste@teste.com";
         String senha = "teste123456";

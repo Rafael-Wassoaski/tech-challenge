@@ -1,7 +1,7 @@
-package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service;
+package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Sobremesa;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Item;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Sobremesa;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.MapPersistenceItemForTests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,12 +10,12 @@ import java.util.List;
 
 public class SobremesaServiceTest {
 
-    private SobremesaService SobremesaService;
+    private com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.SobremesaService SobremesaService;
 
     @Test
     void deveriaCriarUmItemValido() throws Exception {
         MapPersistenceItemForTests mapPersistenceForTests = new MapPersistenceItemForTests();
-        SobremesaService = new SobremesaService(mapPersistenceForTests);
+        SobremesaService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.SobremesaService(mapPersistenceForTests);
         String nomeSobremesa = "Nome 1";
         double valor = 10;
         Sobremesa Sobremesa = new Sobremesa(nomeSobremesa, valor);
@@ -31,7 +31,7 @@ public class SobremesaServiceTest {
     @Test
     void deveriaRetornarTodosOsItensSalvos() throws Exception {
         MapPersistenceItemForTests mapPersistenceForTests = new MapPersistenceItemForTests();
-        SobremesaService = new SobremesaService(mapPersistenceForTests);
+        SobremesaService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.SobremesaService(mapPersistenceForTests);
         String nomeSobremesa1= "Nome 1";
         String nomeSobremesa2 = "Nome 2";
         double valor = 10;
@@ -48,7 +48,7 @@ public class SobremesaServiceTest {
     @Test
     void deveriaAtualizarOPrecoDeUmSobremesaSalvo() throws Exception {
         MapPersistenceItemForTests mapPersistenceForTests = new MapPersistenceItemForTests();
-        SobremesaService = new SobremesaService(mapPersistenceForTests);
+        SobremesaService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.SobremesaService(mapPersistenceForTests);
         String nomeSobremesa= "Nome 1";
         double valor = 10;
         Sobremesa Sobremesa = new Sobremesa(nomeSobremesa, valor);

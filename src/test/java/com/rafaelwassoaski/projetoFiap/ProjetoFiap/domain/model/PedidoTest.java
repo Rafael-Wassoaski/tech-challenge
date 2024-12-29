@@ -80,17 +80,6 @@ public class PedidoTest {
         Assertions.assertTrue(pedido.getAcompanhamento().isEmpty());
     }
 
-    @Test
-    void deveriaRetornarOTotalDoPedidoComBaseNosItens() throws Exception {
-        Lanche lanche = new Lanche("Lanche 1", 10);
-        Bebida bebida = new Bebida("Bebida 1", 10);
-        Acompanhamento acompanhamento = new Acompanhamento("Acompanhamento 1", 10);
-        Sobremesa sobremesa = new Sobremesa("Sobremesa 1", 10);
-
-        Pedido pedido = new Pedido(1, Optional.of(lanche), Optional.of(bebida), Optional.of(acompanhamento), Optional.of(sobremesa));
-
-        Assertions.assertEquals(40, pedido.getTotal());
-    }
 
     @Test
     void deveriaCriarUmPedidoComOStatusDeRecebido() throws Exception {
