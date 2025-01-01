@@ -1,83 +1,85 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.PersistenceItemAdapter;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.PersistencePedidoAdapter;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.port.in.ItemUseCase;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.StatusPedido;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistencePedidoRepository;
 
 import java.util.Optional;
 
 public class PedidoService {
-    private PersistenceItemAdapter persistenceItemAdapter;
-    private PersistencePedidoAdapter persistencePedidoAdapter;
+    private PersistencePedidoRepository persistencePedidoRepository;
     private BebidaService bebidaService;
     private LancheService lancheService;
     private AcompanhamentoService acompanhamentoService;
     private SobremesaService sobremesaService;
     private com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service.PedidoService pedidoService;
 
-    private Optional<Lanche> optionalLanche;
-    private Optional<Bebida> optionalBebiba;
-    private Optional<Acompanhamento> optionalAcompanhamento;
-    private Optional<Sobremesa> optionalSobremesa;
 
-
-    public PedidoService(PersistenceItemAdapter persistenceItemAdapter, PersistencePedidoAdapter persistencePedidoAdapter) {
-        this.persistenceItemAdapter = persistenceItemAdapter;
-        this.persistencePedidoAdapter = persistencePedidoAdapter;
-        this.bebidaService = new BebidaService(persistenceItemAdapter);
-        this.lancheService = new LancheService(persistenceItemAdapter);
-        this.acompanhamentoService = new AcompanhamentoService(persistenceItemAdapter);
-        this.sobremesaService = new SobremesaService(persistenceItemAdapter);
+    public PedidoService(PersistenceItemRepository<Lanche> lanchePersistenceItemRepository,
+                         PersistenceItemRepository<Bebida> bebidaPersistenceItemRepository,
+                         PersistenceItemRepository<Acompanhamento> acompanhamentoPersistenceItemRepository,
+                         PersistenceItemRepository<Sobremesa> sobremesaPersistenceItemRepository,
+                         PersistencePedidoRepository persistencePedidoRepository) {
+        this.persistencePedidoRepository = persistencePedidoRepository;
+        this.bebidaService = new BebidaService(bebidaPersistenceItemRepository);
+        this.lancheService = new LancheService(lanchePersistenceItemRepository);
+        this.acompanhamentoService = new AcompanhamentoService(acompanhamentoPersistenceItemRepository);
+        this.sobremesaService = new SobremesaService(sobremesaPersistenceItemRepository);
         this.pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service.PedidoService();
     }
 
-    public void definirLanche(String nomeLanche) throws Exception {
-        if (pedidoService.nomeDoItemEhVazio(nomeLanche)) {
-            optionalLanche = Optional.empty();
-            return;
-        }
+    public Pedido definirLanche(String nomeLanche, int id) throws Exception {
+        Pedido pedido = buscarPedidoPorId(id);
+        Optional<Lanche> optionalLanche = (Optional<Lanche>) buscarItemPorNome(nomeLanche, lancheService);
+        pedido.setOptionalLanche(optionalLanche);
 
-        optionalLanche = Optional.of((Lanche) lancheService.buscarPorNome(nomeLanche));
+        return persistencePedidoRepository.atualizar(pedido);
     }
 
-    public void definirBebida(String nomeBebida) throws Exception {
-        if (pedidoService.nomeDoItemEhVazio(nomeBebida)) {
-            optionalBebiba = Optional.empty();
-            return;
-        }
+    public Pedido definirBebida(String nomeBebida, int id) throws Exception {
+        Pedido pedido = buscarPedidoPorId(id);
+        Optional<Bebida> optionalBebiba = (Optional<Bebida>) buscarItemPorNome(nomeBebida, bebidaService);
+        pedido.setOptionalBebida(optionalBebiba);
 
-        optionalBebiba = Optional.of((Bebida) bebidaService.buscarPorNome(nomeBebida));
+        return persistencePedidoRepository.atualizar(pedido);
     }
 
-    public void definirAcompanhamento(String nomeAcompanhamento) throws Exception {
-        if (pedidoService.nomeDoItemEhVazio(nomeAcompanhamento)) {
-            optionalAcompanhamento = Optional.empty();
-            return;
-        }
+    public Pedido definirAcompanhamento(String nomeAcompanhamento, int id) throws Exception {
+        Pedido pedido = buscarPedidoPorId(id);
+        Optional<Acompanhamento> optionalAcompanhamento = (Optional<Acompanhamento>) buscarItemPorNome(nomeAcompanhamento, acompanhamentoService);
+        pedido.setOptionalAcompanhamento(optionalAcompanhamento);
 
-        optionalAcompanhamento = Optional.of((Acompanhamento) acompanhamentoService.buscarPorNome(nomeAcompanhamento));
+        return persistencePedidoRepository.atualizar(pedido);
     }
 
-    public void definirSobremesa(String nomeSobremesa) throws Exception {
-        if (pedidoService.nomeDoItemEhVazio(nomeSobremesa)) {
-            optionalSobremesa = Optional.empty();
-            return;
-        }
+    public Pedido definirSobremesa(String nomeSobremesa, int id) throws Exception {
+        Pedido pedido = buscarPedidoPorId(id);
+        Optional<Sobremesa> optionalSobremesa = (Optional<Sobremesa>) buscarItemPorNome(nomeSobremesa, sobremesaService);
+        pedido.setOptionalSobremesa(optionalSobremesa);
 
-        optionalSobremesa = Optional.of((Sobremesa) sobremesaService.buscarPorNome(nomeSobremesa));
-
+        return persistencePedidoRepository.atualizar(pedido);
     }
 
-    public Pedido criarPedido(Usuario usuario) {
-        Pedido pedido = new Pedido(optionalLanche, optionalBebiba, optionalAcompanhamento, optionalSobremesa);
+    private Optional<? extends Item> buscarItemPorNome(String nomeItem, ItemUseCase itemUseCase) throws Exception {
+        if (pedidoService.nomeDoItemEhVazio(nomeItem)) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(itemUseCase.buscarPorNome(nomeItem));
+    }
+
+    public Pedido iniciarPedido(Usuario usuario, int id) throws Exception {
+        Pedido pedido = buscarPedidoPorId(id);
         pedido.setUsuario(usuario);
 
-        return persistencePedidoAdapter.salvar(pedido);
+        return persistencePedidoRepository.salvar(pedido);
     }
 
     public Pedido criarPedido() {
-        return new Pedido(optionalLanche, optionalBebiba, optionalAcompanhamento, optionalSobremesa);
+        Pedido pedido = new Pedido();
+        return persistencePedidoRepository.salvar(pedido);
     }
 
     public Pedido prepararPedido(int id) throws Exception {
@@ -89,7 +91,7 @@ public class PedidoService {
 
         pedido.setStatusPedido(StatusPedido.EM_PREPARACAO);
 
-        return persistencePedidoAdapter.atualizar(pedido);
+        return persistencePedidoRepository.atualizar(pedido);
     }
 
     public Pedido finalizarPreparacaoDoPedido(int id) throws Exception {
@@ -101,7 +103,7 @@ public class PedidoService {
 
         pedido.setStatusPedido(StatusPedido.PRONTO);
 
-        return persistencePedidoAdapter.atualizar(pedido);
+        return persistencePedidoRepository.atualizar(pedido);
     }
 
     public Pedido retirarPedido(int id) throws Exception {
@@ -113,11 +115,11 @@ public class PedidoService {
 
         pedido.setStatusPedido(StatusPedido.RETIRADO);
 
-        return persistencePedidoAdapter.atualizar(pedido);
+        return persistencePedidoRepository.atualizar(pedido);
     }
 
     private Pedido buscarPedidoPorId(int id) throws Exception {
-        Optional<Pedido> optionalPedido = persistencePedidoAdapter.buscarPorId(id);
+        Optional<Pedido> optionalPedido = persistencePedidoRepository.buscarPorId(id);
 
         return optionalPedido.orElseThrow(() -> new Exception(String.format("Pedido com id %d não localizado", id)));
     }

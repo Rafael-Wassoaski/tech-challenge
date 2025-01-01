@@ -1,12 +1,11 @@
-package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters;
+package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Pedido;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PersistencePedidoAdapter {
+public interface PersistencePedidoRepository {
     Pedido salvar(Pedido pedido);
 
     Optional<Pedido> buscarPorId(int id);

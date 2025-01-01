@@ -15,8 +15,6 @@ public class Pedido {
     private StatusPedido statusPedido;
     private int id;
 
-    public Pedido() {}
-
     public Pedido(int id, Optional<Lanche> lanche, Optional<Bebida> bebida, Optional<Acompanhamento> acompanhamento, Optional<Sobremesa>  sobremesa) {
         this.optionalLanche = lanche;
         this.optionalBebida = bebida;
@@ -26,11 +24,21 @@ public class Pedido {
         this.id = id;
     }
 
-    public Pedido(Optional<Lanche> lanche, Optional<Bebida> bebida, Optional<Acompanhamento> acompanhamento, Optional<Sobremesa>  sobremesa) {
-        this.optionalLanche = lanche;
-        this.optionalBebida = bebida;
-        this.optionalAcompanhamento = acompanhamento;
-        this.optionalSobremesa = sobremesa;
+    public Pedido(int id, Optional<Lanche> optionalLanche, Optional<Bebida> optionalBebida, Optional<Acompanhamento> optionalAcompanhamento, Optional<Sobremesa> optionalSobremesa, Usuario usuario, StatusPedido statusPedido) {
+        this.optionalLanche = optionalLanche;
+        this.optionalBebida = optionalBebida;
+        this.optionalAcompanhamento = optionalAcompanhamento;
+        this.optionalSobremesa = optionalSobremesa;
+        this.usuario = usuario;
+        this.statusPedido = statusPedido;
+        this.id = id;
+    }
+
+    public Pedido() {
+        this.optionalLanche = Optional.empty();
+        this.optionalBebida = Optional.empty();
+        this.optionalAcompanhamento = Optional.empty();
+        this.optionalSobremesa = Optional.empty();
         this.statusPedido = StatusPedido.RECEBIDO;
     }
 
@@ -72,5 +80,21 @@ public class Pedido {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setOptionalLanche(Optional<Lanche> optionalLanche) {
+        this.optionalLanche = optionalLanche;
+    }
+
+    public void setOptionalBebida(Optional<Bebida> optionalBebida) {
+        this.optionalBebida = optionalBebida;
+    }
+
+    public void setOptionalAcompanhamento(Optional<Acompanhamento> optionalAcompanhamento) {
+        this.optionalAcompanhamento = optionalAcompanhamento;
+    }
+
+    public void setOptionalSobremesa(Optional<Sobremesa> optionalSobremesa) {
+        this.optionalSobremesa = optionalSobremesa;
     }
 }

@@ -1,25 +1,25 @@
-package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
+package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.port.in;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.PersistenceItemAdapter;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Item;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public abstract class ItemService {
+public abstract class ItemUseCase {
 
-    private PersistenceItemAdapter persistenceItemAdapter;
+    private PersistenceItemRepository persistenceItemRepository;
 
-    public ItemService(PersistenceItemAdapter persistenceItemAdapter) {
-        this.persistenceItemAdapter = persistenceItemAdapter;
+    public ItemUseCase(PersistenceItemRepository persistenceItemRepository) {
+        this.persistenceItemRepository = persistenceItemRepository;
     }
 
     public Item criar(Item item){
-        return persistenceItemAdapter.salvar(item);
+        return persistenceItemRepository.salvar(item);
     }
 
     public Item buscarPorNome(String nome) throws Exception {
-        Optional<Item> optionalItem = persistenceItemAdapter.buscarPorNome(nome);
+        Optional<Item> optionalItem = persistenceItemRepository.buscarPorNome(nome);
 
         if(optionalItem.isEmpty()){
             throw new Exception(String.format("Item %s não encontrado", nome));
@@ -29,20 +29,20 @@ public abstract class ItemService {
     }
 
     public List<Item> buscarTodosOsItens() {
-        return persistenceItemAdapter.buscarTodos();
+        return persistenceItemRepository.buscarTodos();
     }
 
     public Item atualizar(Item item) throws Exception {
         Item itemSalvo = this.buscarPorNome(item.getNome());
         itemSalvo.setPreco(item.getPreco());
 
-        return this.persistenceItemAdapter.atualizar(itemSalvo);
+        return this.persistenceItemRepository.atualizar(itemSalvo);
     }
 
     public void deletarPorNome(String nomeLanche) throws Exception {
         Item itemSalvo = this.buscarPorNome(nomeLanche);
 
-        this.persistenceItemAdapter.deletarPorNome(itemSalvo.getNome());
+        this.persistenceItemRepository.deletarPorNome(itemSalvo.getNome());
         return;
     }
 }

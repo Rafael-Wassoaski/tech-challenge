@@ -1,13 +1,10 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.PersistenceItemAdapter;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.PersistenceUsuarioAdapter;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Item;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 
 import java.util.*;
 
-public class MapPersistenceUsuarioForTests implements PersistenceUsuarioAdapter {
+public class MapPersistenceUsuarioForTests implements PersistenceUsuarioRepository {
 
     private Map<String, Usuario> usuarios;
 

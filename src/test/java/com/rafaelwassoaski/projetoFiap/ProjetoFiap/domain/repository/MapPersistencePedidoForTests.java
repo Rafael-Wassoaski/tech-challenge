@@ -1,13 +1,10 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.PersistencePedidoAdapter;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.PersistenceUsuarioAdapter;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Pedido;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 
 import java.util.*;
 
-public class MapPersistencePedidoForTests implements PersistencePedidoAdapter {
+public class MapPersistencePedidoForTests implements PersistencePedidoRepository {
 
     private Map<Integer, Pedido> pedidos;
 

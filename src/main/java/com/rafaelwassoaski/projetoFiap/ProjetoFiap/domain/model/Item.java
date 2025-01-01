@@ -8,7 +8,7 @@ public abstract class Item {
     private double preco;
 
 
-    public Item(String nome, double preco) throws Exception {
+    public Item(String nome, double preco) {
         this.nome = nome;
         this.preco = preco;
     }

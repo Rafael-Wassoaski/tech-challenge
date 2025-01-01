@@ -1,12 +1,11 @@
-package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters;
+package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Item;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PersistenceUsuarioAdapter {
+public interface PersistenceUsuarioRepository{
     Usuario salvar(Usuario usuario);
 
     Optional<Usuario> buscarPorEmail(String email);

@@ -10,12 +10,12 @@ import java.util.List;
 
 public class BebidaServiceTest {
 
-    private com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.BebidaService bebidaService;
+    private BebidaService bebidaService;
 
     @Test
     void deveriaCriarUmItemValido() throws Exception {
         MapPersistenceItemForTests mapPersistenceForTests = new MapPersistenceItemForTests();
-        bebidaService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.BebidaService(mapPersistenceForTests);
+        bebidaService = new BebidaService(mapPersistenceForTests);
         String nomeBebida = "Nome 1";
         double valor = 10;
         Bebida bebida = new Bebida(nomeBebida, valor);
@@ -31,7 +31,7 @@ public class BebidaServiceTest {
     @Test
     void deveriaRetornarTodosOsItensSalvos() throws Exception {
         MapPersistenceItemForTests mapPersistenceForTests = new MapPersistenceItemForTests();
-        bebidaService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.BebidaService(mapPersistenceForTests);
+        bebidaService = new BebidaService(mapPersistenceForTests);
         String nomeBebida1= "Nome 1";
         String nomeBebida2 = "Nome 2";
         double valor = 10;
@@ -48,7 +48,7 @@ public class BebidaServiceTest {
     @Test
     void deveriaAtualizarOPrecoDeUmBebidaSalvo() throws Exception {
         MapPersistenceItemForTests mapPersistenceForTests = new MapPersistenceItemForTests();
-        bebidaService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.BebidaService(mapPersistenceForTests);
+        bebidaService = new BebidaService(mapPersistenceForTests);
         String nomeBebida= "Nome 1";
         double valor = 10;
         Bebida Bebida = new Bebida(nomeBebida, valor);
@@ -66,7 +66,7 @@ public class BebidaServiceTest {
     @Test
     void deveriaDeletarUmItemSalvo() throws Exception {
         MapPersistenceItemForTests mapPersistenceForTests = new MapPersistenceItemForTests();
-        bebidaService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.BebidaService(mapPersistenceForTests);
+        bebidaService = new BebidaService(mapPersistenceForTests);
         String nomeBebida= "Nome 1";
         double valor = 10;
         Bebida bebida = new Bebida(nomeBebida, valor);

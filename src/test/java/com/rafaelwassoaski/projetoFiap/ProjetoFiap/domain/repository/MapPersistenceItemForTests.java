@@ -1,11 +1,10 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.PersistenceItemAdapter;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Item;
 
 import java.util.*;
 
-public class MapPersistenceItemForTests implements PersistenceItemAdapter {
+public class MapPersistenceItemForTests implements PersistenceItemRepository {
 
     private Map<String, Item> itens;
 

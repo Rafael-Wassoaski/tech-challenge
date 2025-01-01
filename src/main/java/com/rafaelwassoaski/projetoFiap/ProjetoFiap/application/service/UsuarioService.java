@@ -1,17 +1,18 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.PersistenceUsuarioAdapter;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.port.in.UsuarioUseCase;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class UsuarioService {
-    private PersistenceUsuarioAdapter persistenceUsuarioAdapter;
+public class UsuarioService implements UsuarioUseCase {
+    private PersistenceUsuarioRepository persistenceUsuarioRepository;
     private com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service.UsuarioService usuarioService;
 
-    public UsuarioService(PersistenceUsuarioAdapter persistenceUsuarioAdapter, Encriptador encriptador) {
-        this.persistenceUsuarioAdapter = persistenceUsuarioAdapter;
+    public UsuarioService(PersistenceUsuarioRepository persistenceUsuarioRepository, Encriptador encriptador) {
+        this.persistenceUsuarioRepository = persistenceUsuarioRepository;
         this.usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service.UsuarioService(encriptador);
     }
 
@@ -19,7 +20,7 @@ public class UsuarioService {
         String senhaForte = usuarioService.encriptarTexto(senha);
         Usuario usuario = new Usuario(email, senhaForte);
 
-        return persistenceUsuarioAdapter.salvar(usuario);
+        return persistenceUsuarioRepository.salvar(usuario);
 
     }
 
@@ -36,7 +37,7 @@ public class UsuarioService {
     }
 
     public UserDetails buscarUsuario(String email) throws Exception {
-        Usuario user = persistenceUsuarioAdapter.buscarPorEmail(email).orElseThrow(
+        Usuario user = persistenceUsuarioRepository.buscarPorEmail(email).orElseThrow(
                 () -> new Exception("Usuário com esse nome não existe"));
 
         return User

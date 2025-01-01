@@ -25,7 +25,7 @@ public class PedidoServiceTest {
         Acompanhamento acompanhamento = new Acompanhamento(nomeAcompanhamento, 10);
         Sobremesa sobremesa = new Sobremesa(nomeSobremesa, 10);
 
-        Pedido pedido = new Pedido(Optional.of(lanche), Optional.of(bebida), Optional.of(acompanhamento), Optional.of(sobremesa));
+        Pedido pedido = new Pedido(0, Optional.of(lanche), Optional.of(bebida), Optional.of(acompanhamento), Optional.of(sobremesa));
 
         Assertions.assertEquals(40, pedidoService.getTotal(pedido));
     }

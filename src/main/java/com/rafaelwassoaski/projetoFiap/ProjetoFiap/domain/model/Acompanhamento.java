@@ -5,7 +5,7 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.validation.ValidadorIt
 public class Acompanhamento extends Item{
 
 
-    public Acompanhamento(String nome, double preco) throws Exception {
+    public Acompanhamento(String nome, double preco) {
         super(nome, preco);
     }
 }

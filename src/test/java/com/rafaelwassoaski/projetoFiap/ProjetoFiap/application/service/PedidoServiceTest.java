@@ -5,10 +5,13 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.MapPersistenceItemForTests;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.MapPersistencePedidoForTests;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.MapPersistenceUsuarioForTests;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 public class PedidoServiceTest {
 
@@ -17,12 +20,15 @@ public class PedidoServiceTest {
     private String nomeAcompanhamento = "Acompanhamento 1";
     private String nomeSobremesa = "Sobremesa 1";
 
-    private com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.BebidaService bebidaService;
-    private com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.LancheService lancheService;
-    private com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.AcompanhamentoService acompanhamentoService;
-    private com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.SobremesaService sobremesaService;
+    private BebidaService BebidaService;
+    private LancheService lancheService;
+    private AcompanhamentoService acompanhamentoService;
+    private SobremesaService sobremesaService;
 
-    private MapPersistenceItemForTests mapPersistenceForTests;
+    private PersistenceItemRepository<Lanche> lanchePersistenceItemRepository;
+    private PersistenceItemRepository<Bebida> bebidaPersistenceItemRepository;
+    private PersistenceItemRepository<Acompanhamento> acompanhamentoPersistenceItemRepository;
+    private PersistenceItemRepository<Sobremesa> sobremesaPersistenceItemRepository;
     private MapPersistencePedidoForTests mapPersistencePedidoForTests;
 
     private com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService pedidoService;
@@ -34,15 +40,18 @@ public class PedidoServiceTest {
         Acompanhamento acompanhamento = new Acompanhamento(nomeAcompanhamento, 10);
         Sobremesa sobremesa = new Sobremesa(nomeSobremesa, 10);
 
-        mapPersistenceForTests = new MapPersistenceItemForTests();
+        lanchePersistenceItemRepository = new MapPersistenceItemForTests();
+        bebidaPersistenceItemRepository = new MapPersistenceItemForTests();
+        acompanhamentoPersistenceItemRepository = new MapPersistenceItemForTests();
+        sobremesaPersistenceItemRepository = new MapPersistenceItemForTests();
         mapPersistencePedidoForTests = new MapPersistencePedidoForTests();
 
-        bebidaService = new BebidaService(mapPersistenceForTests);
-        lancheService = new LancheService(mapPersistenceForTests);
-        acompanhamentoService = new AcompanhamentoService(mapPersistenceForTests);
-        sobremesaService = new SobremesaService(mapPersistenceForTests);
+        BebidaService = new BebidaService(bebidaPersistenceItemRepository);
+        lancheService = new LancheService(lanchePersistenceItemRepository);
+        acompanhamentoService = new AcompanhamentoService(acompanhamentoPersistenceItemRepository);
+        sobremesaService = new SobremesaService(sobremesaPersistenceItemRepository);
 
-        bebidaService.criar(bebida);
+        BebidaService.criar(bebida);
         lancheService.criar(lanche);
         acompanhamentoService.criar(acompanhamento);
         sobremesaService.criar(sobremesa);
@@ -50,14 +59,18 @@ public class PedidoServiceTest {
 
     @Test
     void deveriaCriarUmPedidoComONomeDosItens() throws Exception {
-        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(mapPersistenceForTests, mapPersistencePedidoForTests);
-
-        pedidoService.definirLanche(nomeLanche);
-        pedidoService.definirBebida(nomeBebida);
-        pedidoService.definirAcompanhamento(nomeAcompanhamento);
-        pedidoService.definirSobremesa(nomeSobremesa);
-
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
         Pedido pedido = pedidoService.criarPedido();
+        int pedidoId = pedido.getId();
+
+        pedidoService.definirLanche(nomeLanche, pedidoId);
+        pedidoService.definirBebida(nomeBebida, pedidoId);
+        pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
+        pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
         Assertions.assertEquals(nomeLanche, pedido.getLanche().get().getNome());
         Assertions.assertEquals(nomeBebida, pedido.getBebida().get().getNome());
@@ -67,14 +80,21 @@ public class PedidoServiceTest {
 
     @Test
     void deveriaCriarUmPedidoApenasComOLanche() throws Exception {
-        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(mapPersistenceForTests, mapPersistencePedidoForTests);
-
-        pedidoService.definirLanche(nomeLanche);
-        pedidoService.definirBebida(null);
-        pedidoService.definirAcompanhamento(null);
-        pedidoService.definirSobremesa(null);
-
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
         Pedido pedido = pedidoService.criarPedido();
+        int pedidoId = pedido.getId();
+
+        pedidoService.definirLanche(nomeLanche, pedidoId);
+        pedidoService.definirBebida(null, pedidoId);
+        pedidoService.definirAcompanhamento(null, pedidoId);
+        pedidoService.definirSobremesa(null, pedidoId);
+
+        Optional<Pedido> optionalPedido = mapPersistencePedidoForTests.buscarPorId(pedidoId);
+        pedido = optionalPedido.get();
 
         Assertions.assertEquals(nomeLanche, pedido.getLanche().get().getNome());
         Assertions.assertTrue(pedido.getBebida().isEmpty());
@@ -84,14 +104,21 @@ public class PedidoServiceTest {
 
     @Test
     void deveriaCriarUmPedidoApenasComABebida() throws Exception {
-        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(mapPersistenceForTests, mapPersistencePedidoForTests);
-
-        pedidoService.definirLanche(null);
-        pedidoService.definirBebida(nomeBebida);
-        pedidoService.definirAcompanhamento(null);
-        pedidoService.definirSobremesa(null);
-
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
         Pedido pedido = pedidoService.criarPedido();
+        int pedidoId = pedido.getId();
+
+        pedidoService.definirLanche(null, pedidoId);
+        pedidoService.definirBebida(nomeBebida, pedidoId);
+        pedidoService.definirAcompanhamento(null, pedidoId);
+        pedidoService.definirSobremesa(null, pedidoId);
+
+        Optional<Pedido> optionalPedido = mapPersistencePedidoForTests.buscarPorId(pedidoId);
+        pedido = optionalPedido.get();
 
         Assertions.assertEquals(nomeBebida, pedido.getBebida().get().getNome());
         Assertions.assertTrue(pedido.getLanche().isEmpty());
@@ -101,14 +128,21 @@ public class PedidoServiceTest {
 
     @Test
     void deveriaCriarUmPedidoApenasComOAcompanhamento() throws Exception {
-        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(mapPersistenceForTests, mapPersistencePedidoForTests);
-
-        pedidoService.definirLanche(null);
-        pedidoService.definirBebida(null);
-        pedidoService.definirAcompanhamento(nomeAcompanhamento);
-        pedidoService.definirSobremesa(null);
-
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
         Pedido pedido = pedidoService.criarPedido();
+        int pedidoId = pedido.getId();
+
+        pedidoService.definirLanche(null, pedidoId);
+        pedidoService.definirBebida(null, pedidoId);
+        pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
+        pedidoService.definirSobremesa(null, pedidoId);
+
+        Optional<Pedido> optionalPedido = mapPersistencePedidoForTests.buscarPorId(pedidoId);
+        pedido = optionalPedido.get();
 
         Assertions.assertEquals(nomeAcompanhamento, pedido.getAcompanhamento().get().getNome());
         Assertions.assertTrue(pedido.getLanche().isEmpty());
@@ -118,14 +152,21 @@ public class PedidoServiceTest {
 
     @Test
     void deveriaCriarUmPedidoApenasComASobremesa() throws Exception {
-        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(mapPersistenceForTests, mapPersistencePedidoForTests);
-
-        pedidoService.definirLanche(null);
-        pedidoService.definirBebida(null);
-        pedidoService.definirAcompanhamento(null);
-        pedidoService.definirSobremesa(nomeSobremesa);
-
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
         Pedido pedido = pedidoService.criarPedido();
+        int pedidoId = pedido.getId();
+
+        pedidoService.definirLanche(null, pedidoId);
+        pedidoService.definirBebida(null, pedidoId);
+        pedidoService.definirAcompanhamento(null, pedidoId);
+        pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
+
+        Optional<Pedido> optionalPedido = mapPersistencePedidoForTests.buscarPorId(pedidoId);
+        pedido = optionalPedido.get();
 
         Assertions.assertEquals(nomeSobremesa, pedido.getSobremesa().get().getNome());
         Assertions.assertTrue(pedido.getLanche().isEmpty());
@@ -135,12 +176,18 @@ public class PedidoServiceTest {
 
     @Test
     void deveriaCriarUmPedidoAtreladoAUmUsuario() throws Exception {
-        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(mapPersistenceForTests, mapPersistencePedidoForTests);
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
+        Pedido pedido = pedidoService.criarPedido();
+        int pedidoId = pedido.getId();
 
-        pedidoService.definirLanche(nomeLanche);
-        pedidoService.definirBebida(nomeBebida);
-        pedidoService.definirAcompanhamento(nomeAcompanhamento);
-        pedidoService.definirSobremesa(nomeSobremesa);
+        pedidoService.definirLanche(nomeLanche, pedidoId);
+        pedidoService.definirBebida(nomeBebida, pedidoId);
+        pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
+        pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
         com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService usuarioService;
         MapPersistenceUsuarioForTests mapPersistenceUsuarioForTests;
@@ -154,7 +201,7 @@ public class PedidoServiceTest {
 
         Usuario usuario = usuarioService.criar(email, senha);
 
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        pedido = pedidoService.iniciarPedido(usuario, pedidoId);
 
         Assertions.assertEquals(nomeLanche, pedido.getLanche().get().getNome());
         Assertions.assertEquals(nomeBebida, pedido.getBebida().get().getNome());
@@ -165,12 +212,18 @@ public class PedidoServiceTest {
 
     @Test
     void deveriaAtualizarOStatusDeUmPedidoparaEmPreparacao() throws Exception {
-        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(mapPersistenceForTests, mapPersistencePedidoForTests);
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
+        Pedido pedido = pedidoService.criarPedido();
+        int pedidoId = pedido.getId();
 
-        pedidoService.definirLanche(nomeLanche);
-        pedidoService.definirBebida(nomeBebida);
-        pedidoService.definirAcompanhamento(nomeAcompanhamento);
-        pedidoService.definirSobremesa(nomeSobremesa);
+        pedidoService.definirLanche(nomeLanche, pedidoId);
+        pedidoService.definirBebida(nomeBebida, pedidoId);
+        pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
+        pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
         com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService usuarioService;
         MapPersistenceUsuarioForTests mapPersistenceUsuarioForTests;
@@ -184,7 +237,7 @@ public class PedidoServiceTest {
 
         Usuario usuario = usuarioService.criar(email, senha);
 
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        pedido = pedidoService.iniciarPedido(usuario, pedidoId);
         Pedido pedidoAtualizado = pedidoService.prepararPedido(pedido.getId());
 
         Assertions.assertEquals(StatusPedido.EM_PREPARACAO, pedidoAtualizado.getStatusPedido());
@@ -192,12 +245,18 @@ public class PedidoServiceTest {
 
     @Test
     void deveriaAtualizarOStatusDeUmPedidoParaPronto() throws Exception {
-        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(mapPersistenceForTests, mapPersistencePedidoForTests);
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
+        Pedido pedido = pedidoService.criarPedido();
+        int pedidoId = pedido.getId();
 
-        pedidoService.definirLanche(nomeLanche);
-        pedidoService.definirBebida(nomeBebida);
-        pedidoService.definirAcompanhamento(nomeAcompanhamento);
-        pedidoService.definirSobremesa(nomeSobremesa);
+        pedidoService.definirLanche(nomeLanche, pedidoId);
+        pedidoService.definirBebida(nomeBebida, pedidoId);
+        pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
+        pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
         com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService usuarioService;
         MapPersistenceUsuarioForTests mapPersistenceUsuarioForTests;
@@ -211,7 +270,7 @@ public class PedidoServiceTest {
 
         Usuario usuario = usuarioService.criar(email, senha);
 
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        pedido = pedidoService.iniciarPedido(usuario, pedidoId);
         pedidoService.prepararPedido(pedido.getId());
         Pedido pedidoAtualizado = pedidoService.finalizarPreparacaoDoPedido(pedido.getId());
 
@@ -220,12 +279,18 @@ public class PedidoServiceTest {
 
     @Test
     void deveriaAtualizarOStatusDeUmPedidoParaRetirado() throws Exception {
-        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(mapPersistenceForTests, mapPersistencePedidoForTests);
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
+        Pedido pedido = pedidoService.criarPedido();
+        int pedidoId = pedido.getId();
 
-        pedidoService.definirLanche(nomeLanche);
-        pedidoService.definirBebida(nomeBebida);
-        pedidoService.definirAcompanhamento(nomeAcompanhamento);
-        pedidoService.definirSobremesa(nomeSobremesa);
+        pedidoService.definirLanche(nomeLanche, pedidoId);
+        pedidoService.definirBebida(nomeBebida, pedidoId);
+        pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
+        pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
         com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService usuarioService;
         MapPersistenceUsuarioForTests mapPersistenceUsuarioForTests;
@@ -239,7 +304,7 @@ public class PedidoServiceTest {
 
         Usuario usuario = usuarioService.criar(email, senha);
 
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        pedido = pedidoService.iniciarPedido(usuario, pedidoId);
         pedidoService.prepararPedido(pedido.getId());
         pedidoService.finalizarPreparacaoDoPedido(pedido.getId());
         Pedido pedidoAtualizado = pedidoService.retirarPedido(pedido.getId());
@@ -249,12 +314,18 @@ public class PedidoServiceTest {
 
     @Test
     void naoDeveriaVoltarAoStatusDeEmPreparacaoAposOStatusJaEstarEmPronto() throws Exception {
-        pedidoService = new PedidoService(mapPersistenceForTests, mapPersistencePedidoForTests);
+        pedidoService = new PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
+        Pedido pedido = pedidoService.criarPedido();
+        int pedidoId = pedido.getId();
 
-        pedidoService.definirLanche(nomeLanche);
-        pedidoService.definirBebida(nomeBebida);
-        pedidoService.definirAcompanhamento(nomeAcompanhamento);
-        pedidoService.definirSobremesa(nomeSobremesa);
+        pedidoService.definirLanche(nomeLanche, pedidoId);
+        pedidoService.definirBebida(nomeBebida, pedidoId);
+        pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
+        pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
         com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService usuarioService;
         MapPersistenceUsuarioForTests mapPersistenceUsuarioForTests;
@@ -268,12 +339,12 @@ public class PedidoServiceTest {
 
         Usuario usuario = usuarioService.criar(email, senha);
 
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        pedido = pedidoService.iniciarPedido(usuario, pedidoId);
         pedidoService.prepararPedido(pedido.getId());
         pedidoService.finalizarPreparacaoDoPedido(pedido.getId());
 
         Assertions.assertThrows(Exception.class, () -> {
-            pedidoService.prepararPedido(pedido.getId());
+            pedidoService.prepararPedido(pedidoId);
         });
     }
 }

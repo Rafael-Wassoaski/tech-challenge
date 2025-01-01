@@ -8,10 +8,16 @@ public class Usuario {
     private String senha;
     private Papel papel;
 
-    public Usuario(String email, String senha) throws Exception {
+    public Usuario(String email, String senha) {
         this.email = email;
         this.senha = senha;
         this.papel = Papel.CLIENTE;
+    }
+
+    public Usuario(String email, String senha, Papel papel) {
+        this.email = email;
+        this.senha = senha;
+        this.papel = papel;
     }
 
     public String getEmail() {
