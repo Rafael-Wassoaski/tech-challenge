@@ -13,3 +13,9 @@ spring:
 custom:
   sal: salParaTeste
 
+security:
+  jwt:
+    expiration: 50000
+#    esta é uma chave para testes, não é utilizada além do ambiente de testes
+    signatureKey: "CoVixxWQ+xzC9tQ5ym90aBfmB+MhTT+4FEw3gPY0oTRo+Ys5wLqEuH/gqFv3R1diRSiwFY9Qw+WL/CAIlsZN0w=="
+

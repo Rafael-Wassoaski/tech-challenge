@@ -5,11 +5,10 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.MapPersiste
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.core.userdetails.UserDetails;
 
 public class UsuarioServiceTest {
 
-    private UsuarioService usuarioService;
+    private UsuarioDomainService usuarioService;
     private MapPersistenceUsuarioForTests mapPersistenceUsuarioForTests;
     private String salParaTestes = "salParaTestes";
 
@@ -17,7 +16,7 @@ public class UsuarioServiceTest {
     void deveriaRetornarEmailComoInvalido() throws Exception {
         mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
         Encriptador encriptador = new Encriptador(salParaTestes);
-        usuarioService = new UsuarioService(encriptador);
+        usuarioService = new UsuarioDomainService(encriptador);
         String email = "testeteste.com";
         String senha = "teste123456";
         Usuario usuario = new Usuario(email, senha);

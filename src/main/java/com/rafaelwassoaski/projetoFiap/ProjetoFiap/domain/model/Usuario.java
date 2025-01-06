@@ -4,9 +4,13 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.validation.ValidardorEmail;
 
 public class Usuario {
+    private Integer id;
     private String email;
     private String senha;
     private Papel papel;
+
+    public Usuario() {
+    }
 
     public Usuario(String email, String senha) {
         this.email = email;
@@ -14,7 +18,15 @@ public class Usuario {
         this.papel = Papel.CLIENTE;
     }
 
-    public Usuario(String email, String senha, Papel papel) {
+    public Usuario(Integer id, String email, String senha) {
+        this.id = id;
+        this.email = email;
+        this.senha = senha;
+        this.papel = Papel.CLIENTE;
+    }
+
+    public Usuario(int id, String email, String senha, Papel papel) {
+        this.id = id;
         this.email = email;
         this.senha = senha;
         this.papel = papel;
@@ -42,5 +54,13 @@ public class Usuario {
 
     public void setPapel(Papel papel) {
         this.papel = papel;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

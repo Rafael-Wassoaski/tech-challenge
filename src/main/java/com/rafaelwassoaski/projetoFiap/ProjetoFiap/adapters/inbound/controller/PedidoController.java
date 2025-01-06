@@ -1,12 +1,19 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistencePedidoRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.JWTService;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.utils.CookiesUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import lombok.extern.log4j.Log4j2;
@@ -14,7 +21,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Log4j2
-@RestController("/pedidos")
+@RestController
+@RequestMapping("/pedidos")
 public class PedidoController {
 
     private PersistenceItemRepository<Lanche> lanchePersistenceItemRepository;
@@ -24,32 +32,40 @@ public class PedidoController {
     private PersistenceUsuarioRepository persistenceUsuarioRepository;
     private PersistencePedidoRepository persistencePedidoRepository;
     private static final Logger log = LogManager.getLogger(PedidoController.class);
+    private JWTService jwtService;
 
     public PedidoController(PersistenceItemRepository<Lanche> lanchePersistenceItemRepository,
                             PersistenceItemRepository<Bebida> bebidaPersistenceItemRepository,
                             PersistenceItemRepository<Acompanhamento> acompanhamentoPersistenceItemRepository,
                             PersistenceItemRepository<Sobremesa> sobremesaPersistenceItemRepository,
                             PersistenceUsuarioRepository persistenceUsuarioRepository,
-                            PersistencePedidoRepository persistencePedidoRepository) {
+                            PersistencePedidoRepository persistencePedidoRepository,
+                            JWTService jwtService) {
         this.lanchePersistenceItemRepository = lanchePersistenceItemRepository;
         this.bebidaPersistenceItemRepository = bebidaPersistenceItemRepository;
         this.acompanhamentoPersistenceItemRepository = acompanhamentoPersistenceItemRepository;
         this.sobremesaPersistenceItemRepository = sobremesaPersistenceItemRepository;
         this.persistenceUsuarioRepository = persistenceUsuarioRepository;
         this.persistencePedidoRepository = persistencePedidoRepository;
+        this.jwtService = jwtService;
     }
 
 
     @PostMapping("/criar")
-    public Pedido criarPedido(Usuario usuario) {
+    @ResponseStatus( HttpStatus.CREATED)
+    public Pedido criarPedido(HttpServletRequest request) {
         try {
+            String token = CookiesUtils.extractTokenCookie(request).get();
+            String email = jwtService.getUsername(token);
+            UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
+            Usuario usuario = usuarioService.buscarUsuario(email);
+
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
                     acompanhamentoPersistenceItemRepository,
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
-            Pedido pedido = pedidoService.criarPedido();
-            return pedidoService.iniciarPedido(usuario, pedido.getId());
+            return pedidoService.criarPedido(usuario);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 

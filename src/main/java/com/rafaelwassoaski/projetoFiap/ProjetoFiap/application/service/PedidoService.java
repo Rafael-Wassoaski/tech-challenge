@@ -70,15 +70,9 @@ public class PedidoService {
         return Optional.ofNullable(itemUseCase.buscarPorNome(nomeItem));
     }
 
-    public Pedido iniciarPedido(Usuario usuario, int id) throws Exception {
-        Pedido pedido = buscarPedidoPorId(id);
-        pedido.setUsuario(usuario);
-
-        return persistencePedidoRepository.salvar(pedido);
-    }
-
-    public Pedido criarPedido() {
+    public Pedido criarPedido(Usuario usuario) throws Exception {
         Pedido pedido = new Pedido();
+        pedido.setUsuario(usuario);
         return persistencePedidoRepository.salvar(pedido);
     }
 

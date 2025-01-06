@@ -3,17 +3,22 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.port.in.UsuarioUseCase;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service.UsuarioDomainService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class UsuarioService implements UsuarioUseCase {
     private PersistenceUsuarioRepository persistenceUsuarioRepository;
-    private com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service.UsuarioService usuarioService;
+    private UsuarioDomainService usuarioService;
 
     public UsuarioService(PersistenceUsuarioRepository persistenceUsuarioRepository, Encriptador encriptador) {
         this.persistenceUsuarioRepository = persistenceUsuarioRepository;
-        this.usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service.UsuarioService(encriptador);
+        this.usuarioService = new UsuarioDomainService(encriptador);
+    }
+
+    public UsuarioService(PersistenceUsuarioRepository persistenceUsuarioRepository) {
+        this.persistenceUsuarioRepository = persistenceUsuarioRepository;
     }
 
     public Usuario criar(String email, String senha) throws Exception {
@@ -21,11 +26,10 @@ public class UsuarioService implements UsuarioUseCase {
         Usuario usuario = new Usuario(email, senhaForte);
 
         return persistenceUsuarioRepository.salvar(usuario);
-
     }
 
     public UserDetails logar(String email, String senha) throws Exception {
-        UserDetails userDetails = buscarUsuario(email);
+        UserDetails userDetails = buscarUserDetails(email);
 
         boolean isSamePassword = usuarioService.senhasBatem(senha, userDetails.getPassword());
 
@@ -36,14 +40,21 @@ public class UsuarioService implements UsuarioUseCase {
         throw new Exception("Usuário ou senha incorretos");
     }
 
-    public UserDetails buscarUsuario(String email) throws Exception {
-        Usuario user = persistenceUsuarioRepository.buscarPorEmail(email).orElseThrow(
-                () -> new Exception("Usuário com esse nome não existe"));
+    public UserDetails buscarUserDetails(String email) throws Exception {
+        Usuario user = buscarUsuario(email);
 
         return User
                 .builder()
                 .username(user.getEmail())
                 .password(user.getSenha())
+                .roles(usuarioService.papeisParaArray(user))
                 .build();
+    }
+
+    public Usuario buscarUsuario(String email) throws Exception {
+        Usuario user = persistenceUsuarioRepository.buscarPorEmail(email).orElseThrow(
+                () -> new Exception("Usuário com esse nome não existe"));
+
+        return user;
     }
 }

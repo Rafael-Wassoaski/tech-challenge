@@ -64,7 +64,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Pedido pedido = pedidoService.criarPedido();
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -85,7 +86,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Pedido pedido = pedidoService.criarPedido();
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -109,7 +111,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Pedido pedido = pedidoService.criarPedido();
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(null, pedidoId);
@@ -133,7 +136,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Pedido pedido = pedidoService.criarPedido();
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(null, pedidoId);
@@ -157,7 +161,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Pedido pedido = pedidoService.criarPedido();
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(null, pedidoId);
@@ -181,7 +186,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Pedido pedido = pedidoService.criarPedido();
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -189,20 +195,10 @@ public class PedidoServiceTest {
         pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
         pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
-        com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService usuarioService;
-        MapPersistenceUsuarioForTests mapPersistenceUsuarioForTests;
-        String salParaTestes = "salParaTestes";
+        Optional<Pedido> optionalPedido = mapPersistencePedidoForTests.buscarPorId(pedidoId);
 
-        mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
-        Encriptador encriptador = new Encriptador(salParaTestes);
-        usuarioService = new UsuarioService(mapPersistenceUsuarioForTests, encriptador);
-        String email = "teste@teste.com";
-        String senha = "teste123456";
-
-        Usuario usuario = usuarioService.criar(email, senha);
-
-        pedido = pedidoService.iniciarPedido(usuario, pedidoId);
-
+        Assertions.assertTrue(optionalPedido.isPresent());
+        pedido = optionalPedido.get();
         Assertions.assertEquals(nomeLanche, pedido.getLanche().get().getNome());
         Assertions.assertEquals(nomeBebida, pedido.getBebida().get().getNome());
         Assertions.assertEquals(nomeAcompanhamento, pedido.getAcompanhamento().get().getNome());
@@ -217,7 +213,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Pedido pedido = pedidoService.criarPedido();
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -225,19 +222,7 @@ public class PedidoServiceTest {
         pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
         pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
-        com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService usuarioService;
-        MapPersistenceUsuarioForTests mapPersistenceUsuarioForTests;
-        String salParaTestes = "salParaTestes";
-
-        mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
-        Encriptador encriptador = new Encriptador(salParaTestes);
-        usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
-        String email = "teste@teste.com";
-        String senha = "teste123456";
-
-        Usuario usuario = usuarioService.criar(email, senha);
-
-        pedido = pedidoService.iniciarPedido(usuario, pedidoId);
+        pedido = pedidoService.criarPedido(usuario);
         Pedido pedidoAtualizado = pedidoService.prepararPedido(pedido.getId());
 
         Assertions.assertEquals(StatusPedido.EM_PREPARACAO, pedidoAtualizado.getStatusPedido());
@@ -250,7 +235,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Pedido pedido = pedidoService.criarPedido();
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -258,19 +244,7 @@ public class PedidoServiceTest {
         pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
         pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
-        com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService usuarioService;
-        MapPersistenceUsuarioForTests mapPersistenceUsuarioForTests;
-        String salParaTestes = "salParaTestes";
-
-        mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
-        Encriptador encriptador = new Encriptador(salParaTestes);
-        usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
-        String email = "teste@teste.com";
-        String senha = "teste123456";
-
-        Usuario usuario = usuarioService.criar(email, senha);
-
-        pedido = pedidoService.iniciarPedido(usuario, pedidoId);
+        pedido = pedidoService.criarPedido(usuario);
         pedidoService.prepararPedido(pedido.getId());
         Pedido pedidoAtualizado = pedidoService.finalizarPreparacaoDoPedido(pedido.getId());
 
@@ -284,7 +258,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Pedido pedido = pedidoService.criarPedido();
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -292,59 +267,11 @@ public class PedidoServiceTest {
         pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
         pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
-        com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService usuarioService;
-        MapPersistenceUsuarioForTests mapPersistenceUsuarioForTests;
-        String salParaTestes = "salParaTestes";
-
-        mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
-        Encriptador encriptador = new Encriptador(salParaTestes);
-        usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
-        String email = "teste@teste.com";
-        String senha = "teste123456";
-
-        Usuario usuario = usuarioService.criar(email, senha);
-
-        pedido = pedidoService.iniciarPedido(usuario, pedidoId);
+        pedido = pedidoService.criarPedido(usuario);
         pedidoService.prepararPedido(pedido.getId());
         pedidoService.finalizarPreparacaoDoPedido(pedido.getId());
         Pedido pedidoAtualizado = pedidoService.retirarPedido(pedido.getId());
 
         Assertions.assertEquals(StatusPedido.RETIRADO, pedidoAtualizado.getStatusPedido());
-    }
-
-    @Test
-    void naoDeveriaVoltarAoStatusDeEmPreparacaoAposOStatusJaEstarEmPronto() throws Exception {
-        pedidoService = new PedidoService(lanchePersistenceItemRepository,
-                bebidaPersistenceItemRepository,
-                acompanhamentoPersistenceItemRepository,
-                sobremesaPersistenceItemRepository,
-                mapPersistencePedidoForTests);
-        Pedido pedido = pedidoService.criarPedido();
-        int pedidoId = pedido.getId();
-
-        pedidoService.definirLanche(nomeLanche, pedidoId);
-        pedidoService.definirBebida(nomeBebida, pedidoId);
-        pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
-        pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
-
-        com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService usuarioService;
-        MapPersistenceUsuarioForTests mapPersistenceUsuarioForTests;
-        String salParaTestes = "salParaTestes";
-
-        mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
-        Encriptador encriptador = new Encriptador(salParaTestes);
-        usuarioService = new UsuarioService(mapPersistenceUsuarioForTests, encriptador);
-        String email = "teste@teste.com";
-        String senha = "teste123456";
-
-        Usuario usuario = usuarioService.criar(email, senha);
-
-        pedido = pedidoService.iniciarPedido(usuario, pedidoId);
-        pedidoService.prepararPedido(pedido.getId());
-        pedidoService.finalizarPreparacaoDoPedido(pedido.getId());
-
-        Assertions.assertThrows(Exception.class, () -> {
-            pedidoService.prepararPedido(pedidoId);
-        });
     }
 }

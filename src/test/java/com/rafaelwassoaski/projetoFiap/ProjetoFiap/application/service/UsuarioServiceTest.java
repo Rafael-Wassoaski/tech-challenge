@@ -36,7 +36,7 @@ public class UsuarioServiceTest {
         String senha = "teste123456";
 
         usuarioService.criar(email, senha);
-        UserDetails userDetails = usuarioService.buscarUsuario(email);
+        UserDetails userDetails = usuarioService.buscarUserDetails(email);
 
         Assertions.assertNotNull(userDetails);
         Assertions.assertEquals(email, userDetails.getUsername());

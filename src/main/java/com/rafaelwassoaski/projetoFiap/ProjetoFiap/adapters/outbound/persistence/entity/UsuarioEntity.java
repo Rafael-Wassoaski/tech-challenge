@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -18,7 +16,7 @@ public class UsuarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column
+    @Column(unique = true)
     private String email;
     @Column
     private String senha;
@@ -36,12 +34,15 @@ public class UsuarioEntity {
     public UsuarioEntity() {}
 
     public UsuarioEntity(Usuario usuario) {
+        if(usuario.getId() != null){
+            this.id = usuario.getId();
+        }
         this.email = usuario.getEmail();
         this.senha = usuario.getSenha();
         this.papel = usuario.getPapel();
     }
 
     public Usuario converterParaUsuario(){
-           return new Usuario(email, senha, papel);
+           return new Usuario(id, email, senha, papel);
     }
 }

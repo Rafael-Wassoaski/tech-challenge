@@ -1,9 +1,10 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.BebidaEntity;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.PedidoEntity;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.mappers.PedidoMapper;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Pedido;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistencePedidoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface JpaPedidoRepository extends JpaRepository<PedidoEntity, Integer
     default List<Pedido> buscarTodos() {
         List<PedidoEntity> pedidoEntities = findAll();
 
-        return pedidoEntities.stream().map(PedidoEntity::converterParaPedido).collect(Collectors.toList());    }
+        return pedidoEntities.stream().map(PedidoMapper::converterParaPedido).collect(Collectors.toList());    }
 
     @Override
     default Optional<Pedido> buscarPorId(int id) {
@@ -32,13 +33,14 @@ public interface JpaPedidoRepository extends JpaRepository<PedidoEntity, Integer
 
         PedidoEntity pedido = pedidoEntity.get();
 
-        return Optional.of(pedido.converterParaPedido());
+        return Optional.of(PedidoMapper.converterParaPedido(pedido));
     }
 
+    @Transactional
     @Override
     default Pedido salvar(Pedido pedido) {
-        PedidoEntity pedidoEntity = new PedidoEntity(pedido);
+        PedidoEntity pedidoEntity = PedidoMapper.converterParaPedidoEntity(pedido);
         PedidoEntity pedidoEntitySalvo = saveAndFlush(pedidoEntity);
-        return pedidoEntitySalvo.converterParaPedido();
+        return PedidoMapper.converterParaPedido(pedidoEntitySalvo);
     }
 }

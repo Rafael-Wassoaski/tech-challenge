@@ -2,19 +2,10 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistenc
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.StatusPedido;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Pedido;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Sobremesa;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Optional;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Entity
 public class PedidoEntity {
     @Id
@@ -39,35 +30,59 @@ public class PedidoEntity {
     @Enumerated(EnumType.STRING)
     private StatusPedido statusPedido;
 
-    public PedidoEntity(Pedido pedido){
-        this.statusPedido = pedido.getStatusPedido();
-        this.usuario = new UsuarioEntity(pedido.getUsuario());
-
-        if(pedido.getLanche().isPresent()){
-            this.lanche = new LancheEntity(pedido.getLanche().get());
-        }
-
-        if(pedido.getBebida().isPresent()){
-            this.bebida = new BebidaEntity(pedido.getBebida().get());
-        }
-
-        if(pedido.getAcompanhamento().isPresent()){
-            this.acompanhamento = new AcompanhamentoEntity(pedido.getAcompanhamento().get());
-        }
-        if(pedido.getSobremesa().isPresent()){
-            this.sobremesa = new SobremesaEntity(pedido.getSobremesa().get());
-        }
+    public int getId() {
+        return id;
     }
 
-    public Pedido converterParaPedido(){
-        return new Pedido(id,
-                Optional.of(lanche.converterParaLanche()),
-                Optional.of(bebida.converterParaBebida()),
-                Optional.of(acompanhamento.converterParaAcompanhamento()),
-                Optional.of(sobremesa.converterParaSobremesa()),
-                usuario.converterParaUsuario(),
-                statusPedido
-        );
+    public void setId(int id) {
+        this.id = id;
     }
 
+    public LancheEntity getLanche() {
+        return lanche;
+    }
+
+    public void setLanche(LancheEntity lanche) {
+        this.lanche = lanche;
+    }
+
+    public BebidaEntity getBebida() {
+        return bebida;
+    }
+
+    public void setBebida(BebidaEntity bebida) {
+        this.bebida = bebida;
+    }
+
+    public AcompanhamentoEntity getAcompanhamento() {
+        return acompanhamento;
+    }
+
+    public void setAcompanhamento(AcompanhamentoEntity acompanhamento) {
+        this.acompanhamento = acompanhamento;
+    }
+
+    public SobremesaEntity getSobremesa() {
+        return sobremesa;
+    }
+
+    public void setSobremesa(SobremesaEntity sobremesa) {
+        this.sobremesa = sobremesa;
+    }
+
+    public UsuarioEntity getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioEntity usuario) {
+        this.usuario = usuario;
+    }
+
+    public StatusPedido getStatusPedido() {
+        return statusPedido;
+    }
+
+    public void setStatusPedido(StatusPedido statusPedido) {
+        this.statusPedido = statusPedido;
+    }
 }

@@ -9,6 +9,8 @@ public interface UsuarioUseCase {
 
     UserDetails logar(String email, String senha) throws Exception;
 
-    UserDetails buscarUsuario(String email) throws Exception;
+    UserDetails buscarUserDetails(String email) throws Exception;
+
+    Usuario buscarUsuario(String email) throws Exception;
 
 }

@@ -4,12 +4,14 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.validation.ValidardorEmail;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
 
-public class UsuarioService {
+public class UsuarioDomainService {
     private Encriptador encriptador;
 
-    public UsuarioService(Encriptador encriptador) {
+    public UsuarioDomainService(Encriptador encriptador) {
         this.encriptador = encriptador;
     }
+
+    public UsuarioDomainService() {}
 
     public void validarEmail(Usuario usuario) throws Exception {
         ValidardorEmail validardorEmail = new ValidardorEmail();
@@ -26,4 +28,9 @@ public class UsuarioService {
     public String encriptarTexto(String senha){
         return encriptador.encriptarTexto(senha);
     }
+
+    public String[] papeisParaArray(Usuario usuario){
+        return new String[]{usuario.getPapel().name()};
+    }
+
 }
