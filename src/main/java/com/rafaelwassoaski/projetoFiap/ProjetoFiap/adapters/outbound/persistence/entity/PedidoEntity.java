@@ -23,8 +23,8 @@ public class PedidoEntity {
     @OneToOne
     @JoinColumn(name = "id")
     private SobremesaEntity sobremesa;
-    @OneToOne
-    @JoinColumn(name = "id")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "usuario_id", nullable = true)
     private UsuarioEntity usuario;
     @Column
     @Enumerated(EnumType.STRING)

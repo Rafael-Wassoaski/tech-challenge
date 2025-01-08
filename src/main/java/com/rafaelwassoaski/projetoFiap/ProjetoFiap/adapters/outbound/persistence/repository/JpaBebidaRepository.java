@@ -2,6 +2,7 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistenc
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.BebidaEntity;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.BebidaEntity;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.mappers.BebidaMapper;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Bebida;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Bebida;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
@@ -26,7 +27,7 @@ public interface JpaBebidaRepository extends JpaRepository<BebidaEntity, Integer
     default List<Bebida> buscarTodos() {
         List<BebidaEntity> bebidaEntities = findAll();
 
-        return bebidaEntities.stream().map(BebidaEntity::converterParaBebida).collect(Collectors.toList());
+        return bebidaEntities.stream().map(BebidaMapper::converterParaBebida).collect(Collectors.toList());
     }
 
     @Override
@@ -39,15 +40,15 @@ public interface JpaBebidaRepository extends JpaRepository<BebidaEntity, Integer
 
         BebidaEntity bebidaEntity = optionalBebidaEntity.get();
 
-        return Optional.of(bebidaEntity.converterParaBebida());
+        return Optional.of(BebidaMapper.converterParaBebida(bebidaEntity));
     }
 
     @Override
     default Bebida salvar(Bebida item) {
-        BebidaEntity bebidaEntity = new BebidaEntity(item);
+        BebidaEntity bebidaEntity = BebidaMapper.converterParaBebidaEntity(item);
         BebidaEntity bebidaSalvo = saveAndFlush(bebidaEntity);
 
-        return bebidaSalvo.converterParaBebida();
+        return BebidaMapper.converterParaBebida(bebidaSalvo);
     }
 
     Optional<BebidaEntity> findByNome(String nome);

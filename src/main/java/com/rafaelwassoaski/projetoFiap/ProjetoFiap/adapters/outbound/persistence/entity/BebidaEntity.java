@@ -8,10 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Entity
 public class BebidaEntity {
 
@@ -23,12 +19,41 @@ public class BebidaEntity {
     @Column
     private double preco;
 
-    public Bebida converterParaBebida(){
-        return new Bebida(nome, preco);
+    public BebidaEntity() {
     }
 
-    public BebidaEntity(Bebida bebida){
-        this.nome = bebida.getNome();
-        this.preco = bebida.getPreco();
+    public BebidaEntity(String nome, double preco) {
+        this.nome = nome;
+        this.preco = preco;
+    }
+
+    public BebidaEntity(int id, String nome, double preco) {
+        this.id = id;
+        this.nome = nome;
+        this.preco = preco;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
     }
 }

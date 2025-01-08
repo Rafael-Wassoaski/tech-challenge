@@ -12,13 +12,14 @@ public class PedidoMapper {
         Optional<Bebida> optionalBebida = pegarBebidaOpcional(pedidoEntity.getBebida());
         Optional<Acompanhamento> optionalAcompanhamento = pegarAcompanhamentoOpcional(pedidoEntity.getAcompanhamento());
         Optional<Sobremesa> optionalSobremesa = pegarSobremesaOpcional(pedidoEntity.getSobremesa());
+        Usuario usuario = pegarUsuario(pedidoEntity.getUsuario());
 
         return new Pedido(pedidoEntity.getId(),
                 optionalLanche,
                 optionalBebida,
                 optionalAcompanhamento,
                 optionalSobremesa,
-                pedidoEntity.getUsuario().converterParaUsuario(),
+                usuario,
                 pedidoEntity.getStatusPedido()
         );
     }
@@ -28,7 +29,7 @@ public class PedidoMapper {
             return Optional.empty();
         }
 
-        return Optional.of(lancheEntity.converterParaLanche());
+        return Optional.of(LancheMapper.converterParaLanche(lancheEntity));
     }
 
     private static Optional<Bebida> pegarBebidaOpcional(BebidaEntity bebidaEntity){
@@ -36,7 +37,7 @@ public class PedidoMapper {
             return Optional.empty();
         }
 
-        return Optional.of(bebidaEntity.converterParaBebida());
+        return Optional.of(BebidaMapper.converterParaBebida(bebidaEntity));
     }
 
     private static Optional<Acompanhamento> pegarAcompanhamentoOpcional(AcompanhamentoEntity acompanhamentoEntity){
@@ -55,18 +56,29 @@ public class PedidoMapper {
         return Optional.of(sobremesaEntity.converterParaSobremesa());
     }
 
+    private static Usuario pegarUsuario(UsuarioEntity usuario){
+        if (usuario == null){
+            return null;
+        }
+
+        return usuario.converterParaUsuario();
+    }
+
     public static PedidoEntity converterParaPedidoEntity(Pedido pedido) {
         PedidoEntity pedidoEntity = new PedidoEntity();
         pedidoEntity.setStatusPedido(pedido.getStatusPedido()); ;
-        //TODO esse costrutor deve virar um mapper também
-        pedidoEntity.setUsuario(new UsuarioEntity(pedido.getUsuario()));
+
+        if(pedido.getUsuario() != null){
+            //TODO esse costrutor deve virar um mapper também
+            pedidoEntity.setUsuario(new UsuarioEntity(pedido.getUsuario()));
+        }
 
         if(pedido.getLanche().isPresent()){
-            pedidoEntity.setLanche(new LancheEntity(pedido.getLanche().get())) ;
+            pedidoEntity.setLanche(LancheMapper.converterParaLancheEntity(pedido.getLanche().get())) ;
         }
 
         if(pedido.getBebida().isPresent()){
-            pedidoEntity.setBebida(new BebidaEntity(pedido.getBebida().get()));
+            pedidoEntity.setBebida(BebidaMapper.converterParaBebidaEntity(pedido.getBebida().get()));
         }
 
         if(pedido.getAcompanhamento().isPresent()){

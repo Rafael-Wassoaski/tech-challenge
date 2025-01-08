@@ -40,7 +40,7 @@ public class LancheServiceTest {
 
         lancheService.criar(lanche1);
         lancheService.criar(lanche2);
-        List<Item> lanches = lancheService.buscarTodosOsItens();
+        List<Lanche> lanches = lancheService.buscarTodosOsItens();
 
         Assertions.assertEquals(2, lanches.size());
     }

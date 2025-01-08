@@ -68,7 +68,6 @@ public class JWTService {
 
             return !LocalDateTime.now().isAfter(expirationTime);
         }catch(Exception exception){
-            System.out.println("Erro ao validar token: " + exception.getMessage());
             return false;
         }
     }

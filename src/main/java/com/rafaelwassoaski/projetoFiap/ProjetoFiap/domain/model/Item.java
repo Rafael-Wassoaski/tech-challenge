@@ -6,11 +6,21 @@ public abstract class Item {
 
     private String nome;
     private double preco;
+    private int id;
 
+    public Item(int id, String nome, double preco) {
+        this.nome = nome;
+        this.preco = preco;
+        this.id = id;
+    }
 
     public Item(String nome, double preco) {
         this.nome = nome;
         this.preco = preco;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getNome() {
@@ -26,5 +36,9 @@ public abstract class Item {
     }
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -1,5 +1,7 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.BebidaDTO;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.LancheDTO;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
@@ -10,11 +12,7 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.JWTSe
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.utils.CookiesUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
@@ -65,6 +63,7 @@ public class PedidoController {
                     acompanhamentoPersistenceItemRepository,
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
+
             return pedidoService.criarPedido(usuario);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
@@ -73,15 +72,15 @@ public class PedidoController {
         }
     }
 
-    @PostMapping("/adicionar/lanche")
-    public Pedido adicionarLanche(Pedido pedido, String nomeLanche) {
+    @PostMapping("/adicionar/lanche/{id}")
+    public Pedido adicionarLanche(@PathVariable Integer id, @RequestBody LancheDTO lancheDTO) {
         try {
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
                     acompanhamentoPersistenceItemRepository,
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
-            return pedidoService.definirLanche(nomeLanche, pedido.getId());
+            return pedidoService.definirLanche(lancheDTO.getNomeDoLanche(), id);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao adicionar o lanche ao pedido", e);
 
@@ -89,15 +88,15 @@ public class PedidoController {
         }
     }
 
-    @PostMapping("/adicionar/bebida")
-    public Pedido adicionarBebida(Pedido pedido, String nomeBebida) {
+    @PostMapping("/adicionar/bebida/{id}")
+    public Pedido adicionarBebida(@PathVariable Integer id, @RequestBody BebidaDTO bebidaDTO) {
         try {
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
                     acompanhamentoPersistenceItemRepository,
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
-            return pedidoService.definirBebida(nomeBebida, pedido.getId());
+            return pedidoService.definirBebida(bebidaDTO.getNomeDaBebida(), id);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao adicionar a bebida ao pedido", e);
 

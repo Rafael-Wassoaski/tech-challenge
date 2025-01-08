@@ -6,20 +6,20 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.Persistence
 import java.util.List;
 import java.util.Optional;
 
-public abstract class ItemUseCase {
+public abstract class ItemUseCase<T extends Item> {
 
-    private PersistenceItemRepository persistenceItemRepository;
+    private PersistenceItemRepository<T> persistenceItemRepository;
 
-    public ItemUseCase(PersistenceItemRepository persistenceItemRepository) {
+    public ItemUseCase(PersistenceItemRepository<T> persistenceItemRepository) {
         this.persistenceItemRepository = persistenceItemRepository;
     }
 
-    public Item criar(Item item){
+    public T criar(T item){
         return persistenceItemRepository.salvar(item);
     }
 
-    public Item buscarPorNome(String nome) throws Exception {
-        Optional<Item> optionalItem = persistenceItemRepository.buscarPorNome(nome);
+    public T buscarPorNome(String nome) throws Exception {
+        Optional<T> optionalItem = persistenceItemRepository.buscarPorNome(nome);
 
         if(optionalItem.isEmpty()){
             throw new Exception(String.format("Item %s não encontrado", nome));
@@ -28,21 +28,20 @@ public abstract class ItemUseCase {
         return optionalItem.get();
     }
 
-    public List<Item> buscarTodosOsItens() {
+    public List<T> buscarTodosOsItens() {
         return persistenceItemRepository.buscarTodos();
     }
 
-    public Item atualizar(Item item) throws Exception {
-        Item itemSalvo = this.buscarPorNome(item.getNome());
+    public T atualizar(T item) throws Exception {
+        T itemSalvo = this.buscarPorNome(item.getNome());
         itemSalvo.setPreco(item.getPreco());
 
         return this.persistenceItemRepository.atualizar(itemSalvo);
     }
 
     public void deletarPorNome(String nomeLanche) throws Exception {
-        Item itemSalvo = this.buscarPorNome(nomeLanche);
+        T itemSalvo = this.buscarPorNome(nomeLanche);
 
         this.persistenceItemRepository.deletarPorNome(itemSalvo.getNome());
-        return;
     }
 }

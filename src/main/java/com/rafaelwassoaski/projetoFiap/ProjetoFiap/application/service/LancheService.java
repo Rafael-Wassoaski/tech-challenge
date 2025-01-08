@@ -4,7 +4,7 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.port.in.ItemUseCa
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Lanche;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 
-public class LancheService extends ItemUseCase {
+public class LancheService extends ItemUseCase<Lanche> {
     public LancheService(PersistenceItemRepository<Lanche> persistenceItemRepository) {
         super(persistenceItemRepository);
     }

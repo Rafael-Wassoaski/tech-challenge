@@ -1,6 +1,7 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.LancheEntity;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.mappers.LancheMapper;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Lanche;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,7 +25,7 @@ public interface JpaLancheRepository extends JpaRepository<LancheEntity, Integer
     default List<Lanche> buscarTodos() {
         List<LancheEntity> lancheEntities = findAll();
 
-        return lancheEntities.stream().map(LancheEntity::converterParaLanche).collect(Collectors.toList());
+        return lancheEntities.stream().map(LancheMapper::converterParaLanche).collect(Collectors.toList());
     }
 
     @Override
@@ -37,15 +38,15 @@ public interface JpaLancheRepository extends JpaRepository<LancheEntity, Integer
 
         LancheEntity lancheEntity = optionalLancheEntity.get();
 
-        return Optional.of(lancheEntity.converterParaLanche());
+        return Optional.of(LancheMapper.converterParaLanche(lancheEntity));
     }
 
     @Override
     default Lanche salvar(Lanche item) {
-        LancheEntity lancheEntity = new LancheEntity(item);
+        LancheEntity lancheEntity = LancheMapper.converterParaLancheEntity(item);
         LancheEntity lancheSalvo = saveAndFlush(lancheEntity);
 
-        return lancheSalvo.converterParaLanche();
+        return LancheMapper.converterParaLanche(lancheEntity);
     }
 
     Optional<LancheEntity> findByNome(String nome);
