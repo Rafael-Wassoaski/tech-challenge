@@ -4,6 +4,7 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.mappers.LancheMapper;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Lanche;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public interface JpaLancheRepository extends JpaRepository<LancheEntity, Integer
         return salvar(itemSalvo);
     }
 
+    @Transactional
     @Override
     default void deletarPorNome(String nome) {
         deleteByNome(nome);

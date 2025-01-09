@@ -41,6 +41,7 @@ public interface JpaPedidoRepository extends JpaRepository<PedidoEntity, Integer
     default Pedido salvar(Pedido pedido) {
         PedidoEntity pedidoEntity = PedidoMapper.converterParaPedidoEntity(pedido);
         PedidoEntity pedidoEntitySalvo = saveAndFlush(pedidoEntity);
+
         return PedidoMapper.converterParaPedido(pedidoEntitySalvo);
     }
 }

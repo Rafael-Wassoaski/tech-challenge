@@ -8,4 +8,8 @@ public class Acompanhamento extends Item{
     public Acompanhamento(String nome, double preco) {
         super(nome, preco);
     }
+
+    public Acompanhamento(int id, String nome, double preco) {
+        super(id, nome, preco);
+    }
 }

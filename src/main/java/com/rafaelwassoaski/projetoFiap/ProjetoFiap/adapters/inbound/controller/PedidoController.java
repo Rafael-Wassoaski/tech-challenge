@@ -1,7 +1,9 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.AcompanhamentoDTO;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.BebidaDTO;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.LancheDTO;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.SobremesaDTO;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
@@ -104,15 +106,15 @@ public class PedidoController {
         }
     }
 
-    @PostMapping("/adicionar/acompanhamento")
-    public Pedido adicionarAcompanhamento(Pedido pedido, String nomeAcompanhamento) {
+    @PostMapping("/adicionar/acompanhamento/{id}")
+    public Pedido adicionarAcompanhamento(@PathVariable Integer id, @RequestBody AcompanhamentoDTO acompanhamentoDTO) {
         try {
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
                     acompanhamentoPersistenceItemRepository,
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
-            return pedidoService.definirAcompanhamento(nomeAcompanhamento, pedido.getId());
+            return pedidoService.definirAcompanhamento(acompanhamentoDTO.getNomeDoAcompanhamento(), id);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao adicionar o acompanhamento ao pedido", e);
 
@@ -120,15 +122,15 @@ public class PedidoController {
         }
     }
 
-    @PostMapping("/adicionar/sobremesa")
-    public Pedido adicionarSobremesa(Pedido pedido, String nomeSobremesa) {
+    @PostMapping("/adicionar/sobremesa/{id}")
+    public Pedido adicionarSobremesa(@PathVariable Integer id, @RequestBody SobremesaDTO sobremesaDTO) {
         try {
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
                     acompanhamentoPersistenceItemRepository,
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
-            return pedidoService.definirSobremesa(nomeSobremesa, pedido.getId());
+            return pedidoService.definirSobremesa(sobremesaDTO.getNomeDoSobremesa(), id);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao adicionar o acompanhamento ao pedido", e);
 

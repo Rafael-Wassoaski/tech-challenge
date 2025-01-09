@@ -11,17 +11,17 @@ public class PedidoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @OneToOne
-    @JoinColumn(name = "id")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "lanche_id")
     private LancheEntity lanche;
-    @OneToOne
-    @JoinColumn(name = "id")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "bebida_id")
     private BebidaEntity bebida;
-    @OneToOne
-    @JoinColumn(name = "id")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "acompanhamento_id")
     private AcompanhamentoEntity acompanhamento;
-    @OneToOne
-    @JoinColumn(name = "id")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "sobremesa_id")
     private SobremesaEntity sobremesa;
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "usuario_id", nullable = true)
@@ -29,6 +29,19 @@ public class PedidoEntity {
     @Column
     @Enumerated(EnumType.STRING)
     private StatusPedido statusPedido;
+
+    public PedidoEntity() {
+    }
+
+    public PedidoEntity(int id, LancheEntity lanche, BebidaEntity bebida, AcompanhamentoEntity acompanhamento, SobremesaEntity sobremesa, UsuarioEntity usuario, StatusPedido statusPedido) {
+        this.id = id;
+        this.lanche = lanche;
+        this.bebida = bebida;
+        this.acompanhamento = acompanhamento;
+        this.sobremesa = sobremesa;
+        this.usuario = usuario;
+        this.statusPedido = statusPedido;
+    }
 
     public int getId() {
         return id;

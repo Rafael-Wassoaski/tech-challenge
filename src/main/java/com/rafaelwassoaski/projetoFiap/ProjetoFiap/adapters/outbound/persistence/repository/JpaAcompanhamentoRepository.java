@@ -1,8 +1,10 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.AcompanhamentoEntity;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.mappers.AcompanhamentoMapper;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Acompanhamento;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -15,6 +17,7 @@ public interface JpaAcompanhamentoRepository extends JpaRepository<Acompanhament
         return salvar(itemSalvo);
     }
 
+    @Transactional
     @Override
     default void deletarPorNome(String nome) {
         deleteByNome(nome);
@@ -24,7 +27,7 @@ public interface JpaAcompanhamentoRepository extends JpaRepository<Acompanhament
     default List<Acompanhamento> buscarTodos() {
         List<AcompanhamentoEntity> acompanhamentoEntities = findAll();
 
-        return acompanhamentoEntities.stream().map(AcompanhamentoEntity::converterParaAcompanhamento).collect(Collectors.toList());
+        return acompanhamentoEntities.stream().map(AcompanhamentoMapper::converterParaAcompanhamento).collect(Collectors.toList());
     }
 
     @Override
@@ -37,15 +40,15 @@ public interface JpaAcompanhamentoRepository extends JpaRepository<Acompanhament
 
         AcompanhamentoEntity acompanhamentoEntity = optionalAcompanhamentoEntity.get();
 
-        return Optional.of(acompanhamentoEntity.converterParaAcompanhamento());
+        return Optional.of(AcompanhamentoMapper.converterParaAcompanhamento(acompanhamentoEntity));
     }
 
     @Override
     default Acompanhamento salvar(Acompanhamento item) {
-        AcompanhamentoEntity acompanhamentoEntity = new AcompanhamentoEntity(item);
+        AcompanhamentoEntity acompanhamentoEntity = AcompanhamentoMapper.converterParaAcompanhamentoEntity(item);
         AcompanhamentoEntity acompanhamentoSalvo = saveAndFlush(acompanhamentoEntity);
 
-        return acompanhamentoSalvo.converterParaAcompanhamento();
+        return AcompanhamentoMapper.converterParaAcompanhamento(acompanhamentoSalvo);
     }
 
     Optional<AcompanhamentoEntity> findByNome(String nome);

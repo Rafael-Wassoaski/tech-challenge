@@ -45,7 +45,7 @@ public class PedidoMapper {
             return Optional.empty();
         }
 
-        return Optional.of(acompanhamentoEntity.converterParaAcompanhamento());
+        return Optional.of(AcompanhamentoMapper.converterParaAcompanhamento(acompanhamentoEntity));
     }
 
     private static Optional<Sobremesa> pegarSobremesaOpcional(SobremesaEntity sobremesaEntity){
@@ -53,7 +53,7 @@ public class PedidoMapper {
             return Optional.empty();
         }
 
-        return Optional.of(sobremesaEntity.converterParaSobremesa());
+        return Optional.of(SobremesaMapper.converterParaSobremesa(sobremesaEntity));
     }
 
     private static Usuario pegarUsuario(UsuarioEntity usuario){
@@ -68,11 +68,14 @@ public class PedidoMapper {
         PedidoEntity pedidoEntity = new PedidoEntity();
         pedidoEntity.setStatusPedido(pedido.getStatusPedido()); ;
 
+        if(pedido.getId() != null){
+            pedidoEntity.setId(pedido.getId());
+        }
+
         if(pedido.getUsuario() != null){
             //TODO esse costrutor deve virar um mapper também
             pedidoEntity.setUsuario(new UsuarioEntity(pedido.getUsuario()));
         }
-
         if(pedido.getLanche().isPresent()){
             pedidoEntity.setLanche(LancheMapper.converterParaLancheEntity(pedido.getLanche().get())) ;
         }
@@ -82,10 +85,10 @@ public class PedidoMapper {
         }
 
         if(pedido.getAcompanhamento().isPresent()){
-            pedidoEntity.setAcompanhamento(new AcompanhamentoEntity(pedido.getAcompanhamento().get()));
+            pedidoEntity.setAcompanhamento(AcompanhamentoMapper.converterParaAcompanhamentoEntity(pedido.getAcompanhamento().get()));
         }
         if(pedido.getSobremesa().isPresent()){
-            pedidoEntity.setSobremesa(new SobremesaEntity(pedido.getSobremesa().get()));
+            pedidoEntity.setSobremesa(SobremesaMapper.converterParaSobremesaEntity(pedido.getSobremesa().get()));
         }
 
         return pedidoEntity;

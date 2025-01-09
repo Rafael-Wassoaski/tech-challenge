@@ -1,8 +1,10 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.SobremesaEntity;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.mappers.SobremesaMapper;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Sobremesa;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -15,6 +17,7 @@ public interface JpaSobremesaRepository extends JpaRepository<SobremesaEntity, I
         return salvar(itemSalvo);
     }
 
+    @Transactional
     @Override
     default void deletarPorNome(String nome) {
         deleteByNome(nome);
@@ -24,7 +27,7 @@ public interface JpaSobremesaRepository extends JpaRepository<SobremesaEntity, I
     default List<Sobremesa> buscarTodos() {
         List<SobremesaEntity> sobremesaEntities = findAll();
 
-        return sobremesaEntities.stream().map(SobremesaEntity::converterParaSobremesa).collect(Collectors.toList());
+        return sobremesaEntities.stream().map(SobremesaMapper::converterParaSobremesa).collect(Collectors.toList());
     }
 
     @Override
@@ -37,15 +40,15 @@ public interface JpaSobremesaRepository extends JpaRepository<SobremesaEntity, I
 
         SobremesaEntity sobremesaEntity = optionalSobremesaEntity.get();
 
-        return Optional.of(sobremesaEntity.converterParaSobremesa());
+        return Optional.of(SobremesaMapper.converterParaSobremesa(sobremesaEntity));
     }
 
     @Override
     default Sobremesa salvar(Sobremesa item) {
-        SobremesaEntity sobremesaEntity = new SobremesaEntity(item);
+        SobremesaEntity sobremesaEntity = SobremesaMapper.converterParaSobremesaEntity(item);
         SobremesaEntity sobremesaSalva = saveAndFlush(sobremesaEntity);
 
-        return sobremesaSalva.converterParaSobremesa();
+        return SobremesaMapper.converterParaSobremesa(sobremesaSalva);
     }
 
     Optional<SobremesaEntity> findByNome(String nome);

@@ -40,6 +40,7 @@ public class PedidoService {
 
     public Pedido definirBebida(String nomeBebida, int id) throws Exception {
         Pedido pedido = buscarPedidoPorId(id);
+
         Optional<Bebida> optionalBebiba = (Optional<Bebida>) buscarItemPorNome(nomeBebida, bebidaService);
         pedido.setOptionalBebida(optionalBebiba);
 
