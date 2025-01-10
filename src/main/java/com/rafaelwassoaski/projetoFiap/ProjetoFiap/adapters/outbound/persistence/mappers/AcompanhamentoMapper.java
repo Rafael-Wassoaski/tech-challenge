@@ -7,10 +7,10 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Acompanhamento;
 public class AcompanhamentoMapper {
 
     public static Acompanhamento converterParaAcompanhamento(AcompanhamentoEntity acompanhamento){
-        return new Acompanhamento(acompanhamento.getId(), acompanhamento.getNome(), acompanhamento.getPreco());
+        return new Acompanhamento(acompanhamento.getId(), acompanhamento.getNome(), acompanhamento.getPreco(), acompanhamento.getCategoria());
     }
 
     public static AcompanhamentoEntity converterParaAcompanhamentoEntity(Acompanhamento acompanhamento){
-        return new AcompanhamentoEntity(acompanhamento.getId(), acompanhamento.getNome(), acompanhamento.getPreco());
+        return new AcompanhamentoEntity(acompanhamento.getId(), acompanhamento.getNome(), acompanhamento.getPreco(), acompanhamento.getCategoria());
     }
 }

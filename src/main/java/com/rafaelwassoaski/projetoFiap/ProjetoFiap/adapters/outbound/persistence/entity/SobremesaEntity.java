@@ -18,6 +18,8 @@ public class SobremesaEntity {
     private String nome;
     @Column
     private double preco;
+    @Column
+    private String categoria;
 
     public SobremesaEntity() {
     }
@@ -31,6 +33,19 @@ public class SobremesaEntity {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
+    }
+
+    public SobremesaEntity(String nome, double preco, String categoria) {
+        this.nome = nome;
+        this.preco = preco;
+        this.categoria = categoria;
+    }
+
+    public SobremesaEntity(int id, String nome, double preco, String categoria) {
+        this.id = id;
+        this.nome = nome;
+        this.preco = preco;
+        this.categoria = categoria;
     }
 
     public int getId() {
@@ -55,5 +70,13 @@ public class SobremesaEntity {
 
     public void setPreco(double preco) {
         this.preco = preco;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

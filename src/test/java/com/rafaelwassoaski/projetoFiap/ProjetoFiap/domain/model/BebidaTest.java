@@ -6,13 +6,15 @@ import org.junit.jupiter.api.Test;
 
 public class BebidaTest {
     String nomeBebida = "Bebida 1";
+    String categoria = "categoria bebida";
     double preco = 10.0;
 
     @Test
     public void deveriaCriarBebidaComTodosOsAtributos() throws Exception {
-        Bebida Bebida = new Bebida(nomeBebida, preco);
+        Bebida bebida = new Bebida(nomeBebida, preco, categoria);
 
-        Assertions.assertEquals(nomeBebida, Bebida.getNome());
-        Assertions.assertEquals(preco, Bebida.getPreco());
+        Assertions.assertEquals(nomeBebida, bebida.getNome());
+        Assertions.assertEquals(preco, bebida.getPreco());
+        Assertions.assertEquals(categoria, bebida.getCategoria());
     }
 }

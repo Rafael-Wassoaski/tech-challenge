@@ -1,6 +1,7 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.port.in.UsuarioUseCase;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service.UsuarioDomainService;
@@ -56,5 +57,12 @@ public class UsuarioService implements UsuarioUseCase {
                 () -> new Exception("Usuário com esse nome não existe"));
 
         return user;
+    }
+
+    @Override
+    public boolean usuarioEhGerente(String email) throws Exception {
+        Usuario usuario = buscarUsuario(email);
+
+        return Papel.GERENTE.equals(usuario.getPapel());
     }
 }

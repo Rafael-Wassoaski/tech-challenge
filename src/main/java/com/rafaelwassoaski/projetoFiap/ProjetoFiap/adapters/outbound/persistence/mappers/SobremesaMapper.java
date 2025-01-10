@@ -8,10 +8,10 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Sobremesa;
 public class SobremesaMapper {
 
     public static Sobremesa converterParaSobremesa(SobremesaEntity sobremesa){
-        return new Sobremesa(sobremesa.getId(), sobremesa.getNome(), sobremesa.getPreco());
+        return new Sobremesa(sobremesa.getId(), sobremesa.getNome(), sobremesa.getPreco(), sobremesa.getCategoria());
     }
 
     public static SobremesaEntity converterParaSobremesaEntity(Sobremesa sobremesa){
-        return new SobremesaEntity(sobremesa.getId(), sobremesa.getNome(), sobremesa.getPreco());
+        return new SobremesaEntity(sobremesa.getId(), sobremesa.getNome(), sobremesa.getPreco(), sobremesa.getCategoria());
     }
 }

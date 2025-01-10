@@ -6,10 +6,10 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Lanche;
 public class LancheMapper {
 
     public static Lanche converterParaLanche(LancheEntity lancheEntity){
-        return new Lanche(lancheEntity.getId(), lancheEntity.getNome(), lancheEntity.getPreco());
+        return new Lanche(lancheEntity.getId(), lancheEntity.getNome(), lancheEntity.getPreco(), lancheEntity.getCategoria());
     }
 
     public static LancheEntity converterParaLancheEntity(Lanche lanche){
-        return new LancheEntity(lanche.getId(), lanche.getNome(), lanche.getPreco());
+        return new LancheEntity(lanche.getId(), lanche.getNome(), lanche.getPreco(), lanche.getCategoria());
     }
 }

@@ -18,6 +18,8 @@ public class BebidaEntity {
     private String nome;
     @Column
     private double preco;
+    @Column
+    private String categoria;
 
     public BebidaEntity() {
     }
@@ -31,6 +33,19 @@ public class BebidaEntity {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
+    }
+
+    public BebidaEntity(String nome, double preco, String categoria) {
+        this.nome = nome;
+        this.preco = preco;
+        this.categoria = categoria;
+    }
+
+    public BebidaEntity(int id, String nome, double preco, String categoria) {
+        this.id = id;
+        this.nome = nome;
+        this.preco = preco;
+        this.categoria = categoria;
     }
 
     public int getId() {
@@ -55,5 +70,13 @@ public class BebidaEntity {
 
     public void setPreco(double preco) {
         this.preco = preco;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

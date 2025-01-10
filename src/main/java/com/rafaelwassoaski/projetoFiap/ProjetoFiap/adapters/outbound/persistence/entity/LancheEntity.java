@@ -15,6 +15,8 @@ public class LancheEntity {
     private String nome;
     @Column
     private double preco;
+    @Column
+    private String categoria;
 
     public LancheEntity() {
     }
@@ -28,6 +30,19 @@ public class LancheEntity {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
+    }
+
+    public LancheEntity(String nome, double preco, String categoria) {
+        this.nome = nome;
+        this.preco = preco;
+        this.categoria = categoria;
+    }
+
+    public LancheEntity(int id, String nome, double preco, String categoria) {
+        this.id = id;
+        this.nome = nome;
+        this.preco = preco;
+        this.categoria = categoria;
     }
 
     public int getId() {
@@ -52,5 +67,13 @@ public class LancheEntity {
 
     public void setPreco(double preco) {
         this.preco = preco;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

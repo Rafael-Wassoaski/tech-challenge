@@ -46,7 +46,7 @@ public class BebidaServiceTest {
     }
 
     @Test
-    void deveriaAtualizarOPrecoDeUmBebidaSalvo() throws Exception {
+    void deveriaAtualizarOPrecoDeUmaBebidaSalva() throws Exception {
         MapPersistenceItemForTests mapPersistenceForTests = new MapPersistenceItemForTests();
         bebidaService = new BebidaService(mapPersistenceForTests);
         String nomeBebida= "Nome 1";

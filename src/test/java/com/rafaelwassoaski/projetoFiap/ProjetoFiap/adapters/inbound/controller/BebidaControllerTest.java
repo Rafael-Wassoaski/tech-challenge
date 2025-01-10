@@ -1,7 +1,6 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
-import com.google.gson.Gson;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Lanche;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Bebida;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,10 +17,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class LancheControllerTest {
+public class BebidaControllerTest {
 
     @Autowired
-    private PersistenceItemRepository<Lanche> lanchePersistenceItemRepository;
+    private PersistenceItemRepository<Bebida> bebidaPersistenceItemRepository;
     @Autowired
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
@@ -32,17 +31,17 @@ public class LancheControllerTest {
     }
 
     @Test
-    void deveriaRetornarTodosOsLanches() throws Exception {
-        Lanche lanche1 = new Lanche("lanche1", 10);
-        Lanche lanche2 = new Lanche("lanche2", 5);
-        Lanche lanche3 = new Lanche("lanche3", 15);
+    void deveriaRetornarTodasAsBebidas() throws Exception {
+        Bebida bebiba1 = new Bebida("bebida1", 10);
+        Bebida bebiba2 = new Bebida("bebida2", 5);
+        Bebida bebiba3 = new Bebida("bebida3", 15);
 
-        lanchePersistenceItemRepository.salvar(lanche1);
-        lanchePersistenceItemRepository.salvar(lanche2);
-        lanchePersistenceItemRepository.salvar(lanche3);
+        bebidaPersistenceItemRepository.salvar(bebiba1);
+        bebidaPersistenceItemRepository.salvar(bebiba2);
+        bebidaPersistenceItemRepository.salvar(bebiba3);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/lanches")
+                        .get("/bebidas")
                         .contentType("application/json")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())

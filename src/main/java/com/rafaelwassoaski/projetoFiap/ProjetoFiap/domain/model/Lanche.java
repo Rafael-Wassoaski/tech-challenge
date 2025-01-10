@@ -11,5 +11,13 @@ public class Lanche extends Item{
         super(id, nome, preco);
     }
 
+    public Lanche(String nome, double preco, String categoria) {
+        super(nome, preco, categoria);
+    }
+
+    public Lanche(int id, String nome, double preco, String categoria) {
+        super(id, nome, preco, categoria);
+    }
+
 
 }
