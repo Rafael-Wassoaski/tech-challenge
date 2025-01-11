@@ -2,6 +2,7 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Acompanhamento;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Item;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Sobremesa;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.MapPersistenceItemForTests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ public class AcompanhamentoServiceTest {
 
         acompanhamentoService.criar(Acompanhamento1);
         acompanhamentoService.criar(Acompanhamento2);
-        List<Item> Acompanhamentos = acompanhamentoService.buscarTodosOsItens();
+        List<Acompanhamento> Acompanhamentos = acompanhamentoService.buscarTodosOsItens();
 
         Assertions.assertEquals(2, Acompanhamentos.size());
     }

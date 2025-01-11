@@ -40,7 +40,7 @@ public class SobremesaServiceTest {
 
         SobremesaService.criar(Sobremesa1);
         SobremesaService.criar(Sobremesa2);
-        List<Item> Sobremesas = SobremesaService.buscarTodosOsItens();
+        List<Sobremesa> Sobremesas = SobremesaService.buscarTodosOsItens();
 
         Assertions.assertEquals(2, Sobremesas.size());
     }

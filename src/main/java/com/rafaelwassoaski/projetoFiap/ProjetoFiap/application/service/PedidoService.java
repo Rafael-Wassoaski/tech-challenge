@@ -1,11 +1,13 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.port.in.ItemUseCase;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.StatusPedido;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistencePedidoRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public class PedidoService {
@@ -117,5 +119,24 @@ public class PedidoService {
         Optional<Pedido> optionalPedido = persistencePedidoRepository.buscarPorId(id);
 
         return optionalPedido.orElseThrow(() -> new Exception(String.format("Pedido com id %d não localizado", id)));
+    }
+
+    public List<Pedido> buscarTodosOsPedidos(Usuario usuario) throws Exception {
+
+        if(!(Papel.GERENTE.equals(usuario.getPapel()) || Papel.FUNCIONARIO.equals(usuario.getPapel()))){
+            throw new Exception("Usuário não tem permissão para visualizar estes dados");
+        }
+
+        return persistencePedidoRepository.buscarTodos();
+    }
+
+    public Pedido buscarPorId(Integer id, Usuario usuario) throws Exception {
+        Pedido pedido = buscarPedidoPorId(id);
+
+        if(!pedidoService.clientePodeVerPedido(pedido, usuario)){
+            throw new Exception("Você não tem permissão para visualizar este pedido");
+        }
+
+        return pedido;
     }
 }

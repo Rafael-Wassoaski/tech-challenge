@@ -56,12 +56,13 @@ public class PedidoMapper {
         return Optional.of(SobremesaMapper.converterParaSobremesa(sobremesaEntity));
     }
 
+    //TODO Validar necessidade desse método
     private static Usuario pegarUsuario(UsuarioEntity usuario){
         if (usuario == null){
             return null;
         }
 
-        return usuario.converterParaUsuario();
+        return UsuarioMapper.converterParaUsuario(usuario);
     }
 
     public static PedidoEntity converterParaPedidoEntity(Pedido pedido) {
@@ -73,8 +74,7 @@ public class PedidoMapper {
         }
 
         if(pedido.getUsuario() != null){
-            //TODO esse costrutor deve virar um mapper também
-            pedidoEntity.setUsuario(new UsuarioEntity(pedido.getUsuario()));
+            pedidoEntity.setUsuario(UsuarioMapper.converterParaUsuarioEntity(pedido.getUsuario()));
         }
         if(pedido.getLanche().isPresent()){
             pedidoEntity.setLanche(LancheMapper.converterParaLancheEntity(pedido.getLanche().get())) ;

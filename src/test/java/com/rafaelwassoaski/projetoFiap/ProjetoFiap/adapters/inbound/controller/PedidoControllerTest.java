@@ -2,8 +2,10 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
 import com.google.gson.Gson;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.PedidoEntity;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.UsuarioEntity;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository.JpaPedidoRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.*;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.StatusPedido;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.*;
@@ -106,6 +108,114 @@ public class PedidoControllerTest {
         Optional<Pedido> optionalPedido = persistencePedidoRepository.buscarPorId(pedido.getId());
 
         Assertions.assertTrue(optionalPedido.isPresent());
+    }
+    
+    
+
+    @Test
+    void deveriaRetornarTodoOsPedidos() throws Exception {
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/usuarios/cadastro")
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
+        Usuario usuarioSalvo = usuarioSalvoOptional.get();
+        usuarioSalvo.setPapel(Papel.GERENTE);
+        persistenceUsuarioRepository.atualizar(usuarioSalvo);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/usuarios/login")
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/pedidos/criar")
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .cookie(new Cookie("token", tokenDTO.getToken()))
+                        .accept(MediaType.APPLICATION_JSON));
+             
+
+         mockMvc.perform(MockMvcRequestBuilders
+                        .post("/pedidos/criar")
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .cookie(new Cookie("token", tokenDTO.getToken()))
+                        .accept(MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/pedidos/buscar/todos")
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .cookie(new Cookie("token", tokenDTO.getToken()))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
+
+    @Test
+    void deveriaRetornarUmPedidoPorId() throws Exception {
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/usuarios/cadastro")
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
+        Usuario usuarioSalvo = usuarioSalvoOptional.get();
+        usuarioSalvo.setPapel(Papel.GERENTE);
+        persistenceUsuarioRepository.atualizar(usuarioSalvo);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/usuarios/login")
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/pedidos/criar")
+                .content(new Gson().toJson(usuario))
+                .contentType("application/json")
+                .cookie(new Cookie("token", tokenDTO.getToken()))
+                .accept(MediaType.APPLICATION_JSON));
+
+
+        result = mockMvc.perform(MockMvcRequestBuilders
+                .post("/pedidos/criar")
+                .content(new Gson().toJson(usuario))
+                .contentType("application/json")
+                .cookie(new Cookie("token", tokenDTO.getToken()))
+                .accept(MediaType.APPLICATION_JSON)).andReturn();
+
+        PedidoEntity pedido = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
+
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/pedidos/buscar/" + pedido.getId())
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .cookie(new Cookie("token", tokenDTO.getToken()))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(pedido.getId()))
+                .andExpect(jsonPath("usuario.email").value(pedido.getUsuario().getEmail()));
     }
 
     @Test

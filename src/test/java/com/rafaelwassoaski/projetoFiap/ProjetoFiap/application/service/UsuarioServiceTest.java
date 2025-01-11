@@ -3,6 +3,7 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.MapPersistenceUsuarioForTests;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service.UsuarioDomainService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -99,6 +100,7 @@ public class UsuarioServiceTest {
         mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
         Encriptador encriptador = new Encriptador(salParaTestes);
         usuarioService = new UsuarioService(mapPersistenceUsuarioForTests, encriptador);
+        UsuarioDomainService usuarioDomainService = new UsuarioDomainService();
         String email = "teste@teste.com";
         String senha = "teste123456";
 
@@ -106,13 +108,9 @@ public class UsuarioServiceTest {
         usuario.setPapel(Papel.GERENTE);
         mapPersistenceUsuarioForTests.salvar(usuario);
 
-        Assertions.assertTrue(() -> {
-            try {
-                return usuarioService.usuarioEhGerente(email);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
+        Assertions.assertTrue(() ->
+                usuarioDomainService.usuarioEhGerente(usuario)
+        );
     }
 
     @Test
@@ -120,18 +118,13 @@ public class UsuarioServiceTest {
         mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
         Encriptador encriptador = new Encriptador(salParaTestes);
         usuarioService = new UsuarioService(mapPersistenceUsuarioForTests, encriptador);
+        UsuarioDomainService usuarioDomainService = new UsuarioDomainService();
         String email = "teste@teste.com";
         String senha = "teste123456";
 
         Usuario usuario = new Usuario(email, senha);
         mapPersistenceUsuarioForTests.salvar(usuario);
 
-        Assertions.assertFalse(() -> {
-            try {
-                return usuarioService.usuarioEhGerente(email);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
+        Assertions.assertFalse(() -> usuarioDomainService.usuarioEhGerente(usuario));
     }
 }

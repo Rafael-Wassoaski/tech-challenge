@@ -1,13 +1,14 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.validation.ValidadorItem;
-
 public abstract class Item {
 
     private String nome;
     private double preco;
     private String categoria;
     private int id;
+
+    public Item() {
+    }
 
     public Item(int id, String nome, double preco) {
         this.nome = nome;

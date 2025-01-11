@@ -40,7 +40,7 @@ public class BebidaServiceTest {
 
         bebidaService.criar(bebida1);
         bebidaService.criar(bebida2);
-        List<Item> Bebidas = bebidaService.buscarTodosOsItens();
+        List<Bebida> Bebidas = bebidaService.buscarTodosOsItens();
 
         Assertions.assertEquals(2, Bebidas.size());
     }

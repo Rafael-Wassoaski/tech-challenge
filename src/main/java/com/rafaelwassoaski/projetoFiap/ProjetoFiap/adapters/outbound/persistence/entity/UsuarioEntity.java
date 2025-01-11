@@ -3,13 +3,7 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistenc
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
 public class UsuarioEntity {
 
@@ -31,18 +25,43 @@ public class UsuarioEntity {
         this.papel = papel;
     }
 
-    public UsuarioEntity() {}
-
-    public UsuarioEntity(Usuario usuario) {
-        if(usuario.getId() != null){
-            this.id = usuario.getId();
-        }
-        this.email = usuario.getEmail();
-        this.senha = usuario.getSenha();
-        this.papel = usuario.getPapel();
+    public UsuarioEntity(String email, String senha, Papel papel) {
+        this.email = email;
+        this.senha = senha;
+        this.papel = papel;
     }
 
-    public Usuario converterParaUsuario(){
-           return new Usuario(id, email, senha, papel);
+    public UsuarioEntity() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public Papel getPapel() {
+        return papel;
+    }
+
+    public void setPapel(Papel papel) {
+        this.papel = papel;
     }
 }

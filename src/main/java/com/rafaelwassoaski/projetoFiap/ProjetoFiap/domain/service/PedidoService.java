@@ -21,4 +21,11 @@ public class PedidoService {
 
         return somatoriaItem.getValorTotal();
     }
+
+    public boolean clientePodeVerPedido(Pedido pedido, Usuario usuario){
+        Usuario usuarioPedido = pedido.getUsuario();
+        String emailUsuarioSolicitante = usuario.getEmail();
+
+        return usuarioPedido == null || emailUsuarioSolicitante.equals(usuarioPedido.getEmail());
+    }
 }

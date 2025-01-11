@@ -20,6 +20,8 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
+
 @Log4j2
 @RestController
 @RequestMapping("/pedidos")
@@ -52,7 +54,7 @@ public class PedidoController {
 
 
     @PostMapping("/criar")
-    @ResponseStatus( HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED)
     public Pedido criarPedido(HttpServletRequest request) {
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
@@ -67,6 +69,52 @@ public class PedidoController {
                     persistencePedidoRepository);
 
             return pedidoService.criarPedido(usuario);
+        } catch (Exception e) {
+            log.error("Ocorreu um erro ao criar o pedido", e);
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @GetMapping("/buscar/todos")
+    @ResponseStatus( HttpStatus.OK)
+    public List<Pedido> buscarTodosOsPedidos(HttpServletRequest request) {
+        try {
+            String token = CookiesUtils.extractTokenCookie(request).get();
+            String email = jwtService.getUsername(token);
+            UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
+            Usuario usuario = usuarioService.buscarUsuario(email);
+
+            PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
+                    bebidaPersistenceItemRepository,
+                    acompanhamentoPersistenceItemRepository,
+                    sobremesaPersistenceItemRepository,
+                    persistencePedidoRepository);
+
+            return pedidoService.buscarTodosOsPedidos(usuario);
+        } catch (Exception e) {
+            log.error("Ocorreu um erro ao criar o pedido", e);
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @GetMapping("/buscar/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Pedido buscarTodosOsPedidos(@PathVariable Integer id, HttpServletRequest request) {
+        try {
+            String token = CookiesUtils.extractTokenCookie(request).get();
+            String email = jwtService.getUsername(token);
+            UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
+            Usuario usuario = usuarioService.buscarUsuario(email);
+
+            PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
+                    bebidaPersistenceItemRepository,
+                    acompanhamentoPersistenceItemRepository,
+                    sobremesaPersistenceItemRepository,
+                    persistencePedidoRepository);
+
+            return pedidoService.buscarPorId(id, usuario);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 

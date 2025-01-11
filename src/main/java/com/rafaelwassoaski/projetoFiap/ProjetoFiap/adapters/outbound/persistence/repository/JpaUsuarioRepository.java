@@ -1,6 +1,7 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.UsuarioEntity;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.mappers.UsuarioMapper;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -26,7 +27,7 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Integ
     default List<Usuario> buscarTodos() {
         List<UsuarioEntity> usuarioEntities = findAll();
 
-        return usuarioEntities.stream().map(usuarioEntity -> usuarioEntity.converterParaUsuario()).collect(Collectors.toList());
+        return usuarioEntities.stream().map(UsuarioMapper::converterParaUsuario).collect(Collectors.toList());
     }
 
     @Override
@@ -38,15 +39,15 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Integ
         }
 
         UsuarioEntity usuarioEntity = optionalUsuarioEntity.get();
-        return Optional.of(usuarioEntity.converterParaUsuario());
+        return Optional.of(UsuarioMapper.converterParaUsuario(usuarioEntity));
     }
 
     @Override
     default Usuario salvar(Usuario usuario) {
-        UsuarioEntity usuarioEntity = new UsuarioEntity(usuario);
+        UsuarioEntity usuarioEntity = UsuarioMapper.converterParaUsuarioEntity(usuario);
 
         UsuarioEntity usuarioEntitySalvo = saveAndFlush(usuarioEntity);
-        return usuarioEntitySalvo.converterParaUsuario();
+        return UsuarioMapper.converterParaUsuario(usuarioEntitySalvo);
     }
 
     Optional<UsuarioEntity> findByEmail(String email);

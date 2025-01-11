@@ -1,5 +1,6 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service;
 
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.validation.ValidardorEmail;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
@@ -31,6 +32,10 @@ public class UsuarioDomainService {
 
     public String[] papeisParaArray(Usuario usuario){
         return new String[]{usuario.getPapel().name()};
+    }
+
+    public boolean usuarioEhGerente(Usuario usuario) {
+        return Papel.GERENTE.equals(usuario.getPapel());
     }
 
 }

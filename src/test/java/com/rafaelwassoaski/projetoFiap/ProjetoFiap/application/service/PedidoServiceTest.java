@@ -1,5 +1,6 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
 
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.StatusPedido;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.MapPersistenceItemForTests;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 public class PedidoServiceTest {
@@ -273,5 +275,62 @@ public class PedidoServiceTest {
         Pedido pedidoAtualizado = pedidoService.retirarPedido(pedido.getId());
 
         Assertions.assertEquals(StatusPedido.RETIRADO, pedidoAtualizado.getStatusPedido());
+    }
+
+    @Test
+    void deveriaBuscarTodosOsPedidosCasoSejaGerente() throws Exception {
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        usuario.setPapel(Papel.GERENTE);
+
+        pedidoService.criarPedido(usuario);
+        pedidoService.criarPedido(usuario);
+        pedidoService.criarPedido(usuario);
+        pedidoService.criarPedido(usuario);
+
+        List<Pedido> pedidosList = pedidoService.buscarTodosOsPedidos(usuario);
+
+        Assertions.assertEquals(4, pedidosList.size());
+    }
+
+    @Test
+    void deveriaBuscarTodosOsPedidosCasoSejaFuncionario() throws Exception {
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        usuario.setPapel(Papel.FUNCIONARIO);
+
+        pedidoService.criarPedido(usuario);
+        pedidoService.criarPedido(usuario);
+        pedidoService.criarPedido(usuario);
+        pedidoService.criarPedido(usuario);
+
+        List<Pedido> pedidosList = pedidoService.buscarTodosOsPedidos(usuario);
+
+        Assertions.assertEquals(4, pedidosList.size());
+    }
+
+    @Test
+    void deveriaRetornarErroQuandoOClienteTentarBuscarTodosOsPedidos() throws Exception {
+        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
+                bebidaPersistenceItemRepository,
+                acompanhamentoPersistenceItemRepository,
+                sobremesaPersistenceItemRepository,
+                mapPersistencePedidoForTests);
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
+
+        pedidoService.criarPedido(usuario);
+        pedidoService.criarPedido(usuario);
+        pedidoService.criarPedido(usuario);
+        pedidoService.criarPedido(usuario);
+
+        Assertions.assertThrows(Exception.class, ()-> pedidoService.buscarTodosOsPedidos(usuario));
     }
 }

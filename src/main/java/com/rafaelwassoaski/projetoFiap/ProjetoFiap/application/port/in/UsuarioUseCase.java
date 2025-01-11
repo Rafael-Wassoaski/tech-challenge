@@ -13,6 +13,4 @@ public interface UsuarioUseCase {
 
     Usuario buscarUsuario(String email) throws Exception;
 
-    boolean usuarioEhGerente(String email) throws Exception;
-
 }
