@@ -41,6 +41,7 @@ public class BebidaControllerTest {
     private MockMvc mockMvc;
     private String emailUsuario = "email@email.com";
     private String senhaUsuario = "senha";
+    private String cpf = "000.000.000-00";
 
     @BeforeEach
     public void setUp(){
@@ -78,7 +79,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaCriarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -121,7 +122,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarCriarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -156,7 +157,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaAtualizarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         double precoOriginal = 10;
         Bebida bebida = new Bebida("bebida1", precoOriginal, "categoria");
 
@@ -209,7 +210,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarAtualizarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         double precoOriginal = 10;
         Bebida bebida = new Bebida("bebida1", precoOriginal, "categoria");
         bebidaPersistenceItemRepository.salvar(bebida);
@@ -248,7 +249,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaDeletarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -296,7 +297,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarDeletarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
         bebidaPersistenceItemRepository.salvar(bebida);
 

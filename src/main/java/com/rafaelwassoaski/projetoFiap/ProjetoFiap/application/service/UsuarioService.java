@@ -21,9 +21,12 @@ public class UsuarioService implements UsuarioUseCase {
         this.persistenceUsuarioRepository = persistenceUsuarioRepository;
     }
 
-    public Usuario criar(String email, String senha) throws Exception {
+    public Usuario criar(Usuario usuarioDTO) throws Exception {
+        String senha = usuarioDTO.getSenha();
+        String email = usuarioDTO.getEmail();
+        String cpf = usuarioDTO.getCpf();
         String senhaForte = usuarioService.encriptarTexto(senha);
-        Usuario usuario = new Usuario(email, senhaForte);
+        Usuario usuario = new Usuario(email, senhaForte, cpf);
 
         return persistenceUsuarioRepository.salvar(usuario);
     }

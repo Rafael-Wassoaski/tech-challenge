@@ -2,7 +2,6 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
 import com.google.gson.Gson;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.MapPersistenceUsuarioForTests;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -10,8 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -33,6 +30,7 @@ public class UsuarioControllerTest {
     private MockMvc mockMvc;
     String emailUsuario = "email@email.com";
     String senhaUsuario = "senha";
+    String cpf = "000.000.000.00";
 
     @BeforeEach
     public void setUp() {
@@ -46,7 +44,7 @@ public class UsuarioControllerTest {
 
     @Test
     void deveriaCriarUmUsuarioComEmailESenha() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
@@ -60,11 +58,12 @@ public class UsuarioControllerTest {
 
         Assertions.assertTrue(usuarioCadastrado.isPresent());
         Assertions.assertEquals(emailUsuario, usuarioCadastrado.get().getEmail());
+        Assertions.assertEquals(cpf, usuarioCadastrado.get().getCpf());
     }
 
     @Test
     void deveriaFazerLoginComUmUsuarioCadastrado() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")

@@ -41,6 +41,8 @@ public class LancheControllerTest {
     private MockMvc mockMvc;
     private String emailUsuario = "email@email.com";
     private String senhaUsuario = "senha";
+    private String cpf = "000.000.000.00";
+
 
     @BeforeEach
     public void setUp(){
@@ -77,7 +79,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaCriarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -120,7 +122,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarCriarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -155,7 +157,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaAtualizarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         double precoOriginal = 10;
         Lanche lanche = new Lanche("lanche1", precoOriginal, "categoria");
 
@@ -208,7 +210,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarAtualizarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         double precoOriginal = 10;
         Lanche lanche = new Lanche("lanche1", precoOriginal, "categoria");
         lanchePersistenceItemRepository.salvar(lanche);
@@ -247,7 +249,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaDeletarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -295,7 +297,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarDeletarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
         lanchePersistenceItemRepository.salvar(lanche);
 

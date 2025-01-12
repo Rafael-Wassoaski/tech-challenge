@@ -12,22 +12,26 @@ public class UsuarioEntity {
     private int id;
     @Column(unique = true)
     private String email;
-    @Column
+    @Column(nullable = true)
     private String senha;
+    @Column
+    private String cpf;
     @Enumerated(EnumType.STRING)
     @Column
     private Papel papel;
 
-    public UsuarioEntity(int id, String email, String senha, Papel papel) {
+    public UsuarioEntity(int id, String email, String senha, String cpf, Papel papel) {
         this.id = id;
         this.email = email;
         this.senha = senha;
+        this.cpf = cpf;
         this.papel = papel;
     }
 
-    public UsuarioEntity(String email, String senha, Papel papel) {
+    public UsuarioEntity(String email, String senha, String cpf, Papel papel) {
         this.email = email;
         this.senha = senha;
+        this.cpf = cpf;
         this.papel = papel;
     }
 
@@ -63,5 +67,13 @@ public class UsuarioEntity {
 
     public void setPapel(Papel papel) {
         this.papel = papel;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 }

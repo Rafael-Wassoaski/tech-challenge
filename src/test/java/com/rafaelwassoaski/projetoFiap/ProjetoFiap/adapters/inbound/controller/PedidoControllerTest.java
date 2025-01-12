@@ -51,6 +51,7 @@ public class PedidoControllerTest {
 
     String emailUsuario = "email@email.com";
     String senhaUsuario = "senha";
+    String cpf = "000.000.000-00";
 
     @BeforeEach
     void setup() throws Exception {
@@ -70,7 +71,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaCriarUmPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
@@ -114,7 +115,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaRetornarTodoOsPedidos() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
@@ -165,7 +166,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaRetornarUmPedidoPorId() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
@@ -220,7 +221,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaCriarUmPedidoComOUsuario() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/usuarios/cadastro")
@@ -265,7 +266,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarUmLancheAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Lanche lanche = new Lanche("lanche 1", 10);
         lanchePersistenceItemRepository.salvar(lanche);
         LancheDTO lancheDTO = new LancheDTO(lanche.getNome());
@@ -314,7 +315,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarUmaBebidaeAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Bebida bebida = new Bebida("bebida 1", 10);
         bebidaPersistenceItemRepository.salvar(bebida);
         BebidaDTO bebidaDTO = new BebidaDTO(bebida.getNome());
@@ -363,7 +364,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarUmAcompanhamentoAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento 1", 10);
         acompanhamentoPersistenceItemRepository.salvar(acompanhamento);
         AcompanhamentoDTO acompanhamentoDTO = new AcompanhamentoDTO(acompanhamento.getNome());
@@ -411,7 +412,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarUmaSobremesaAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Sobremesa sobremesa = new Sobremesa("sobremesa 1", 10);
         sobremesaPersistenceItemRepository.salvar(sobremesa);
         SobremesaDTO sobremesaDTO = new SobremesaDTO(sobremesa.getNome());
@@ -459,7 +460,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarTodosOsItensAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         MockHttpSession session = new MockHttpSession();
 
         Lanche lanche = new Lanche("lanche 1", 10);

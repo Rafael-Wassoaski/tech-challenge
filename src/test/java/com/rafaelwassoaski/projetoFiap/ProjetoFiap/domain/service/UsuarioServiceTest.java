@@ -19,7 +19,8 @@ public class UsuarioServiceTest {
         usuarioService = new UsuarioDomainService(encriptador);
         String email = "testeteste.com";
         String senha = "teste123456";
-        Usuario usuario = new Usuario(email, senha);
+        String cpf = "000.000.000.36";
+        Usuario usuario = new Usuario(email, senha, cpf);
 
         Assertions.assertThrows(Exception.class, () -> usuarioService.validarEmail(usuario));
     }

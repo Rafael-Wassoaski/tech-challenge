@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UsuarioUseCase {
 
-    Usuario criar(String email, String senha) throws Exception;
+    Usuario criar(Usuario usuario) throws Exception;
 
     UserDetails logar(String email, String senha) throws Exception;
 

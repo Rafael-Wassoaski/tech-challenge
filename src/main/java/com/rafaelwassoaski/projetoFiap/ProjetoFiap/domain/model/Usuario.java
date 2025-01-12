@@ -6,29 +6,39 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.validation.ValidardorE
 public class Usuario {
     private Integer id;
     private String email;
+    private String cpf;
     private String senha;
     private Papel papel;
 
     public Usuario() {
     }
 
-    public Usuario(String email, String senha) {
+    public Usuario(String email, String cpf) {
         this.email = email;
-        this.senha = senha;
+        this.cpf = cpf;
         this.papel = Papel.CLIENTE;
     }
 
-    public Usuario(Integer id, String email, String senha) {
-        this.id = id;
+    public Usuario(String email, String senha, String cpf) {
         this.email = email;
         this.senha = senha;
+        this.cpf = cpf;
         this.papel = Papel.CLIENTE;
     }
 
-    public Usuario(int id, String email, String senha, Papel papel) {
+    public Usuario(Integer id, String email, String senha, String cpf) {
         this.id = id;
         this.email = email;
         this.senha = senha;
+        this.cpf = cpf;
+        this.papel = Papel.CLIENTE;
+    }
+
+    public Usuario(int id, String email, String senha, String cpf, Papel papel) {
+        this.id = id;
+        this.email = email;
+        this.senha = senha;
+        this.cpf = cpf;
         this.papel = papel;
     }
 
@@ -44,6 +54,9 @@ public class Usuario {
         return papel;
     }
 
+    public String getCpf() {
+        return cpf;
+    }
     public void setEmail(String email) {
         this.email = email;
     }
@@ -61,6 +74,10 @@ public class Usuario {
     }
 
     public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
     }
 }

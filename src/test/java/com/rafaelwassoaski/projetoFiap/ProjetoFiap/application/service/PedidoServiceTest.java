@@ -66,7 +66,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
         Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
@@ -88,7 +88,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
         Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
@@ -113,7 +113,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
         Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
@@ -138,7 +138,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
         Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
@@ -163,7 +163,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
         Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
@@ -188,7 +188,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
         Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
@@ -215,7 +215,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
         Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
@@ -237,7 +237,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
         Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
@@ -260,7 +260,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
         Pedido pedido = pedidoService.criarPedido(usuario);
         int pedidoId = pedido.getId();
 
@@ -284,7 +284,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
         usuario.setPapel(Papel.GERENTE);
 
         pedidoService.criarPedido(usuario);
@@ -304,7 +304,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
         usuario.setPapel(Papel.FUNCIONARIO);
 
         pedidoService.criarPedido(usuario);
@@ -324,7 +324,7 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567");
+        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000.00");
 
         pedidoService.criarPedido(usuario);
         pedidoService.criarPedido(usuario);

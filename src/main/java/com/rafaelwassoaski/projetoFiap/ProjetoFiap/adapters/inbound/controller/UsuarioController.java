@@ -37,7 +37,7 @@ public class UsuarioController {
     public void cadastrar(@RequestBody Usuario usuario) {
         try {
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, encriptador);
-            usuarioService.criar(usuario.getEmail(), usuario.getSenha());
+            usuarioService.criar(usuario);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao cadastrar o usuario", e);
 
@@ -51,7 +51,7 @@ public class UsuarioController {
         try {
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, encriptador);
             UserDetails authenticatedUser = usuarioService.logar(usuario.getEmail(), usuario.getSenha());
-            Usuario usuarioLogado = new Usuario(1, authenticatedUser.getUsername(), authenticatedUser.getPassword());
+            Usuario usuarioLogado = new Usuario(1, authenticatedUser.getUsername(), authenticatedUser.getPassword(), "000.000.000.00");
 
             String token = jwtService.generateToken(usuarioLogado);
 

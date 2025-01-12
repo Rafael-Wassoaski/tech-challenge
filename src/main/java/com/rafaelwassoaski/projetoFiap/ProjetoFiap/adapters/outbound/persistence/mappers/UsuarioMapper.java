@@ -14,11 +14,12 @@ public class UsuarioMapper {
         usuarioEntity.setEmail(usuario.getEmail());
         usuarioEntity.setSenha(usuario.getSenha());
         usuarioEntity.setPapel(usuario.getPapel());
+        usuarioEntity.setCpf(usuario.getCpf());
 
         return usuarioEntity;
     }
 
     public static Usuario converterParaUsuario(UsuarioEntity usuarioEntity){
-        return new Usuario(usuarioEntity.getId(), usuarioEntity.getEmail(), usuarioEntity.getSenha(), usuarioEntity.getPapel());
+        return new Usuario(usuarioEntity.getId(), usuarioEntity.getEmail(), usuarioEntity.getSenha(), usuarioEntity.getCpf() ,usuarioEntity.getPapel());
     }
 }

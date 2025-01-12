@@ -40,6 +40,7 @@ public class SobremesaControllerTest {
     private MockMvc mockMvc;
     private String emailUsuario = "email@email.com";
     private String senhaUsuario = "senha";
+    private String cpf = "000.000.000.00";
 
     @BeforeEach
     public void setUp(){
@@ -76,7 +77,7 @@ public class SobremesaControllerTest {
 
     @Test
     void deveriaCriarUmSobremesa() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Sobremesa sobremesa = new Sobremesa("sobremesa1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -119,7 +120,7 @@ public class SobremesaControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarCriarUmSobremesa() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Sobremesa sobremesa = new Sobremesa("sobremesa1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -154,7 +155,7 @@ public class SobremesaControllerTest {
 
     @Test
     void deveriaAtualizarUmSobremesa() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         double precoOriginal = 10;
         Sobremesa sobremesa = new Sobremesa("sobremesa1", precoOriginal, "categoria");
 
@@ -207,7 +208,7 @@ public class SobremesaControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarAtualizarUmSobremesa() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         double precoOriginal = 10;
         Sobremesa sobremesa = new Sobremesa("sobremesa1", precoOriginal, "categoria");
         sobremesaPersistenceItemRepository.salvar(sobremesa);
@@ -246,7 +247,7 @@ public class SobremesaControllerTest {
 
     @Test
     void deveriaDeletarUmSobremesa() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Sobremesa sobremesa = new Sobremesa("sobremesa1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -294,7 +295,7 @@ public class SobremesaControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarDeletarUmSobremesa() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
         Sobremesa sobremesa = new Sobremesa("sobremesa1", 10, "categoria");
         sobremesaPersistenceItemRepository.salvar(sobremesa);
 

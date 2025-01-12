@@ -24,11 +24,14 @@ public class UsuarioServiceTest {
         usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
         String email = "teste@teste.com";
         String senha = "teste123456";
+        String cpf = "000.000.000.00";
 
-        Usuario usuario = usuarioService.criar(email, senha);
+        Usuario usuario = new Usuario(email, senha, cpf);
+        Usuario usuarioCriado = usuarioService.criar(usuario);
 
-        Assertions.assertTrue(encriptador.senhasBatem(senha, usuario.getSenha()));
-        Assertions.assertNotEquals(senha, usuario.getSenha());
+        Assertions.assertTrue(encriptador.senhasBatem(senha, usuarioCriado.getSenha()));
+        Assertions.assertNotEquals(senha, usuarioCriado.getSenha());
+        Assertions.assertEquals(cpf, usuarioCriado.getCpf());
     }
 
     @Test
@@ -38,8 +41,10 @@ public class UsuarioServiceTest {
         usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
         String email = "teste@teste.com";
         String senha = "teste123456";
+        String cpf = "000.000.000.00";
+        Usuario usuario = new Usuario(email, senha, cpf);
 
-        usuarioService.criar(email, senha);
+        usuarioService.criar(usuario);
         UserDetails userDetails = usuarioService.buscarUserDetails(email);
 
         Assertions.assertNotNull(userDetails);
@@ -53,8 +58,10 @@ public class UsuarioServiceTest {
         usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
         String email = "teste@teste.com";
         String senha = "teste123456";
+        String cpf = "000.000.000.00";
+        Usuario usuario = new Usuario(email, senha, cpf);
 
-        usuarioService.criar(email, senha);
+        usuarioService.criar(usuario);
 
         Assertions.assertDoesNotThrow(() -> {
             UserDetails userDetails = usuarioService.logar(email, senha);
@@ -71,8 +78,10 @@ public class UsuarioServiceTest {
         String email = "teste@teste.com";
         String senha = "teste123456";
         String senhaErrada = "teste654321";
+        String cpf = "000.000.000.00";
+        Usuario usuario = new Usuario(email, senha, cpf);
 
-        usuarioService.criar(email, senha);
+        usuarioService.criar(usuario);
 
         Assertions.assertThrows(Exception.class, () -> {
             usuarioService.logar(email, senhaErrada);
@@ -87,8 +96,10 @@ public class UsuarioServiceTest {
         String email = "teste@teste.com";
         String emailErrado = "testeErrado@teste.com";
         String senha = "teste123456";
+        String cpf = "000.000.000.00";
+        Usuario usuario = new Usuario(email, senha, cpf);
 
-        usuarioService.criar(email, senha);
+        usuarioService.criar(usuario);
 
         Assertions.assertThrows(Exception.class, () -> {
             usuarioService.logar(emailErrado, senha);
@@ -103,9 +114,10 @@ public class UsuarioServiceTest {
         UsuarioDomainService usuarioDomainService = new UsuarioDomainService();
         String email = "teste@teste.com";
         String senha = "teste123456";
-
-        Usuario usuario = new Usuario(email, senha);
+        String cpf = "000.000.000.00";
+        Usuario usuario = new Usuario(email, senha, cpf);
         usuario.setPapel(Papel.GERENTE);
+
         mapPersistenceUsuarioForTests.salvar(usuario);
 
         Assertions.assertTrue(() ->
@@ -121,8 +133,9 @@ public class UsuarioServiceTest {
         UsuarioDomainService usuarioDomainService = new UsuarioDomainService();
         String email = "teste@teste.com";
         String senha = "teste123456";
+        String cpf = "000.000.000.00";
 
-        Usuario usuario = new Usuario(email, senha);
+        Usuario usuario = new Usuario(email, senha, cpf);
         mapPersistenceUsuarioForTests.salvar(usuario);
 
         Assertions.assertFalse(() -> usuarioDomainService.usuarioEhGerente(usuario));
