@@ -1,6 +1,7 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
 import com.google.gson.Gson;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -30,7 +31,7 @@ public class UsuarioControllerTest {
     private MockMvc mockMvc;
     String emailUsuario = "email@email.com";
     String senhaUsuario = "senha";
-    String cpf = "000.000.000.00";
+    String cpf = "000.000.000-00";
 
     @BeforeEach
     public void setUp() {
@@ -59,6 +60,25 @@ public class UsuarioControllerTest {
         Assertions.assertTrue(usuarioCadastrado.isPresent());
         Assertions.assertEquals(emailUsuario, usuarioCadastrado.get().getEmail());
         Assertions.assertEquals(cpf, usuarioCadastrado.get().getCpf());
+    }
+
+    @Test
+    void naoDeveriaCriarUmUsuarioGerentePelaApi() throws Exception {
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        usuario.setPapel(Papel.GERENTE);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/usuarios/cadastro")
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        Optional<Usuario> usuarioCadastrado = mapPersistenceUsuarioForTests.buscarPorEmail(emailUsuario);
+
+        Assertions.assertNotEquals(Papel.GERENTE, usuarioCadastrado.get().getPapel());
+        Assertions.assertEquals(Papel.CLIENTE, usuarioCadastrado.get().getPapel());
     }
 
     @Test

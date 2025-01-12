@@ -24,7 +24,7 @@ public class UsuarioServiceTest {
         usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
         String email = "teste@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000.00";
+        String cpf = "000.000.000-00";
 
         Usuario usuario = new Usuario(email, senha, cpf);
         Usuario usuarioCriado = usuarioService.criar(usuario);
@@ -41,14 +41,14 @@ public class UsuarioServiceTest {
         usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
         String email = "teste@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000.00";
+        String cpf = "000.000.000-00";
         Usuario usuario = new Usuario(email, senha, cpf);
 
         usuarioService.criar(usuario);
         UserDetails userDetails = usuarioService.buscarUserDetails(email);
 
         Assertions.assertNotNull(userDetails);
-        Assertions.assertEquals(email, userDetails.getUsername());
+        Assertions.assertEquals(cpf, userDetails.getUsername());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class UsuarioServiceTest {
         usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
         String email = "teste@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000.00";
+        String cpf = "000.000.000-00";
         Usuario usuario = new Usuario(email, senha, cpf);
 
         usuarioService.criar(usuario);
@@ -66,7 +66,7 @@ public class UsuarioServiceTest {
         Assertions.assertDoesNotThrow(() -> {
             UserDetails userDetails = usuarioService.logar(email, senha);
             Assertions.assertNotNull(userDetails);
-            Assertions.assertEquals(email, userDetails.getUsername());
+            Assertions.assertEquals(cpf, userDetails.getUsername());
         });
     }
 
@@ -78,7 +78,7 @@ public class UsuarioServiceTest {
         String email = "teste@teste.com";
         String senha = "teste123456";
         String senhaErrada = "teste654321";
-        String cpf = "000.000.000.00";
+        String cpf = "000.000.000-00";
         Usuario usuario = new Usuario(email, senha, cpf);
 
         usuarioService.criar(usuario);
@@ -96,7 +96,7 @@ public class UsuarioServiceTest {
         String email = "teste@teste.com";
         String emailErrado = "testeErrado@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000.00";
+        String cpf = "000.000.000-00";
         Usuario usuario = new Usuario(email, senha, cpf);
 
         usuarioService.criar(usuario);
@@ -114,7 +114,7 @@ public class UsuarioServiceTest {
         UsuarioDomainService usuarioDomainService = new UsuarioDomainService();
         String email = "teste@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000.00";
+        String cpf = "000.000.000-00";
         Usuario usuario = new Usuario(email, senha, cpf);
         usuario.setPapel(Papel.GERENTE);
 
@@ -133,7 +133,7 @@ public class UsuarioServiceTest {
         UsuarioDomainService usuarioDomainService = new UsuarioDomainService();
         String email = "teste@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000.00";
+        String cpf = "000.000.000-00";
 
         Usuario usuario = new Usuario(email, senha, cpf);
         mapPersistenceUsuarioForTests.salvar(usuario);

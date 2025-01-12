@@ -11,7 +11,7 @@ public class Pedido {
     private Optional<Bebida> optionalBebida;
     private Optional<Acompanhamento> optionalAcompanhamento;
     private Optional<Sobremesa> optionalSobremesa;
-    private Usuario usuario;
+    private Optional<Usuario> usuario;
     private StatusPedido statusPedido;
     private Integer id;
 
@@ -24,7 +24,7 @@ public class Pedido {
         this.id = id;
     }
 
-    public Pedido(Integer id, Optional<Lanche> optionalLanche, Optional<Bebida> optionalBebida, Optional<Acompanhamento> optionalAcompanhamento, Optional<Sobremesa> optionalSobremesa, Usuario usuario, StatusPedido statusPedido) {
+    public Pedido(Integer id, Optional<Lanche> optionalLanche, Optional<Bebida> optionalBebida, Optional<Acompanhamento> optionalAcompanhamento, Optional<Sobremesa> optionalSobremesa, Optional<Usuario> usuario, StatusPedido statusPedido) {
         this.optionalLanche = optionalLanche;
         this.optionalBebida = optionalBebida;
         this.optionalAcompanhamento = optionalAcompanhamento;
@@ -39,6 +39,7 @@ public class Pedido {
         this.optionalBebida = Optional.empty();
         this.optionalAcompanhamento = Optional.empty();
         this.optionalSobremesa = Optional.empty();
+        this.usuario = Optional.empty();
         this.statusPedido = StatusPedido.RECEBIDO;
     }
 
@@ -58,7 +59,7 @@ public class Pedido {
         return optionalSobremesa;
     }
 
-    public Usuario getUsuario() {
+    public Optional<Usuario> getUsuario() {
         return usuario;
     }
 
@@ -70,7 +71,7 @@ public class Pedido {
         return statusPedido;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(Optional<Usuario> usuario) {
         this.usuario = usuario;
     }
 

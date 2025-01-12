@@ -31,8 +31,8 @@ public class UsuarioService implements UsuarioUseCase {
         return persistenceUsuarioRepository.salvar(usuario);
     }
 
-    public UserDetails logar(String email, String senha) throws Exception {
-        UserDetails userDetails = buscarUserDetails(email);
+    public UserDetails logar(String cpf, String senha) throws Exception {
+        UserDetails userDetails = buscarUserDetails(cpf);
 
         boolean isSamePassword = usuarioService.senhasBatem(senha, userDetails.getPassword());
 
@@ -43,20 +43,20 @@ public class UsuarioService implements UsuarioUseCase {
         throw new Exception("Usuário ou senha incorretos");
     }
 
-    public UserDetails buscarUserDetails(String email) throws Exception {
-        Usuario user = buscarUsuario(email);
+    public UserDetails buscarUserDetails(String cpf) throws Exception {
+        Usuario user = buscarUsuario(cpf);
 
         return User
                 .builder()
-                .username(user.getEmail())
+                .username(user.getCpf())
                 .password(user.getSenha())
                 .roles(usuarioService.papeisParaArray(user))
                 .build();
     }
 
-    public Usuario buscarUsuario(String email) throws Exception {
-        Usuario user = persistenceUsuarioRepository.buscarPorEmail(email).orElseThrow(
-                () -> new Exception("Usuário com esse nome não existe"));
+    public Usuario buscarUsuario(String cpf) throws Exception {
+        Usuario user = persistenceUsuarioRepository.buscarPorCpf(cpf).orElseThrow(
+                () -> new Exception("Usuário com esse cpf não existe"));
 
         return user;
     }

@@ -50,8 +50,10 @@ public class UsuarioController {
     public TokenDTO logar(@RequestBody Usuario usuario) {
         try {
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, encriptador);
-            UserDetails authenticatedUser = usuarioService.logar(usuario.getEmail(), usuario.getSenha());
-            Usuario usuarioLogado = new Usuario(1, authenticatedUser.getUsername(), authenticatedUser.getPassword(), "000.000.000.00");
+            UserDetails authenticatedUser = usuarioService.logar(usuario.getCpf(), usuario.getSenha());
+            Usuario usuarioLogado = new Usuario();
+            usuarioLogado.setSenha(authenticatedUser.getPassword());
+            usuarioLogado.setCpf(authenticatedUser.getUsername());
 
             String token = jwtService.generateToken(usuarioLogado);
 

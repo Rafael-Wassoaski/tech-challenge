@@ -10,7 +10,7 @@ public class UsuarioTest {
     void deveriaCriarUmUsuarioComEmailECPFESenha() throws Exception {
         String email = "teste@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000.00";
+        String cpf = "000.000.000-00";
         Usuario usuario = new Usuario(email, senha, cpf);
 
         Assertions.assertEquals(email, usuario.getEmail());
@@ -20,7 +20,7 @@ public class UsuarioTest {
     @Test
     void deveriaCriarUmUsuarioComEmailECpfESemSenha() throws Exception {
         String email = "teste@teste.com";
-        String cpf = "000.000.000.00";
+        String cpf = "000.000.000-00";
         Usuario usuario = new Usuario(email, cpf);
 
         Assertions.assertEquals(email, usuario.getEmail());
@@ -33,7 +33,7 @@ public class UsuarioTest {
         String email = "teste@teste.com";
         String email2 = "teste2@teste2.com";
         String senha = "teste123456";
-        String cpf = "000.000.000.00";
+        String cpf = "000.000.000-00";
         Usuario usuario = new Usuario(email, senha, cpf);
 
         Assertions.assertEquals(email, usuario.getEmail());
@@ -47,7 +47,7 @@ public class UsuarioTest {
         String email = "teste@teste.com";
         String senha = "teste123456";
         String senha2 = "teste654321";
-        String cpf = "000.000.000.00";
+        String cpf = "000.000.000-00";
 
         Usuario usuario = new Usuario(email, senha, cpf);
 

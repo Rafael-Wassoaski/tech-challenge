@@ -12,14 +12,14 @@ public class PedidoMapper {
         Optional<Bebida> optionalBebida = pegarBebidaOpcional(pedidoEntity.getBebida());
         Optional<Acompanhamento> optionalAcompanhamento = pegarAcompanhamentoOpcional(pedidoEntity.getAcompanhamento());
         Optional<Sobremesa> optionalSobremesa = pegarSobremesaOpcional(pedidoEntity.getSobremesa());
-        Usuario usuario = pegarUsuario(pedidoEntity.getUsuario());
+        Optional<Usuario> usuarioOptional = pegarUsuario(pedidoEntity.getUsuario());
 
         return new Pedido(pedidoEntity.getId(),
                 optionalLanche,
                 optionalBebida,
                 optionalAcompanhamento,
                 optionalSobremesa,
-                usuario,
+                usuarioOptional,
                 pedidoEntity.getStatusPedido()
         );
     }
@@ -56,13 +56,13 @@ public class PedidoMapper {
         return Optional.of(SobremesaMapper.converterParaSobremesa(sobremesaEntity));
     }
 
-    //TODO Validar necessidade desse método
-    private static Usuario pegarUsuario(UsuarioEntity usuario){
-        if (usuario == null){
-            return null;
+    private static Optional<Usuario> pegarUsuario(UsuarioEntity usuarioEntity){
+        if (usuarioEntity == null){
+            return Optional.empty();
         }
 
-        return UsuarioMapper.converterParaUsuario(usuario);
+        Usuario usuario = UsuarioMapper.converterParaUsuario(usuarioEntity);
+        return Optional.of(usuario);
     }
 
     public static PedidoEntity converterParaPedidoEntity(Pedido pedido) {
@@ -73,8 +73,8 @@ public class PedidoMapper {
             pedidoEntity.setId(pedido.getId());
         }
 
-        if(pedido.getUsuario() != null){
-            pedidoEntity.setUsuario(UsuarioMapper.converterParaUsuarioEntity(pedido.getUsuario()));
+        if(pedido.getUsuario().isPresent()){
+            pedidoEntity.setUsuario(UsuarioMapper.converterParaUsuarioEntity(pedido.getUsuario().get()));
         }
         if(pedido.getLanche().isPresent()){
             pedidoEntity.setLanche(LancheMapper.converterParaLancheEntity(pedido.getLanche().get())) ;

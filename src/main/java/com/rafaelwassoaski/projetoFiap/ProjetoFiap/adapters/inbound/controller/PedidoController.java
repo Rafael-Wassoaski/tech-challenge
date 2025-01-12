@@ -58,9 +58,9 @@ public class PedidoController {
     public Pedido criarPedido(HttpServletRequest request) {
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String email = jwtService.getUsername(token);
+            String cpf = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(email);
+            Usuario usuario = usuarioService.buscarUsuario(cpf);
 
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
@@ -76,14 +76,32 @@ public class PedidoController {
         }
     }
 
+    @PostMapping("/criar/anonimo")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Pedido criarPedido() {
+        try {
+            PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
+                    bebidaPersistenceItemRepository,
+                    acompanhamentoPersistenceItemRepository,
+                    sobremesaPersistenceItemRepository,
+                    persistencePedidoRepository);
+
+            return pedidoService.criarPedido();
+        } catch (Exception e) {
+            log.error("Ocorreu um erro ao criar o pedido", e);
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
     @GetMapping("/buscar/todos")
     @ResponseStatus( HttpStatus.OK)
     public List<Pedido> buscarTodosOsPedidos(HttpServletRequest request) {
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String email = jwtService.getUsername(token);
+            String cpf = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(email);
+            Usuario usuario = usuarioService.buscarUsuario(cpf);
 
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
@@ -104,9 +122,9 @@ public class PedidoController {
     public Pedido buscarTodosOsPedidos(@PathVariable Integer id, HttpServletRequest request) {
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String email = jwtService.getUsername(token);
+            String cpf = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(email);
+            Usuario usuario = usuarioService.buscarUsuario(cpf);
 
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,

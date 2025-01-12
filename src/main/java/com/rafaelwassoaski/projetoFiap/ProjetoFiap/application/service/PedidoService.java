@@ -75,8 +75,12 @@ public class PedidoService {
 
     public Pedido criarPedido(Usuario usuario) throws Exception {
         Pedido pedido = new Pedido();
-        pedido.setUsuario(usuario);
+        pedido.setUsuario(Optional.of(usuario));
         return persistencePedidoRepository.salvar(pedido);
+    }
+
+    public Pedido criarPedido() throws Exception {
+        return persistencePedidoRepository.salvar(new Pedido());
     }
 
     public Pedido prepararPedido(int id) throws Exception {

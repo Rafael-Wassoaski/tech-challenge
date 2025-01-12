@@ -25,6 +25,12 @@ public class MapPersistenceUsuarioForTests implements PersistenceUsuarioReposito
     }
 
     @Override
+    public Optional<Usuario> buscarPorCpf(String cpf) {
+        Usuario usuario = this.usuarios.get(cpf);
+        return Optional.of(usuario);
+    }
+
+    @Override
     public List<Usuario> buscarTodos() {
         return new ArrayList<Usuario>(usuarios.values());
     }

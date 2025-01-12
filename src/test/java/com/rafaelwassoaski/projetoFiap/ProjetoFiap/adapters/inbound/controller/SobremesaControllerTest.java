@@ -40,7 +40,7 @@ public class SobremesaControllerTest {
     private MockMvc mockMvc;
     private String emailUsuario = "email@email.com";
     private String senhaUsuario = "senha";
-    private String cpf = "000.000.000.00";
+    private String cpf = "000.000.000-00";
 
     @BeforeEach
     public void setUp(){

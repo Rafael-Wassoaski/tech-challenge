@@ -23,9 +23,12 @@ public class PedidoService {
     }
 
     public boolean clientePodeVerPedido(Pedido pedido, Usuario usuario){
-        Usuario usuarioPedido = pedido.getUsuario();
+        Optional<Usuario> usuarioPedidoOptional = pedido.getUsuario();
         String emailUsuarioSolicitante = usuario.getEmail();
 
-        return usuarioPedido == null || emailUsuarioSolicitante.equals(usuarioPedido.getEmail());
+        if (usuarioPedidoOptional.isPresent()) {
+            return emailUsuarioSolicitante.equals(usuarioPedidoOptional.get().getEmail());
+        }
+        return true;
     }
 }

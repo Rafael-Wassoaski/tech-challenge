@@ -1,7 +1,6 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.validation.ValidardorEmail;
 
 public class Usuario {
     private Integer id;
@@ -79,5 +78,9 @@ public class Usuario {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 }

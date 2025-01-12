@@ -10,6 +10,8 @@ public interface PersistenceUsuarioRepository{
 
     Optional<Usuario> buscarPorEmail(String email);
 
+    Optional<Usuario> buscarPorCpf(String cpf);
+
     List<Usuario> buscarTodos();
 
     void deletarPorEmail(String nome);

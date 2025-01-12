@@ -110,8 +110,32 @@ public class PedidoControllerTest {
 
         Assertions.assertTrue(optionalPedido.isPresent());
     }
-    
-    
+
+    @Test
+    void deveriaCriarUmPedidoSemUsuario() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/pedidos/criar/anonimo")
+                        .contentType("application/json")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("statusPedido").exists())
+                .andExpect(jsonPath("statusPedido").value(StatusPedido.RECEBIDO.toString()))
+                .andExpect(jsonPath("bebida").isEmpty())
+                .andExpect(jsonPath("lanche").isEmpty())
+                .andExpect(jsonPath("acompanhamento").isEmpty())
+                .andExpect(jsonPath("sobremesa").isEmpty())
+                .andReturn();
+
+        PedidoEntity pedido = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
+        Optional<Pedido> optionalPedido = persistencePedidoRepository.buscarPorId(pedido.getId());
+
+        Assertions.assertTrue(optionalPedido.isPresent());
+        Assertions.assertTrue(optionalPedido.get().getUsuario().isEmpty());
+    }
+
+
+
 
     @Test
     void deveriaRetornarTodoOsPedidos() throws Exception {
@@ -261,7 +285,7 @@ public class PedidoControllerTest {
         Optional<Pedido> optionalPedido = persistencePedidoRepository.buscarPorId(pedido.getId());
 
         Assertions.assertTrue(optionalPedido.isPresent());
-        Assertions.assertEquals(usuario.getEmail(), optionalPedido.get().getUsuario().getEmail());
+        Assertions.assertEquals(usuario.getEmail(), optionalPedido.get().getUsuario().get().getEmail());
     }
 
     @Test

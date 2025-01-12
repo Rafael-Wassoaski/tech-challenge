@@ -33,7 +33,16 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Integ
     @Override
     default Optional<Usuario> buscarPorEmail(String email) {
         Optional<UsuarioEntity> optionalUsuarioEntity = findByEmail(email);
+        return extrairUsuario(optionalUsuarioEntity);
+    }
 
+    @Override
+    default Optional<Usuario> buscarPorCpf(String cpf) {
+        Optional<UsuarioEntity> optionalUsuarioEntity = findByCpf(cpf);
+        return extrairUsuario(optionalUsuarioEntity);
+    }
+
+    default Optional<Usuario> extrairUsuario(Optional<UsuarioEntity> optionalUsuarioEntity){
         if (optionalUsuarioEntity.isEmpty()) {
             Optional.empty();
         }
@@ -51,5 +60,7 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Integ
     }
 
     Optional<UsuarioEntity> findByEmail(String email);
+    Optional<UsuarioEntity> findByCpf(String cpf);
+    
     public void deleteByEmail(String email);
 }
