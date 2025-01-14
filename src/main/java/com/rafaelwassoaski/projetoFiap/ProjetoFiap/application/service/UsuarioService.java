@@ -24,11 +24,23 @@ public class UsuarioService implements UsuarioUseCase {
     public Usuario criar(Usuario usuarioDTO) throws Exception {
         String senha = usuarioDTO.getSenha();
         String email = usuarioDTO.getEmail();
+        String nome = usuarioDTO.getNome();
         String cpf = usuarioDTO.getCpf();
-        String senhaForte = usuarioService.encriptarTexto(senha);
-        Usuario usuario = new Usuario(email, senhaForte, cpf);
+        String senhaForte = tornarSenhaForte(senha);
+
+        Usuario usuario = new Usuario(email, nome, senhaForte, cpf);
+        UsuarioDomainService usuarioDomainService = new UsuarioDomainService();
+        usuarioDomainService.validarUsuario(usuario);
 
         return persistenceUsuarioRepository.salvar(usuario);
+    }
+
+    private String tornarSenhaForte(String senha) {
+        if (senha != null) {
+            return usuarioService.encriptarTexto(senha);
+        }
+
+        return null;
     }
 
     public UserDetails logar(String cpf, String senha) throws Exception {
@@ -36,7 +48,7 @@ public class UsuarioService implements UsuarioUseCase {
 
         boolean isSamePassword = usuarioService.senhasBatem(senha, userDetails.getPassword());
 
-        if(isSamePassword){
+        if (isSamePassword) {
             return userDetails;
         }
 

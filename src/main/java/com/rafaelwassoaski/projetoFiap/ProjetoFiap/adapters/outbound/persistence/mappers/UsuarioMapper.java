@@ -12,6 +12,7 @@ public class UsuarioMapper {
         }
 
         usuarioEntity.setEmail(usuario.getEmail());
+        usuarioEntity.setNome(usuario.getNome());
         usuarioEntity.setSenha(usuario.getSenha());
         usuarioEntity.setPapel(usuario.getPapel());
         usuarioEntity.setCpf(usuario.getCpf());
@@ -20,6 +21,6 @@ public class UsuarioMapper {
     }
 
     public static Usuario converterParaUsuario(UsuarioEntity usuarioEntity){
-        return new Usuario(usuarioEntity.getId(), usuarioEntity.getEmail(), usuarioEntity.getSenha(), usuarioEntity.getCpf() ,usuarioEntity.getPapel());
+        return new Usuario(usuarioEntity.getId(), usuarioEntity.getEmail(), usuarioEntity.getNome(), usuarioEntity.getSenha(), usuarioEntity.getCpf() ,usuarioEntity.getPapel());
     }
 }

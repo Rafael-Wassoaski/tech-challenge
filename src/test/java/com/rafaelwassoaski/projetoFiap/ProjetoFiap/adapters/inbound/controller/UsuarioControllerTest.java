@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class UsuarioControllerTest {
 
     @Autowired
@@ -32,6 +34,7 @@ public class UsuarioControllerTest {
     String emailUsuario = "email@email.com";
     String senhaUsuario = "senha";
     String cpf = "000.000.000-00";
+    String nome = "teste";
 
     @BeforeEach
     public void setUp() {
@@ -45,7 +48,7 @@ public class UsuarioControllerTest {
 
     @Test
     void deveriaCriarUmUsuarioComEmailESenha() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
@@ -64,7 +67,7 @@ public class UsuarioControllerTest {
 
     @Test
     void naoDeveriaCriarUmUsuarioGerentePelaApi() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         usuario.setPapel(Papel.GERENTE);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -83,13 +86,32 @@ public class UsuarioControllerTest {
 
     @Test
     void deveriaFazerLoginComUmUsuarioCadastrado() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
                         .content(new Gson().toJson(usuario))
                         .contentType("application/json")
                         .accept(MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/usuarios/login")
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void deveriaFazerLoginApenasComCpfESenha() throws Exception {
+        Usuario usuario = new Usuario(cpf, senhaUsuario);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/usuarios/cadastro")
+                .content(new Gson().toJson(usuario))
+                .contentType("application/json")
+                .accept(MediaType.APPLICATION_JSON));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/login")

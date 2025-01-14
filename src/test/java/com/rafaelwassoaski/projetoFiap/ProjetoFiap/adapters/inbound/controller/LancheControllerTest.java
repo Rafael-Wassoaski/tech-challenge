@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class LancheControllerTest {
 
     @Autowired
@@ -42,6 +44,7 @@ public class LancheControllerTest {
     private String emailUsuario = "email@email.com";
     private String senhaUsuario = "senha";
     private String cpf = "000.000.000-00";
+    private String nome = "teste";
 
 
     @BeforeEach
@@ -79,7 +82,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaCriarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -122,7 +125,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarCriarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -157,7 +160,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaAtualizarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         double precoOriginal = 10;
         Lanche lanche = new Lanche("lanche1", precoOriginal, "categoria");
 
@@ -210,7 +213,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarAtualizarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         double precoOriginal = 10;
         Lanche lanche = new Lanche("lanche1", precoOriginal, "categoria");
         lanchePersistenceItemRepository.salvar(lanche);
@@ -249,7 +252,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaDeletarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -297,7 +300,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarDeletarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
         lanchePersistenceItemRepository.salvar(lanche);
 

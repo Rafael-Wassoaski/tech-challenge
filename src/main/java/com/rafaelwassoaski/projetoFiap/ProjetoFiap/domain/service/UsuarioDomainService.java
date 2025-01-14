@@ -12,25 +12,26 @@ public class UsuarioDomainService {
         this.encriptador = encriptador;
     }
 
-    public UsuarioDomainService() {}
+    public UsuarioDomainService() {
+    }
 
     public void validarEmail(Usuario usuario) throws Exception {
         ValidardorEmail validardorEmail = new ValidardorEmail();
 
-        if(!validardorEmail.validarEmail(usuario.getEmail())){
+        if (!validardorEmail.validarEmail(usuario.getEmail())) {
             throw new Exception("O e-mail não é válido");
         }
     }
 
-    public boolean senhasBatem(String senhaOriginal, String senhaCriptografada){
+    public boolean senhasBatem(String senhaOriginal, String senhaCriptografada) {
         return encriptador.senhasBatem(senhaOriginal, senhaCriptografada);
     }
 
-    public String encriptarTexto(String senha){
+    public String encriptarTexto(String senha) {
         return encriptador.encriptarTexto(senha);
     }
 
-    public String[] papeisParaArray(Usuario usuario){
+    public String[] papeisParaArray(Usuario usuario) {
         return new String[]{usuario.getPapel().name()};
     }
 
@@ -38,4 +39,9 @@ public class UsuarioDomainService {
         return Papel.GERENTE.equals(usuario.getPapel());
     }
 
+    public void validarUsuario(Usuario usuario) throws Exception {
+        if (usuario.getCpf() == null || usuario.getCpf().isEmpty()) {
+            throw new Exception("Usuário deve ter CPF para ser criado");
+        }
+    }
 }

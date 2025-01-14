@@ -1,10 +1,15 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
+import lombok.Builder;
 
+
+
+@Builder
 public class Usuario {
     private Integer id;
     private String email;
+    private String nome;
     private String cpf;
     private String senha;
     private Papel papel;
@@ -12,30 +17,45 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String email, String cpf) {
-        this.email = email;
+    public Usuario(String cpf) {
         this.cpf = cpf;
         this.papel = Papel.CLIENTE;
     }
 
-    public Usuario(String email, String senha, String cpf) {
-        this.email = email;
+    public Usuario(String cpf, String senha) {
         this.senha = senha;
         this.cpf = cpf;
         this.papel = Papel.CLIENTE;
     }
 
-    public Usuario(Integer id, String email, String senha, String cpf) {
-        this.id = id;
+    public Usuario(String email, String nome, String cpf) {
         this.email = email;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.papel = Papel.CLIENTE;
+    }
+
+    public Usuario(String email, String nome, String senha, String cpf) {
+        this.email = email;
+        this.nome = nome;
         this.senha = senha;
         this.cpf = cpf;
         this.papel = Papel.CLIENTE;
     }
 
-    public Usuario(int id, String email, String senha, String cpf, Papel papel) {
+    public Usuario(Integer id, String email, String nome, String senha, String cpf) {
         this.id = id;
         this.email = email;
+        this.nome = nome;
+        this.senha = senha;
+        this.cpf = cpf;
+        this.papel = Papel.CLIENTE;
+    }
+
+    public Usuario(int id, String email, String nome, String senha, String cpf, Papel papel) {
+        this.id = id;
+        this.email = email;
+        this.nome = nome;
         this.senha = senha;
         this.cpf = cpf;
         this.papel = papel;
@@ -56,6 +76,11 @@ public class Usuario {
     public String getCpf() {
         return cpf;
     }
+
+    public String getNome() {
+        return nome;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -72,15 +97,15 @@ public class Usuario {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setId(Integer id) {
         this.id = id;
     }
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }

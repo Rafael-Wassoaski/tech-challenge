@@ -34,7 +34,10 @@ public class WebSecurityConfig {
                 )
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.disable())
-                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.loginProcessingUrl("/usuarios/login"))
+                .formLogin(httpSecurityFormLoginConfigurer -> {
+                    httpSecurityFormLoginConfigurer.loginProcessingUrl("/usuarios/login");
+                    httpSecurityFormLoginConfigurer.disable();
+                })
                 .authenticationManager(authManager);
         return http.build();
     }

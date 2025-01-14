@@ -76,6 +76,27 @@ public class PedidoController {
         }
     }
 
+    @PostMapping("/criar/{cpf}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Pedido criarPedido(@PathVariable String cpf) {
+        try {
+            UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
+            Usuario usuario = usuarioService.buscarUsuario(cpf);
+
+            PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
+                    bebidaPersistenceItemRepository,
+                    acompanhamentoPersistenceItemRepository,
+                    sobremesaPersistenceItemRepository,
+                    persistencePedidoRepository);
+
+            return pedidoService.criarPedido(usuario);
+        } catch (Exception e) {
+            log.error("Ocorreu um erro ao criar o pedido", e);
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
     @PostMapping("/criar/anonimo")
     @ResponseStatus(HttpStatus.CREATED)
     public Pedido criarPedido() {

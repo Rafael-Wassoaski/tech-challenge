@@ -1,7 +1,6 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +11,7 @@ public class UsuarioEntity {
     private int id;
     @Column(unique = true)
     private String email;
+    private String nome;
     @Column(nullable = true)
     private String senha;
     @Column
@@ -20,16 +20,18 @@ public class UsuarioEntity {
     @Column
     private Papel papel;
 
-    public UsuarioEntity(int id, String email, String senha, String cpf, Papel papel) {
+    public UsuarioEntity(int id, String email,String nome, String senha, String cpf, Papel papel) {
         this.id = id;
         this.email = email;
+        this.nome = nome;
         this.senha = senha;
         this.cpf = cpf;
         this.papel = papel;
     }
 
-    public UsuarioEntity(String email, String senha, String cpf, Papel papel) {
+    public UsuarioEntity(String email, String nome, String senha, String cpf, Papel papel) {
         this.email = email;
+        this.nome = nome;
         this.senha = senha;
         this.cpf = cpf;
         this.papel = papel;
@@ -75,5 +77,13 @@ public class UsuarioEntity {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }

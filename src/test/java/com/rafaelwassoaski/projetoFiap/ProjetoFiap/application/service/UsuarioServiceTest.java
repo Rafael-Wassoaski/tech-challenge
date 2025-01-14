@@ -25,8 +25,9 @@ public class UsuarioServiceTest {
         String email = "teste@teste.com";
         String senha = "teste123456";
         String cpf = "000.000.000-00";
+        String nome = "teste";
 
-        Usuario usuario = new Usuario(email, senha, cpf);
+        Usuario usuario = new Usuario(email, nome, senha, cpf);
         Usuario usuarioCriado = usuarioService.criar(usuario);
 
         Assertions.assertTrue(encriptador.senhasBatem(senha, usuarioCriado.getSenha()));
@@ -42,7 +43,8 @@ public class UsuarioServiceTest {
         String email = "teste@teste.com";
         String senha = "teste123456";
         String cpf = "000.000.000-00";
-        Usuario usuario = new Usuario(email, senha, cpf);
+        String nome = "teste";
+        Usuario usuario = new Usuario(email, nome, senha, cpf);
 
         usuarioService.criar(usuario);
         UserDetails userDetails = usuarioService.buscarUserDetails(email);
@@ -59,7 +61,8 @@ public class UsuarioServiceTest {
         String email = "teste@teste.com";
         String senha = "teste123456";
         String cpf = "000.000.000-00";
-        Usuario usuario = new Usuario(email, senha, cpf);
+        String nome = "teste";
+        Usuario usuario = new Usuario(email, nome, senha, cpf);
 
         usuarioService.criar(usuario);
 

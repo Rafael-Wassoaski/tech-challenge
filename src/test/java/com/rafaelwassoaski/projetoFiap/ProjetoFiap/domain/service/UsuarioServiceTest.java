@@ -25,4 +25,28 @@ public class UsuarioServiceTest {
         Assertions.assertThrows(Exception.class, () -> usuarioService.validarEmail(usuario));
     }
 
+    @Test
+    void deveriaRetornarErroAoTentarCriarUsuarioComCPFNulo() throws Exception {
+        mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
+        Encriptador encriptador = new Encriptador(salParaTestes);
+        usuarioService = new UsuarioDomainService(encriptador);
+        String email = "testeteste.com";
+        String senha = "teste123456";
+        Usuario usuario = new Usuario(email, senha, null);
+
+        Assertions.assertThrows(Exception.class, () -> usuarioService.validarUsuario(usuario));
+    }
+
+    @Test
+    void deveriaRetornarErroAoTentarCriarUsuarioComCPFVazio() throws Exception {
+        mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
+        Encriptador encriptador = new Encriptador(salParaTestes);
+        usuarioService = new UsuarioDomainService(encriptador);
+        String email = "testeteste.com";
+        String senha = "teste123456";
+        Usuario usuario = new Usuario(email, senha, "");
+
+        Assertions.assertThrows(Exception.class, () -> usuarioService.validarUsuario(usuario));
+    }
+
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.PedidoEntity;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.UsuarioEntity;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository.JpaPedidoRepository;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository.JpaUsuarioRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.*;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.StatusPedido;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -31,10 +33,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class PedidoControllerTest {
 
     @Autowired
-    private PersistenceUsuarioRepository persistenceUsuarioRepository;
+    private JpaUsuarioRepository persistenceUsuarioRepository;
     @Autowired
     private JpaPedidoRepository persistencePedidoRepository;
     @Autowired
@@ -49,9 +52,10 @@ public class PedidoControllerTest {
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
 
-    String emailUsuario = "email@email.com";
-    String senhaUsuario = "senha";
-    String cpf = "000.000.000-00";
+    private String emailUsuario = "email@email.com";
+    private String senhaUsuario = "senha";
+    private String cpf = "000.000.000-00";
+    private String nome = "nome";
 
     @BeforeEach
     void setup() throws Exception {
@@ -62,7 +66,7 @@ public class PedidoControllerTest {
     @AfterEach
     public void after() {
         persistencePedidoRepository.deleteAll();
-        persistenceUsuarioRepository.deletarPorEmail(emailUsuario);
+        persistenceUsuarioRepository.deleteAll();
         lanchePersistenceItemRepository.deletarPorNome("lanche 1");
         bebidaPersistenceItemRepository.deletarPorNome("bebida 1");
         acompanhamentoPersistenceItemRepository.deletarPorNome("acompanhamento 1");
@@ -71,7 +75,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaCriarUmPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
@@ -139,7 +143,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaRetornarTodoOsPedidos() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
@@ -190,7 +194,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaRetornarUmPedidoPorId() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
@@ -245,7 +249,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaCriarUmPedidoComOUsuario() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/usuarios/cadastro")
@@ -289,8 +293,41 @@ public class PedidoControllerTest {
     }
 
     @Test
+    void deveriaCriarUmPedidoComOUsuarioApenasComCpf() throws Exception {
+        Usuario usuario = new Usuario(cpf);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/usuarios/cadastro")
+                .content(new Gson().toJson(usuario))
+                .contentType("application/json")
+                .accept(MediaType.APPLICATION_JSON));
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/pedidos/criar/" + usuario.getCpf())
+                        .contentType("application/json")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("usuario.cpf").exists())
+                .andExpect(jsonPath("usuario.cpf").value(usuario.getCpf()))
+                .andReturn();
+
+        PedidoEntity pedido = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/pedidos/buscar/" + pedido.getId())
+                        .contentType("application/json")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
+        Optional<Pedido> optionalPedido = persistencePedidoRepository.buscarPorId(pedido.getId());
+
+        Assertions.assertTrue(optionalPedido.isPresent());
+        Assertions.assertEquals(usuario.getCpf(), optionalPedido.get().getUsuario().get().getCpf());
+    }
+
+    @Test
     void deveriaAdicionarUmLancheAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         Lanche lanche = new Lanche("lanche 1", 10);
         lanchePersistenceItemRepository.salvar(lanche);
         LancheDTO lancheDTO = new LancheDTO(lanche.getNome());
@@ -339,7 +376,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarUmaBebidaeAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         Bebida bebida = new Bebida("bebida 1", 10);
         bebidaPersistenceItemRepository.salvar(bebida);
         BebidaDTO bebidaDTO = new BebidaDTO(bebida.getNome());
@@ -388,7 +425,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarUmAcompanhamentoAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento 1", 10);
         acompanhamentoPersistenceItemRepository.salvar(acompanhamento);
         AcompanhamentoDTO acompanhamentoDTO = new AcompanhamentoDTO(acompanhamento.getNome());
@@ -436,7 +473,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarUmaSobremesaAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         Sobremesa sobremesa = new Sobremesa("sobremesa 1", 10);
         sobremesaPersistenceItemRepository.salvar(sobremesa);
         SobremesaDTO sobremesaDTO = new SobremesaDTO(sobremesa.getNome());
@@ -484,7 +521,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarTodosOsItensAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
         MockHttpSession session = new MockHttpSession();
 
         Lanche lanche = new Lanche("lanche 1", 10);
