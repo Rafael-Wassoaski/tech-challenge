@@ -32,6 +32,7 @@ public class UsuarioController {
     }
 
 
+    //TODO: Remover esse método depois
     @PostMapping("/cadastro")
     @ResponseStatus( HttpStatus.CREATED)
     public void cadastrar(@RequestBody Usuario usuario) {
@@ -50,10 +51,10 @@ public class UsuarioController {
     public TokenDTO logar(@RequestBody Usuario usuario) {
         try {
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, encriptador);
-            UserDetails authenticatedUser = usuarioService.logar(usuario.getCpf(), usuario.getSenha());
+            UserDetails authenticatedUser = usuarioService.logar(usuario.getEmail(), usuario.getSenha());
             Usuario usuarioLogado = new Usuario();
             usuarioLogado.setSenha(authenticatedUser.getPassword());
-            usuarioLogado.setCpf(authenticatedUser.getUsername());
+            usuarioLogado.setEmail(authenticatedUser.getUsername());
 
             String token = jwtService.generateToken(usuarioLogado);
 

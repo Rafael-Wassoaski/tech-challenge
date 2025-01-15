@@ -35,7 +35,7 @@ public class JWTService {
 
         return Jwts
                 .builder()
-                .setSubject(usuario.getCpf())
+                .setSubject(usuario.getEmail())
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, assinaturaDoToken)
                 .compact();

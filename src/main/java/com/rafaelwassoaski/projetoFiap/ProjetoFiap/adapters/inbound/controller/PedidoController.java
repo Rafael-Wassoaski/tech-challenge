@@ -4,9 +4,12 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.Acompanhament
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.BebidaDTO;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.LancheDTO;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.SobremesaDTO;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.port.in.ClienteUseCase;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.ClienteService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceClienteRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistencePedidoRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
@@ -31,6 +34,7 @@ public class PedidoController {
     private PersistenceItemRepository<Bebida> bebidaPersistenceItemRepository;
     private PersistenceItemRepository<Acompanhamento> acompanhamentoPersistenceItemRepository;
     private PersistenceItemRepository<Sobremesa> sobremesaPersistenceItemRepository;
+    private PersistenceClienteRepository persistenceClienteRepository;
     private PersistenceUsuarioRepository persistenceUsuarioRepository;
     private PersistencePedidoRepository persistencePedidoRepository;
     private static final Logger log = LogManager.getLogger(PedidoController.class);
@@ -40,13 +44,15 @@ public class PedidoController {
                             PersistenceItemRepository<Bebida> bebidaPersistenceItemRepository,
                             PersistenceItemRepository<Acompanhamento> acompanhamentoPersistenceItemRepository,
                             PersistenceItemRepository<Sobremesa> sobremesaPersistenceItemRepository,
-                            PersistenceUsuarioRepository persistenceUsuarioRepository,
+                            PersistenceClienteRepository persistenceClienteRepository,
                             PersistencePedidoRepository persistencePedidoRepository,
+                            PersistenceUsuarioRepository persistenceUsuarioRepository,
                             JWTService jwtService) {
         this.lanchePersistenceItemRepository = lanchePersistenceItemRepository;
         this.bebidaPersistenceItemRepository = bebidaPersistenceItemRepository;
         this.acompanhamentoPersistenceItemRepository = acompanhamentoPersistenceItemRepository;
         this.sobremesaPersistenceItemRepository = sobremesaPersistenceItemRepository;
+        this.persistenceClienteRepository = persistenceClienteRepository;
         this.persistenceUsuarioRepository = persistenceUsuarioRepository;
         this.persistencePedidoRepository = persistencePedidoRepository;
         this.jwtService = jwtService;
@@ -55,12 +61,11 @@ public class PedidoController {
 
     @PostMapping("/criar")
     @ResponseStatus(HttpStatus.CREATED)
-    public Pedido criarPedido(HttpServletRequest request) {
+    public Pedido criarPedido(@RequestBody Cliente cliente) {
         try {
-            String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
-            UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            ClienteUseCase clienteUseCase = new ClienteService(persistenceClienteRepository);
+            String identificador = clienteUseCase.pegarIdentificador(cliente);
+            Cliente clienteSalvo = clienteUseCase.buscarCliente(identificador);
 
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
@@ -68,7 +73,7 @@ public class PedidoController {
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
 
-            return pedidoService.criarPedido(usuario);
+            return pedidoService.criarPedido(clienteSalvo);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 
@@ -80,16 +85,15 @@ public class PedidoController {
     @ResponseStatus(HttpStatus.CREATED)
     public Pedido criarPedido(@PathVariable String cpf) {
         try {
-            UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
-
+            ClienteUseCase clienteUseCase = new ClienteService(persistenceClienteRepository);
+            Cliente cliente = clienteUseCase.buscarCliente(cpf);
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
                     acompanhamentoPersistenceItemRepository,
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
 
-            return pedidoService.criarPedido(usuario);
+            return pedidoService.criarPedido(cliente);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 
@@ -116,13 +120,13 @@ public class PedidoController {
     }
 
     @GetMapping("/buscar/todos")
-    @ResponseStatus( HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     public List<Pedido> buscarTodosOsPedidos(HttpServletRequest request) {
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
 
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
@@ -140,12 +144,12 @@ public class PedidoController {
 
     @GetMapping("/buscar/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Pedido buscarTodosOsPedidos(@PathVariable Integer id, HttpServletRequest request) {
+    public Pedido buscarPedidoPorId(@PathVariable Integer id, HttpServletRequest request) {
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
             String cpf = jwtService.getUsername(token);
-            UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            ClienteUseCase clienteUseCase = new ClienteService(persistenceClienteRepository);
+            Cliente cliente = clienteUseCase.buscarCliente(cpf);
 
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
@@ -153,7 +157,7 @@ public class PedidoController {
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
 
-            return pedidoService.buscarPorId(id, usuario);
+            return pedidoService.buscarPorId(id, cliente);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 

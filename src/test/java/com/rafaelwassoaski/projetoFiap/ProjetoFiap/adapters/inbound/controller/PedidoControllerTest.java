@@ -2,15 +2,13 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
 import com.google.gson.Gson;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.PedidoEntity;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity.UsuarioEntity;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository.JpaClienteRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository.JpaPedidoRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository.JpaUsuarioRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.*;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.StatusPedido;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.*;
-import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +39,8 @@ public class PedidoControllerTest {
     @Autowired
     private JpaPedidoRepository persistencePedidoRepository;
     @Autowired
+    private JpaClienteRepository persistenceClienteRepository;
+    @Autowired
     private PersistenceItemRepository<Lanche> lanchePersistenceItemRepository;
     @Autowired
     private PersistenceItemRepository<Bebida> bebidaPersistenceItemRepository;
@@ -52,10 +52,7 @@ public class PedidoControllerTest {
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
 
-    private String emailUsuario = "email@email.com";
-    private String senhaUsuario = "senha";
     private String cpf = "000.000.000-00";
-    private String nome = "nome";
 
     @BeforeEach
     void setup() throws Exception {
@@ -67,6 +64,7 @@ public class PedidoControllerTest {
     public void after() {
         persistencePedidoRepository.deleteAll();
         persistenceUsuarioRepository.deleteAll();
+        persistenceClienteRepository.deleteAll();
         lanchePersistenceItemRepository.deletarPorNome("lanche 1");
         bebidaPersistenceItemRepository.deletarPorNome("bebida 1");
         acompanhamentoPersistenceItemRepository.deletarPorNome("acompanhamento 1");
@@ -75,29 +73,13 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaCriarUmPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+        Cliente cliente = new Cliente(cpf);
+        persistenceClienteRepository.salvar(cliente);
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/login")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
-
-        result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/pedidos/criar")
-                        .content(new Gson().toJson(usuario))
+                        .content(new Gson().toJson(cliente))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -135,57 +117,32 @@ public class PedidoControllerTest {
         Optional<Pedido> optionalPedido = persistencePedidoRepository.buscarPorId(pedido.getId());
 
         Assertions.assertTrue(optionalPedido.isPresent());
-        Assertions.assertTrue(optionalPedido.get().getUsuario().isEmpty());
+        Assertions.assertTrue(optionalPedido.get().getCliente().isEmpty());
     }
-
-
 
 
     @Test
     void deveriaRetornarTodoOsPedidos() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Cliente cliente = new Cliente(cpf);
+        persistenceClienteRepository.salvar(cliente);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .post("/pedidos/criar")
+                .content(new Gson().toJson(cliente))
+                .contentType("application/json")
+                .accept(MediaType.APPLICATION_JSON));
 
-        Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
-        Usuario usuarioSalvo = usuarioSalvoOptional.get();
-        usuarioSalvo.setPapel(Papel.GERENTE);
-        persistenceUsuarioRepository.atualizar(usuarioSalvo);
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/login")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/pedidos/criar")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
-                        .accept(MediaType.APPLICATION_JSON));
-             
-
-         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/pedidos/criar")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
-                        .accept(MediaType.APPLICATION_JSON));
+                .post("/pedidos/criar")
+                .content(new Gson().toJson(cliente))
+                .contentType("application/json")
+                .accept(MediaType.APPLICATION_JSON));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/pedidos/buscar/todos")
-                        .content(new Gson().toJson(usuario))
+                        .content(new Gson().toJson(cliente))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -194,42 +151,20 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaRetornarUmPedidoPorId() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
-
-        Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
-        Usuario usuarioSalvo = usuarioSalvoOptional.get();
-        usuarioSalvo.setPapel(Papel.GERENTE);
-        persistenceUsuarioRepository.atualizar(usuarioSalvo);
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/login")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
+        Cliente cliente = new Cliente(cpf);
+        persistenceClienteRepository.salvar(cliente);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/pedidos/criar")
-                .content(new Gson().toJson(usuario))
+                .content(new Gson().toJson(cliente))
                 .contentType("application/json")
-                .cookie(new Cookie("token", tokenDTO.getToken()))
                 .accept(MediaType.APPLICATION_JSON));
 
 
-        result = mockMvc.perform(MockMvcRequestBuilders
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                 .post("/pedidos/criar")
-                .content(new Gson().toJson(usuario))
+                .content(new Gson().toJson(cliente))
                 .contentType("application/json")
-                .cookie(new Cookie("token", tokenDTO.getToken()))
                 .accept(MediaType.APPLICATION_JSON)).andReturn();
 
         PedidoEntity pedido = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
@@ -237,79 +172,29 @@ public class PedidoControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/pedidos/buscar/" + pedido.getId())
-                        .content(new Gson().toJson(usuario))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
+                        .content(new Gson().toJson(cliente))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(pedido.getId()))
-                .andExpect(jsonPath("usuario.email").value(pedido.getUsuario().getEmail()));
+                .andExpect(jsonPath("cliente.cpf").value(pedido.getUsuario().getCpf()));
     }
 
     @Test
     void deveriaCriarUmPedidoComOUsuario() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/usuarios/cadastro")
-                .content(new Gson().toJson(usuario))
-                .contentType("application/json")
-                .accept(MediaType.APPLICATION_JSON));
+        Cliente cliente = new Cliente(cpf);
+        persistenceClienteRepository.salvar(cliente);
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/login")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
-
-        result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/pedidos/criar")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("usuario.email").exists())
-                .andExpect(jsonPath("usuario.email").value(usuario.getEmail()))
-                .andReturn();
-
-        PedidoEntity pedido = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/pedidos/buscar/" + pedido.getId())
-                        .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
-        Optional<Pedido> optionalPedido = persistencePedidoRepository.buscarPorId(pedido.getId());
-
-        Assertions.assertTrue(optionalPedido.isPresent());
-        Assertions.assertEquals(usuario.getEmail(), optionalPedido.get().getUsuario().get().getEmail());
-    }
-
-    @Test
-    void deveriaCriarUmPedidoComOUsuarioApenasComCpf() throws Exception {
-        Usuario usuario = new Usuario(cpf);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/usuarios/cadastro")
-                .content(new Gson().toJson(usuario))
-                .contentType("application/json")
-                .accept(MediaType.APPLICATION_JSON));
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/pedidos/criar/" + usuario.getCpf())
+                        .content(new Gson().toJson(cliente))
                         .contentType("application/json")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("usuario.cpf").exists())
-                .andExpect(jsonPath("usuario.cpf").value(usuario.getCpf()))
+                .andExpect(jsonPath("cliente.cpf").exists())
+                .andExpect(jsonPath("cliente.cpf").value(cliente.getCpf()))
                 .andReturn();
 
         PedidoEntity pedido = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
@@ -322,41 +207,26 @@ public class PedidoControllerTest {
         Optional<Pedido> optionalPedido = persistencePedidoRepository.buscarPorId(pedido.getId());
 
         Assertions.assertTrue(optionalPedido.isPresent());
-        Assertions.assertEquals(usuario.getCpf(), optionalPedido.get().getUsuario().get().getCpf());
+        Assertions.assertEquals(cliente.getCpf(), optionalPedido.get().getCliente().get().getCpf());
     }
 
     @Test
     void deveriaAdicionarUmLancheAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Cliente cliente = new Cliente(cpf);
+        persistenceClienteRepository.salvar(cliente);
         Lanche lanche = new Lanche("lanche 1", 10);
         lanchePersistenceItemRepository.salvar(lanche);
         LancheDTO lancheDTO = new LancheDTO(lanche.getNome());
 
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/usuarios/cadastro")
-                .content(new Gson().toJson(usuario))
-                .contentType("application/json")
-                .accept(MediaType.APPLICATION_JSON));
-
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/login")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
-
-        result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/pedidos/criar")
-                        .content(new Gson().toJson(usuario))
+                        .content(new Gson().toJson(cliente))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("usuario.email").exists())
-                .andExpect(jsonPath("usuario.email").value(usuario.getEmail()))
+                .andExpect(jsonPath("cliente.cpf").exists())
+                .andExpect(jsonPath("cliente.cpf").value(cliente.getCpf()))
                 .andReturn();
 
         PedidoEntity pedido = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
@@ -365,7 +235,6 @@ public class PedidoControllerTest {
                         .post("/pedidos/adicionar/lanche/" + pedido.getId())
                         .content(new Gson().toJson(lancheDTO))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -376,36 +245,23 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarUmaBebidaeAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Cliente cliente = new Cliente(cpf);
+        persistenceClienteRepository.salvar(cliente);
+
         Bebida bebida = new Bebida("bebida 1", 10);
         bebidaPersistenceItemRepository.salvar(bebida);
         BebidaDTO bebidaDTO = new BebidaDTO(bebida.getNome());
 
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/usuarios/cadastro")
-                .content(new Gson().toJson(usuario))
-                .contentType("application/json")
-                .accept(MediaType.APPLICATION_JSON));
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/login")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
-
-        result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/pedidos/criar")
-                        .content(new Gson().toJson(usuario))
+                        .content(new Gson().toJson(cliente))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("usuario.email").exists())
-                .andExpect(jsonPath("usuario.email").value(usuario.getEmail()))
+                .andExpect(jsonPath("cliente.cpf").exists())
+                .andExpect(jsonPath("cliente.cpf").value(cliente.getCpf()))
                 .andReturn();
 
         PedidoEntity pedido = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
@@ -414,7 +270,6 @@ public class PedidoControllerTest {
                         .post("/pedidos/adicionar/bebida/" + pedido.getId())
                         .content(new Gson().toJson(bebidaDTO))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -425,36 +280,22 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarUmAcompanhamentoAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Cliente cliente = new Cliente(cpf);
+        persistenceClienteRepository.salvar(cliente);
+
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento 1", 10);
         acompanhamentoPersistenceItemRepository.salvar(acompanhamento);
         AcompanhamentoDTO acompanhamentoDTO = new AcompanhamentoDTO(acompanhamento.getNome());
 
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/usuarios/cadastro")
-                .content(new Gson().toJson(usuario))
-                .contentType("application/json")
-                .accept(MediaType.APPLICATION_JSON));
-
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/login")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
-
-        result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/pedidos/criar")
-                        .content(new Gson().toJson(usuario))
+                        .content(new Gson().toJson(cliente))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("usuario.email").exists())
-                .andExpect(jsonPath("usuario.email").value(usuario.getEmail()))
+                .andExpect(jsonPath("cliente.cpf").exists())
+                .andExpect(jsonPath("cliente.cpf").value(cliente.getCpf()))
                 .andReturn();
 
         PedidoEntity pedido = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
@@ -463,7 +304,6 @@ public class PedidoControllerTest {
                         .post("/pedidos/adicionar/acompanhamento/" + pedido.getId())
                         .content(new Gson().toJson(acompanhamentoDTO))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -473,36 +313,22 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarUmaSobremesaAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Cliente cliente = new Cliente(cpf);
+        persistenceClienteRepository.salvar(cliente);
+
         Sobremesa sobremesa = new Sobremesa("sobremesa 1", 10);
         sobremesaPersistenceItemRepository.salvar(sobremesa);
         SobremesaDTO sobremesaDTO = new SobremesaDTO(sobremesa.getNome());
 
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/usuarios/cadastro")
-                .content(new Gson().toJson(usuario))
-                .contentType("application/json")
-                .accept(MediaType.APPLICATION_JSON));
-
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/login")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
-
-        result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/pedidos/criar")
-                        .content(new Gson().toJson(usuario))
+                        .content(new Gson().toJson(cliente))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("usuario.email").exists())
-                .andExpect(jsonPath("usuario.email").value(usuario.getEmail()))
+                .andExpect(jsonPath("cliente.cpf").exists())
+                .andExpect(jsonPath("cliente.cpf").value(cliente.getCpf()))
                 .andReturn();
 
         PedidoEntity pedido = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
@@ -511,7 +337,7 @@ public class PedidoControllerTest {
                         .post("/pedidos/adicionar/sobremesa/" + pedido.getId())
                         .content(new Gson().toJson(sobremesaDTO))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
+
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -521,7 +347,9 @@ public class PedidoControllerTest {
 
     @Test
     void deveriaAdicionarTodosOsItensAoPedido() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Cliente cliente = new Cliente(cpf);
+        persistenceClienteRepository.salvar(cliente);
+
         MockHttpSession session = new MockHttpSession();
 
         Lanche lanche = new Lanche("lanche 1", 10);
@@ -540,34 +368,16 @@ public class PedidoControllerTest {
         sobremesaPersistenceItemRepository.salvar(sobremesa);
         SobremesaDTO sobremesaDTO = new SobremesaDTO(sobremesa.getNome());
 
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/usuarios/cadastro")
-                .content(new Gson().toJson(usuario))
-                .session(session)
-                .contentType("application/json")
-                .accept(MediaType.APPLICATION_JSON));
-
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/login")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .session(session)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
-
-        result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/pedidos/criar")
-                        .content(new Gson().toJson(usuario))
+                        .content(new Gson().toJson(cliente))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .session(session)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("usuario.email").exists())
-                .andExpect(jsonPath("usuario.email").value(usuario.getEmail()))
+                .andExpect(jsonPath("cliente.cpf").exists())
+                .andExpect(jsonPath("cliente.cpf").value(cliente.getCpf()))
                 .andReturn();
 
         PedidoEntity pedidoEntity = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
@@ -576,7 +386,6 @@ public class PedidoControllerTest {
                         .post("/pedidos/adicionar/lanche/" + pedidoEntity.getId())
                         .content(new Gson().toJson(lancheDTO))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .session(session)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -586,7 +395,6 @@ public class PedidoControllerTest {
                         .post("/pedidos/adicionar/bebida/" + pedidoEntity.getId())
                         .content(new Gson().toJson(bebidaDTO))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .session(session)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -596,7 +404,6 @@ public class PedidoControllerTest {
                         .post("/pedidos/adicionar/acompanhamento/" + pedidoEntity.getId())
                         .content(new Gson().toJson(acompanhamentoDTO))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .session(session)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -607,7 +414,6 @@ public class PedidoControllerTest {
                         .post("/pedidos/adicionar/sobremesa/" + pedidoEntity.getId())
                         .content(new Gson().toJson(sobremesaDTO))
                         .contentType("application/json")
-                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .session(session)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())

@@ -44,7 +44,7 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Integ
 
     default Optional<Usuario> extrairUsuario(Optional<UsuarioEntity> optionalUsuarioEntity){
         if (optionalUsuarioEntity.isEmpty()) {
-            Optional.empty();
+            return Optional.empty();
         }
 
         UsuarioEntity usuarioEntity = optionalUsuarioEntity.get();

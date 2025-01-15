@@ -24,8 +24,8 @@ public class PedidoEntity {
     @JoinColumn(name = "sobremesa_id")
     private SobremesaEntity sobremesa;
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "usuario_id", nullable = true)
-    private UsuarioEntity usuario;
+    @JoinColumn(name = "cliente_id", nullable = true)
+    private ClienteEntity cliente;
     @Column
     @Enumerated(EnumType.STRING)
     private StatusPedido statusPedido;
@@ -33,13 +33,13 @@ public class PedidoEntity {
     public PedidoEntity() {
     }
 
-    public PedidoEntity(int id, LancheEntity lanche, BebidaEntity bebida, AcompanhamentoEntity acompanhamento, SobremesaEntity sobremesa, UsuarioEntity usuario, StatusPedido statusPedido) {
+    public PedidoEntity(int id, LancheEntity lanche, BebidaEntity bebida, AcompanhamentoEntity acompanhamento, SobremesaEntity sobremesa, ClienteEntity cliente, StatusPedido statusPedido) {
         this.id = id;
         this.lanche = lanche;
         this.bebida = bebida;
         this.acompanhamento = acompanhamento;
         this.sobremesa = sobremesa;
-        this.usuario = usuario;
+        this.cliente = cliente;
         this.statusPedido = statusPedido;
     }
 
@@ -83,12 +83,12 @@ public class PedidoEntity {
         this.sobremesa = sobremesa;
     }
 
-    public UsuarioEntity getUsuario() {
-        return usuario;
+    public ClienteEntity getUsuario() {
+        return cliente;
     }
 
-    public void setUsuario(UsuarioEntity usuario) {
-        this.usuario = usuario;
+    public void setUsuario(ClienteEntity cliente) {
+        this.cliente = cliente;
     }
 
     public StatusPedido getStatusPedido() {

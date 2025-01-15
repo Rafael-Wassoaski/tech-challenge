@@ -11,7 +11,7 @@ public class Pedido {
     private Optional<Bebida> optionalBebida;
     private Optional<Acompanhamento> optionalAcompanhamento;
     private Optional<Sobremesa> optionalSobremesa;
-    private Optional<Usuario> usuario;
+    private Optional<Cliente> cliente;
     private StatusPedido statusPedido;
     private Integer id;
 
@@ -24,12 +24,12 @@ public class Pedido {
         this.id = id;
     }
 
-    public Pedido(Integer id, Optional<Lanche> optionalLanche, Optional<Bebida> optionalBebida, Optional<Acompanhamento> optionalAcompanhamento, Optional<Sobremesa> optionalSobremesa, Optional<Usuario> usuario, StatusPedido statusPedido) {
+    public Pedido(Integer id, Optional<Lanche> optionalLanche, Optional<Bebida> optionalBebida, Optional<Acompanhamento> optionalAcompanhamento, Optional<Sobremesa> optionalSobremesa, Optional<Cliente> cliente, StatusPedido statusPedido) {
         this.optionalLanche = optionalLanche;
         this.optionalBebida = optionalBebida;
         this.optionalAcompanhamento = optionalAcompanhamento;
         this.optionalSobremesa = optionalSobremesa;
-        this.usuario = usuario;
+        this.cliente = cliente;
         this.statusPedido = statusPedido;
         this.id = id;
     }
@@ -39,7 +39,7 @@ public class Pedido {
         this.optionalBebida = Optional.empty();
         this.optionalAcompanhamento = Optional.empty();
         this.optionalSobremesa = Optional.empty();
-        this.usuario = Optional.empty();
+        this.cliente = Optional.empty();
         this.statusPedido = StatusPedido.RECEBIDO;
     }
 
@@ -59,8 +59,8 @@ public class Pedido {
         return optionalSobremesa;
     }
 
-    public Optional<Usuario> getUsuario() {
-        return usuario;
+    public Optional<Cliente> getCliente() {
+        return cliente;
     }
 
     public Integer getId() {
@@ -71,8 +71,8 @@ public class Pedido {
         return statusPedido;
     }
 
-    public void setUsuario(Optional<Usuario> usuario) {
-        this.usuario = usuario;
+    public void setCliente(Optional<Cliente> cliente) {
+        this.cliente = cliente;
     }
 
     public void setStatusPedido(StatusPedido statusPedido) {

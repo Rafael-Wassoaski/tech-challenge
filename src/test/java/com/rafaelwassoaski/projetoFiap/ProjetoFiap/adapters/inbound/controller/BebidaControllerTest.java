@@ -47,12 +47,12 @@ public class BebidaControllerTest {
     private String nome = "teste";
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @AfterEach
-    public void afterEach(){
+    public void afterEach() {
         List<Bebida> bebidaList = bebidaPersistenceItemRepository.buscarTodos();
 
         bebidaList.forEach(bebida -> bebidaPersistenceItemRepository.deletarPorNome(bebida.getNome()));
@@ -82,7 +82,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaCriarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -125,7 +125,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarCriarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -160,7 +160,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaAtualizarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         double precoOriginal = 10;
         Bebida bebida = new Bebida("bebida1", precoOriginal, "categoria");
 
@@ -213,7 +213,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarAtualizarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         double precoOriginal = 10;
         Bebida bebida = new Bebida("bebida1", precoOriginal, "categoria");
         bebidaPersistenceItemRepository.salvar(bebida);
@@ -252,7 +252,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaDeletarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -300,7 +300,7 @@ public class BebidaControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarDeletarUmaBebida() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
         bebidaPersistenceItemRepository.salvar(bebida);
 

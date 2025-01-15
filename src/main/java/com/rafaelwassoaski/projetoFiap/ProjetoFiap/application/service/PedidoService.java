@@ -73,9 +73,9 @@ public class PedidoService {
         return Optional.ofNullable(itemUseCase.buscarPorNome(nomeItem));
     }
 
-    public Pedido criarPedido(Usuario usuario) throws Exception {
+    public Pedido criarPedido(Cliente cliente) throws Exception {
         Pedido pedido = new Pedido();
-        pedido.setUsuario(Optional.of(usuario));
+        pedido.setCliente(Optional.of(cliente));
         return persistencePedidoRepository.salvar(pedido);
     }
 
@@ -134,10 +134,10 @@ public class PedidoService {
         return persistencePedidoRepository.buscarTodos();
     }
 
-    public Pedido buscarPorId(Integer id, Usuario usuario) throws Exception {
+    public Pedido buscarPorId(Integer id, Cliente cliente) throws Exception {
         Pedido pedido = buscarPedidoPorId(id);
 
-        if(!pedidoService.clientePodeVerPedido(pedido, usuario)){
+        if(!pedidoService.clientePodeVerPedido(pedido, cliente)){
             throw new Exception("Você não tem permissão para visualizar este pedido");
         }
 

@@ -67,8 +67,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        Cliente cliente = new Cliente("000.000.000-00");
+        Pedido pedido = pedidoService.criarPedido(cliente);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -101,7 +101,7 @@ public class PedidoServiceTest {
         Assertions.assertEquals(nomeBebida, pedido.getBebida().get().getNome());
         Assertions.assertEquals(nomeAcompanhamento, pedido.getAcompanhamento().get().getNome());
         Assertions.assertEquals(nomeSobremesa, pedido.getSobremesa().get().getNome());
-        Assertions.assertTrue(pedido.getUsuario().isEmpty());
+        Assertions.assertTrue(pedido.getCliente().isEmpty());
     }
 
     @Test
@@ -111,8 +111,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        Cliente cliente = new Cliente("000.000.000-00");
+        Pedido pedido = pedidoService.criarPedido(cliente);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -136,8 +136,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        Cliente cliente = new Cliente("000.000.000-00");
+        Pedido pedido = pedidoService.criarPedido(cliente);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(null, pedidoId);
@@ -161,8 +161,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        Cliente cliente = new Cliente("000.000.000-00");
+        Pedido pedido = pedidoService.criarPedido(cliente);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(null, pedidoId);
@@ -186,8 +186,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        Cliente cliente = new Cliente( "000.000.000-00");
+        Pedido pedido = pedidoService.criarPedido(cliente);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(null, pedidoId);
@@ -211,8 +211,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        Cliente cliente = new Cliente("000.000.000-00");
+        Pedido pedido = pedidoService.criarPedido(cliente);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -228,7 +228,7 @@ public class PedidoServiceTest {
         Assertions.assertEquals(nomeBebida, pedido.getBebida().get().getNome());
         Assertions.assertEquals(nomeAcompanhamento, pedido.getAcompanhamento().get().getNome());
         Assertions.assertEquals(nomeSobremesa, pedido.getSobremesa().get().getNome());
-        Assertions.assertEquals(usuario.getEmail(), pedido.getUsuario().get().getEmail());
+        Assertions.assertEquals(cliente.getEmail(), pedido.getCliente().get().getEmail());
     }
 
     @Test
@@ -238,8 +238,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        Cliente cliente = new Cliente( "000.000.000-00");
+        Pedido pedido = pedidoService.criarPedido(cliente);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -247,7 +247,7 @@ public class PedidoServiceTest {
         pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
         pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
-        pedido = pedidoService.criarPedido(usuario);
+        pedido = pedidoService.criarPedido(cliente);
         Pedido pedidoAtualizado = pedidoService.prepararPedido(pedido.getId());
 
         Assertions.assertEquals(StatusPedido.EM_PREPARACAO, pedidoAtualizado.getStatusPedido());
@@ -260,8 +260,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        Cliente cliente = new Cliente("000.000.000-00");
+        Pedido pedido = pedidoService.criarPedido(cliente);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -269,7 +269,7 @@ public class PedidoServiceTest {
         pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
         pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
-        pedido = pedidoService.criarPedido(usuario);
+        pedido = pedidoService.criarPedido(cliente);
         pedidoService.prepararPedido(pedido.getId());
         Pedido pedidoAtualizado = pedidoService.finalizarPreparacaoDoPedido(pedido.getId());
 
@@ -283,8 +283,8 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
-        Pedido pedido = pedidoService.criarPedido(usuario);
+        Cliente cliente = new Cliente("000.000.000-00");
+        Pedido pedido = pedidoService.criarPedido(cliente);
         int pedidoId = pedido.getId();
 
         pedidoService.definirLanche(nomeLanche, pedidoId);
@@ -292,7 +292,7 @@ public class PedidoServiceTest {
         pedidoService.definirAcompanhamento(nomeAcompanhamento, pedidoId);
         pedidoService.definirSobremesa(nomeSobremesa, pedidoId);
 
-        pedido = pedidoService.criarPedido(usuario);
+        pedido = pedidoService.criarPedido(cliente);
         pedidoService.prepararPedido(pedido.getId());
         pedidoService.finalizarPreparacaoDoPedido(pedido.getId());
         Pedido pedidoAtualizado = pedidoService.retirarPedido(pedido.getId());
@@ -307,13 +307,15 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
         usuario.setPapel(Papel.GERENTE);
 
-        pedidoService.criarPedido(usuario);
-        pedidoService.criarPedido(usuario);
-        pedidoService.criarPedido(usuario);
-        pedidoService.criarPedido(usuario);
+        Cliente cliente = new Cliente("000.000.000-00");
+
+        pedidoService.criarPedido(cliente);
+        pedidoService.criarPedido(cliente);
+        pedidoService.criarPedido(cliente);
+        pedidoService.criarPedido(cliente);
 
         List<Pedido> pedidosList = pedidoService.buscarTodosOsPedidos(usuario);
 
@@ -327,33 +329,18 @@ public class PedidoServiceTest {
                 acompanhamentoPersistenceItemRepository,
                 sobremesaPersistenceItemRepository,
                 mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
+        Usuario usuario = new Usuario("teste@test.com", "1234567");
         usuario.setPapel(Papel.FUNCIONARIO);
 
-        pedidoService.criarPedido(usuario);
-        pedidoService.criarPedido(usuario);
-        pedidoService.criarPedido(usuario);
-        pedidoService.criarPedido(usuario);
+        Cliente cliente = new Cliente("000.000.000-00");
+
+        pedidoService.criarPedido(cliente);
+        pedidoService.criarPedido(cliente);
+        pedidoService.criarPedido(cliente);
+        pedidoService.criarPedido(cliente);
 
         List<Pedido> pedidosList = pedidoService.buscarTodosOsPedidos(usuario);
 
         Assertions.assertEquals(4, pedidosList.size());
-    }
-
-    @Test
-    void deveriaRetornarErroQuandoOClienteTentarBuscarTodosOsPedidos() throws Exception {
-        pedidoService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.PedidoService(lanchePersistenceItemRepository,
-                bebidaPersistenceItemRepository,
-                acompanhamentoPersistenceItemRepository,
-                sobremesaPersistenceItemRepository,
-                mapPersistencePedidoForTests);
-        Usuario usuario = new Usuario("teste@test.com", "1234567", "000.000.000-00");
-
-        pedidoService.criarPedido(usuario);
-        pedidoService.criarPedido(usuario);
-        pedidoService.criarPedido(usuario);
-        pedidoService.criarPedido(usuario);
-
-        Assertions.assertThrows(Exception.class, ()-> pedidoService.buscarTodosOsPedidos(usuario));
     }
 }

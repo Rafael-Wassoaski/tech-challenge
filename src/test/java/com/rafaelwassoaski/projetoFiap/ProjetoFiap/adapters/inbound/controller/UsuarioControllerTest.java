@@ -33,8 +33,6 @@ public class UsuarioControllerTest {
     private MockMvc mockMvc;
     String emailUsuario = "email@email.com";
     String senhaUsuario = "senha";
-    String cpf = "000.000.000-00";
-    String nome = "teste";
 
     @BeforeEach
     public void setUp() {
@@ -48,7 +46,7 @@ public class UsuarioControllerTest {
 
     @Test
     void deveriaCriarUmUsuarioComEmailESenha() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
@@ -62,12 +60,12 @@ public class UsuarioControllerTest {
 
         Assertions.assertTrue(usuarioCadastrado.isPresent());
         Assertions.assertEquals(emailUsuario, usuarioCadastrado.get().getEmail());
-        Assertions.assertEquals(cpf, usuarioCadastrado.get().getCpf());
+        Assertions.assertNotNull(usuarioCadastrado.get().getSenha());
     }
 
     @Test
     void naoDeveriaCriarUmUsuarioGerentePelaApi() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         usuario.setPapel(Papel.GERENTE);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -81,37 +79,17 @@ public class UsuarioControllerTest {
         Optional<Usuario> usuarioCadastrado = mapPersistenceUsuarioForTests.buscarPorEmail(emailUsuario);
 
         Assertions.assertNotEquals(Papel.GERENTE, usuarioCadastrado.get().getPapel());
-        Assertions.assertEquals(Papel.CLIENTE, usuarioCadastrado.get().getPapel());
     }
 
     @Test
     void deveriaFazerLoginComUmUsuarioCadastrado() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
                         .content(new Gson().toJson(usuario))
                         .contentType("application/json")
                         .accept(MediaType.APPLICATION_JSON));
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/login")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void deveriaFazerLoginApenasComCpfESenha() throws Exception {
-        Usuario usuario = new Usuario(cpf, senhaUsuario);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/usuarios/cadastro")
-                .content(new Gson().toJson(usuario))
-                .contentType("application/json")
-                .accept(MediaType.APPLICATION_JSON));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/login")

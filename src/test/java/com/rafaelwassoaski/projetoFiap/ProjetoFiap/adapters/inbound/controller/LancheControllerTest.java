@@ -82,7 +82,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaCriarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -125,7 +125,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarCriarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -160,7 +160,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaAtualizarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         double precoOriginal = 10;
         Lanche lanche = new Lanche("lanche1", precoOriginal, "categoria");
 
@@ -213,7 +213,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarAtualizarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         double precoOriginal = 10;
         Lanche lanche = new Lanche("lanche1", precoOriginal, "categoria");
         lanchePersistenceItemRepository.salvar(lanche);
@@ -252,7 +252,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaDeletarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -300,7 +300,7 @@ public class LancheControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarDeletarUmLanche() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
         lanchePersistenceItemRepository.salvar(lanche);
 

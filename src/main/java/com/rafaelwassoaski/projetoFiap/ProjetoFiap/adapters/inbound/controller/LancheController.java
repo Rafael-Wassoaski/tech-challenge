@@ -49,9 +49,9 @@ public class LancheController {
     public void buscarTodosOsLanches(@RequestBody Lanche  lanche, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             LancheService lancheService = new LancheService(lanchePersistenceItemRepository);
 
             lancheService.criar(lanche, usuario);
@@ -67,9 +67,9 @@ public class LancheController {
     public void atualizarLanche(@RequestBody Lanche  lanche, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             LancheService lancheService = new LancheService(lanchePersistenceItemRepository);
 
             lancheService.atualizar(lanche, usuario);
@@ -85,9 +85,9 @@ public class LancheController {
     public void deletarLanche(@PathVariable String nomeLanche, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             LancheService lancheService = new LancheService(lanchePersistenceItemRepository);
 
             lancheService.deletarPorNome(nomeLanche, usuario);

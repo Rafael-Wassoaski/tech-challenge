@@ -42,8 +42,6 @@ public class AcompanhamentoControllerTest {
     private MockMvc mockMvc;
     private String emailUsuario = "email@email.com";
     private String senhaUsuario = "senha";
-    private String cpf = "000.000.000-00";
-    private String nome = "teste";
 
     @BeforeEach
     public void setUp() {
@@ -80,7 +78,7 @@ public class AcompanhamentoControllerTest {
 
     @Test
     void deveriaCriarUmAcompanhamento() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
 
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", 10, "categoria");
 
@@ -124,7 +122,7 @@ public class AcompanhamentoControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarCriarUmAcompanhamento() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
 
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", 10, "categoria");
 
@@ -160,7 +158,7 @@ public class AcompanhamentoControllerTest {
 
     @Test
     void deveriaAtualizarUmAcompanhamento() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
 
         double precoOriginal = 10;
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", precoOriginal, "categoria");
@@ -214,7 +212,7 @@ public class AcompanhamentoControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarAtualizarUmAcompanhamento() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
 
         double precoOriginal = 10;
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", precoOriginal, "categoria");
@@ -254,7 +252,7 @@ public class AcompanhamentoControllerTest {
 
     @Test
     void deveriaDeletarUmAcompanhamento() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
 
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", 10, "categoria");
 
@@ -303,7 +301,7 @@ public class AcompanhamentoControllerTest {
 
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarDeletarUmAcompanhamento() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, nome, senhaUsuario, cpf);
+        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
 
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", 10, "categoria");
         acompanhamentoPersistenceItemRepository.salvar(acompanhamento);

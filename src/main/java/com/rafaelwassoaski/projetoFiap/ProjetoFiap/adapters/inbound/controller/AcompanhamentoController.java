@@ -49,9 +49,9 @@ public class AcompanhamentoController {
     public void buscarTodosOsAcompanhamentos(@RequestBody Acompanhamento acompanhamento, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             AcompanhamentoService acompanhamentoService = new AcompanhamentoService(acompanhamentoPersistenceItemRepository);
 
             acompanhamentoService.criar(acompanhamento, usuario);
@@ -67,9 +67,9 @@ public class AcompanhamentoController {
     public void atualizarAcompanhamento(@RequestBody Acompanhamento  acompanhamento, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             AcompanhamentoService acompanhamentoService = new AcompanhamentoService(acompanhamentoPersistenceItemRepository);
 
             acompanhamentoService.atualizar(acompanhamento, usuario);
@@ -85,9 +85,9 @@ public class AcompanhamentoController {
     public void deletarAcompanhamento(@PathVariable String nomeAcompanhamento, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             AcompanhamentoService acompanhamentoService = new AcompanhamentoService(acompanhamentoPersistenceItemRepository);
 
             acompanhamentoService.deletarPorNome(nomeAcompanhamento, usuario);

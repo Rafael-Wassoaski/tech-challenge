@@ -22,12 +22,12 @@ public class PedidoService {
         return somatoriaItem.getValorTotal();
     }
 
-    public boolean clientePodeVerPedido(Pedido pedido, Usuario usuario){
-        Optional<Usuario> usuarioPedidoOptional = pedido.getUsuario();
-        String emailUsuarioSolicitante = usuario.getEmail();
+    public boolean clientePodeVerPedido(Pedido pedido, Cliente cliente){
+        Optional<Cliente> clientePedidoOptional = pedido.getCliente();
+        String emailClienteSolicitante = cliente.getEmail();
 
-        if (usuarioPedidoOptional.isPresent()) {
-            return emailUsuarioSolicitante.equals(usuarioPedidoOptional.get().getEmail());
+        if (clientePedidoOptional.isPresent()) {
+            return emailClienteSolicitante.equals(clientePedidoOptional.get().getEmail());
         }
         return true;
     }

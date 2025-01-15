@@ -38,10 +38,4 @@ public class UsuarioDomainService {
     public boolean usuarioEhGerente(Usuario usuario) {
         return Papel.GERENTE.equals(usuario.getPapel());
     }
-
-    public void validarUsuario(Usuario usuario) throws Exception {
-        if (usuario.getCpf() == null || usuario.getCpf().isEmpty()) {
-            throw new Exception("Usuário deve ter CPF para ser criado");
-        }
-    }
 }

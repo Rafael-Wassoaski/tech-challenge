@@ -24,15 +24,12 @@ public class UsuarioServiceTest {
         usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
         String email = "teste@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000-00";
-        String nome = "teste";
 
-        Usuario usuario = new Usuario(email, nome, senha, cpf);
+        Usuario usuario = new Usuario(email, senha);
         Usuario usuarioCriado = usuarioService.criar(usuario);
 
         Assertions.assertTrue(encriptador.senhasBatem(senha, usuarioCriado.getSenha()));
         Assertions.assertNotEquals(senha, usuarioCriado.getSenha());
-        Assertions.assertEquals(cpf, usuarioCriado.getCpf());
     }
 
     @Test
@@ -42,15 +39,12 @@ public class UsuarioServiceTest {
         usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
         String email = "teste@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000-00";
-        String nome = "teste";
-        Usuario usuario = new Usuario(email, nome, senha, cpf);
+        Usuario usuario = new Usuario(email, senha);
 
         usuarioService.criar(usuario);
         UserDetails userDetails = usuarioService.buscarUserDetails(email);
 
         Assertions.assertNotNull(userDetails);
-        Assertions.assertEquals(cpf, userDetails.getUsername());
     }
 
     @Test
@@ -60,16 +54,13 @@ public class UsuarioServiceTest {
         usuarioService = new com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService(mapPersistenceUsuarioForTests, encriptador);
         String email = "teste@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000-00";
-        String nome = "teste";
-        Usuario usuario = new Usuario(email, nome, senha, cpf);
+        Usuario usuario = new Usuario(email, senha);
 
         usuarioService.criar(usuario);
 
         Assertions.assertDoesNotThrow(() -> {
             UserDetails userDetails = usuarioService.logar(email, senha);
             Assertions.assertNotNull(userDetails);
-            Assertions.assertEquals(cpf, userDetails.getUsername());
         });
     }
 
@@ -81,8 +72,7 @@ public class UsuarioServiceTest {
         String email = "teste@teste.com";
         String senha = "teste123456";
         String senhaErrada = "teste654321";
-        String cpf = "000.000.000-00";
-        Usuario usuario = new Usuario(email, senha, cpf);
+        Usuario usuario = new Usuario(email, senha);
 
         usuarioService.criar(usuario);
 
@@ -99,8 +89,7 @@ public class UsuarioServiceTest {
         String email = "teste@teste.com";
         String emailErrado = "testeErrado@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000-00";
-        Usuario usuario = new Usuario(email, senha, cpf);
+        Usuario usuario = new Usuario(email, senha);
 
         usuarioService.criar(usuario);
 
@@ -117,8 +106,7 @@ public class UsuarioServiceTest {
         UsuarioDomainService usuarioDomainService = new UsuarioDomainService();
         String email = "teste@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000-00";
-        Usuario usuario = new Usuario(email, senha, cpf);
+        Usuario usuario = new Usuario(email, senha);
         usuario.setPapel(Papel.GERENTE);
 
         mapPersistenceUsuarioForTests.salvar(usuario);
@@ -136,9 +124,8 @@ public class UsuarioServiceTest {
         UsuarioDomainService usuarioDomainService = new UsuarioDomainService();
         String email = "teste@teste.com";
         String senha = "teste123456";
-        String cpf = "000.000.000-00";
 
-        Usuario usuario = new Usuario(email, senha, cpf);
+        Usuario usuario = new Usuario(email, senha);
         mapPersistenceUsuarioForTests.salvar(usuario);
 
         Assertions.assertFalse(() -> usuarioDomainService.usuarioEhGerente(usuario));

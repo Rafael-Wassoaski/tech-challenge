@@ -24,13 +24,9 @@ public class UsuarioService implements UsuarioUseCase {
     public Usuario criar(Usuario usuarioDTO) throws Exception {
         String senha = usuarioDTO.getSenha();
         String email = usuarioDTO.getEmail();
-        String nome = usuarioDTO.getNome();
-        String cpf = usuarioDTO.getCpf();
         String senhaForte = tornarSenhaForte(senha);
 
-        Usuario usuario = new Usuario(email, nome, senhaForte, cpf);
-        UsuarioDomainService usuarioDomainService = new UsuarioDomainService();
-        usuarioDomainService.validarUsuario(usuario);
+        Usuario usuario = new Usuario(email, senhaForte);
 
         return persistenceUsuarioRepository.salvar(usuario);
     }
@@ -60,14 +56,14 @@ public class UsuarioService implements UsuarioUseCase {
 
         return User
                 .builder()
-                .username(user.getCpf())
+                .username(user.getEmail())
                 .password(user.getSenha())
                 .roles(usuarioService.papeisParaArray(user))
                 .build();
     }
 
-    public Usuario buscarUsuario(String cpf) throws Exception {
-        Usuario user = persistenceUsuarioRepository.buscarPorCpf(cpf).orElseThrow(
+    public Usuario buscarUsuario(String email) throws Exception {
+        Usuario user = persistenceUsuarioRepository.buscarPorEmail(email).orElseThrow(
                 () -> new Exception("Usuário com esse cpf não existe"));
 
         return user;

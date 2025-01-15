@@ -47,9 +47,9 @@ public class SobremesaController {
     public void buscarTodosOsSobremesas(@RequestBody Sobremesa sobremesa, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             SobremesaService sobremesaService = new SobremesaService(sobremesaPersistenceItemRepository);
 
             sobremesaService.criar(sobremesa, usuario);
@@ -65,9 +65,9 @@ public class SobremesaController {
     public void atualizarSobremesa(@RequestBody Sobremesa  sobremesa, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             SobremesaService sobremesaService = new SobremesaService(sobremesaPersistenceItemRepository);
 
             sobremesaService.atualizar(sobremesa, usuario);
@@ -83,9 +83,9 @@ public class SobremesaController {
     public void deletarSobremesa(@PathVariable String nomeSobremesa, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             SobremesaService sobremesaService = new SobremesaService(sobremesaPersistenceItemRepository);
 
             sobremesaService.deletarPorNome(nomeSobremesa, usuario);

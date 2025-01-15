@@ -47,9 +47,9 @@ public class BebidaController {
     public void buscarTodasAsBebida(@RequestBody Bebida bebida, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             BebidaService bebidaService = new BebidaService(bebidaPersistenceItemRepository);
 
             bebidaService.criar(bebida, usuario);
@@ -65,9 +65,9 @@ public class BebidaController {
     public void atualizarBebida(@RequestBody Bebida bebida, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             BebidaService bebidaService = new BebidaService(bebidaPersistenceItemRepository);
 
             bebidaService.atualizar(bebida, usuario);
@@ -83,9 +83,9 @@ public class BebidaController {
     public void deletarBebida(@PathVariable String nomeBebida, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
+            String email = jwtService.getUsername(token);
             UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository);
-            Usuario usuario = usuarioService.buscarUsuario(cpf);
+            Usuario usuario = usuarioService.buscarUsuario(email);
             BebidaService bebidaService = new BebidaService(bebidaPersistenceItemRepository);
 
             bebidaService.deletarPorNome(nomeBebida, usuario);
