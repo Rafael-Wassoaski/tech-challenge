@@ -2,18 +2,21 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
 import com.google.gson.Gson;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.TokenDTO;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Lanche;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Pedido;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -45,6 +48,8 @@ public class LancheControllerTest {
     private String senhaUsuario = "senha";
     private String cpf = "000.000.000-00";
     private String nome = "teste";
+    @Value("${custom.sal}")
+    private String sal;
 
 
     @BeforeEach
@@ -83,14 +88,9 @@ public class LancheControllerTest {
     @Test
     void deveriaCriarUmLanche() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
         Usuario usuarioSalvo = usuarioSalvoOptional.get();
@@ -126,14 +126,9 @@ public class LancheControllerTest {
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarCriarUmLanche() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/login")
@@ -161,15 +156,10 @@ public class LancheControllerTest {
     @Test
     void deveriaAtualizarUmLanche() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         double precoOriginal = 10;
         Lanche lanche = new Lanche("lanche1", precoOriginal, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
         Usuario usuarioSalvo = usuarioSalvoOptional.get();
@@ -214,16 +204,11 @@ public class LancheControllerTest {
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarAtualizarUmLanche() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         double precoOriginal = 10;
         Lanche lanche = new Lanche("lanche1", precoOriginal, "categoria");
         lanchePersistenceItemRepository.salvar(lanche);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/login")
@@ -253,14 +238,9 @@ public class LancheControllerTest {
     @Test
     void deveriaDeletarUmLanche() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
         Usuario usuarioSalvo = usuarioSalvoOptional.get();
@@ -301,15 +281,10 @@ public class LancheControllerTest {
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarDeletarUmLanche() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         Lanche lanche = new Lanche("lanche1", 10, "categoria");
         lanchePersistenceItemRepository.salvar(lanche);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/login")

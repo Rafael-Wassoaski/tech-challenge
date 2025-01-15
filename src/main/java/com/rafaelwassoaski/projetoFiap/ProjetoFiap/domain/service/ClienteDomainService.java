@@ -28,4 +28,12 @@ public class ClienteDomainService {
             throw new Exception("Usuário deve ter CPF para ser criado");
         }
     }
+
+    public String pegarIdentificador(Cliente cliente) {
+        if(cliente.getCpf() != null){
+            return cliente.getCpf();
+        }
+
+        return cliente.getEmail();
+    }
 }

@@ -9,6 +9,4 @@ public interface ClienteUseCase {
     Cliente criar(Cliente cliente) throws Exception;
 
     Cliente buscarCliente(String identificador) throws Exception;
-
-    String pegarIdentificador(Cliente cliente);
 }

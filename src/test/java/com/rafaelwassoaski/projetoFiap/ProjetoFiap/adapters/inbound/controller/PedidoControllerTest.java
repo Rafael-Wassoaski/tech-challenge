@@ -6,14 +6,18 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository.JpaPedidoRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.repository.JpaUsuarioRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.*;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.StatusPedido;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.*;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -50,6 +54,8 @@ public class PedidoControllerTest {
     private PersistenceItemRepository<Sobremesa> sobremesaPersistenceItemRepository;
     @Autowired
     private WebApplicationContext webApplicationContext;
+    @Value("${custom.sal}")
+    private String sal;
     private MockMvc mockMvc;
 
     private String cpf = "000.000.000-00";
@@ -125,6 +131,9 @@ public class PedidoControllerTest {
     void deveriaRetornarTodoOsPedidos() throws Exception {
         Cliente cliente = new Cliente(cpf);
         persistenceClienteRepository.salvar(cliente);
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        Usuario usuario = new Usuario("funcionario@teste.com", "senha");
+        usuarioService.criar(usuario);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/pedidos/criar")
@@ -138,11 +147,21 @@ public class PedidoControllerTest {
                 .content(new Gson().toJson(cliente))
                 .contentType("application/json")
                 .accept(MediaType.APPLICATION_JSON));
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/usuarios/login")
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/pedidos/buscar/todos")
                         .content(new Gson().toJson(cliente))
                         .contentType("application/json")
+                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -178,13 +197,16 @@ public class PedidoControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(pedido.getId()))
-                .andExpect(jsonPath("cliente.cpf").value(pedido.getUsuario().getCpf()));
+                .andExpect(jsonPath("cliente.cpf").value(pedido.getCliente().getCpf()));
     }
 
     @Test
     void deveriaCriarUmPedidoComOUsuario() throws Exception {
         Cliente cliente = new Cliente(cpf);
         persistenceClienteRepository.salvar(cliente);
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        Usuario usuario = new Usuario("funcionario@teste.com", "senha");
+        usuarioService.criar(usuario);
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/pedidos/criar")
@@ -199,9 +221,19 @@ public class PedidoControllerTest {
 
         PedidoEntity pedido = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
 
+        result = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/usuarios/login")
+                        .content(new Gson().toJson(usuario))
+                        .contentType("application/json")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        TokenDTO tokenDTO = new Gson().fromJson(result.getResponse().getContentAsString(), TokenDTO.class);
+
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/pedidos/buscar/" + pedido.getId())
                         .contentType("application/json")
+                        .cookie(new Cookie("token", tokenDTO.getToken()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
         Optional<Pedido> optionalPedido = persistencePedidoRepository.buscarPorId(pedido.getId());

@@ -2,17 +2,20 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
 import com.google.gson.Gson;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.TokenDTO;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.*;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Acompanhamento;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -42,6 +45,8 @@ public class AcompanhamentoControllerTest {
     private MockMvc mockMvc;
     private String emailUsuario = "email@email.com";
     private String senhaUsuario = "senha";
+    @Value("${custom.sal}")
+    private String sal;
 
     @BeforeEach
     public void setUp() {
@@ -79,15 +84,9 @@ public class AcompanhamentoControllerTest {
     @Test
     void deveriaCriarUmAcompanhamento() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
-
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", 10, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
         Usuario usuarioSalvo = usuarioSalvoOptional.get();
@@ -123,15 +122,9 @@ public class AcompanhamentoControllerTest {
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarCriarUmAcompanhamento() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
-
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", 10, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/login")
@@ -159,16 +152,10 @@ public class AcompanhamentoControllerTest {
     @Test
     void deveriaAtualizarUmAcompanhamento() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
-
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         double precoOriginal = 10;
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", precoOriginal, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
         Usuario usuarioSalvo = usuarioSalvoOptional.get();
@@ -213,17 +200,12 @@ public class AcompanhamentoControllerTest {
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarAtualizarUmAcompanhamento() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
-
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         double precoOriginal = 10;
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", precoOriginal, "categoria");
         acompanhamentoPersistenceItemRepository.salvar(acompanhamento);
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/login")
@@ -253,15 +235,9 @@ public class AcompanhamentoControllerTest {
     @Test
     void deveriaDeletarUmAcompanhamento() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
-
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", 10, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
         Usuario usuarioSalvo = usuarioSalvoOptional.get();
@@ -302,16 +278,11 @@ public class AcompanhamentoControllerTest {
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarDeletarUmAcompanhamento() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
-
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         Acompanhamento acompanhamento = new Acompanhamento("acompanhamento1", 10, "categoria");
         acompanhamentoPersistenceItemRepository.salvar(acompanhamento);
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/login")

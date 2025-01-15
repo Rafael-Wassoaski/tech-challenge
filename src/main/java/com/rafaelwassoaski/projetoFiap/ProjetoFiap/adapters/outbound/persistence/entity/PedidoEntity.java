@@ -1,10 +1,7 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.StatusPedido;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Pedido;
 import jakarta.persistence.*;
-
-import java.util.Optional;
 
 @Entity
 public class PedidoEntity {
@@ -83,11 +80,11 @@ public class PedidoEntity {
         this.sobremesa = sobremesa;
     }
 
-    public ClienteEntity getUsuario() {
+    public ClienteEntity getCliente() {
         return cliente;
     }
 
-    public void setUsuario(ClienteEntity cliente) {
+    public void setCliente(ClienteEntity cliente) {
         this.cliente = cliente;
     }
 

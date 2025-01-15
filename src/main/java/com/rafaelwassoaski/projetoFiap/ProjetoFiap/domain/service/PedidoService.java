@@ -24,10 +24,13 @@ public class PedidoService {
 
     public boolean clientePodeVerPedido(Pedido pedido, Cliente cliente){
         Optional<Cliente> clientePedidoOptional = pedido.getCliente();
-        String emailClienteSolicitante = cliente.getEmail();
+        ClienteDomainService clienteDomainService = new ClienteDomainService();
+
+        String identificadorClienteSolicitante = clienteDomainService.pegarIdentificador(cliente);
 
         if (clientePedidoOptional.isPresent()) {
-            return emailClienteSolicitante.equals(clientePedidoOptional.get().getEmail());
+            String identificadorClientePedido = clienteDomainService.pegarIdentificador(clientePedidoOptional.get());
+            return identificadorClienteSolicitante.equals(identificadorClientePedido);
         }
         return true;
     }

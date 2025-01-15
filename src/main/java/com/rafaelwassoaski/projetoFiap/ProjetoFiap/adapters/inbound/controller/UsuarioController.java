@@ -32,20 +32,6 @@ public class UsuarioController {
     }
 
 
-    //TODO: Remover esse método depois
-    @PostMapping("/cadastro")
-    @ResponseStatus( HttpStatus.CREATED)
-    public void cadastrar(@RequestBody Usuario usuario) {
-        try {
-            UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, encriptador);
-            usuarioService.criar(usuario);
-        } catch (Exception e) {
-            log.error("Ocorreu um erro ao cadastrar o usuario", e);
-
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-    }
-
     @PostMapping("/login")
     @ResponseStatus(value = HttpStatus.OK)
     public TokenDTO logar(@RequestBody Usuario usuario) {

@@ -12,7 +12,7 @@ public class PedidoMapper {
         Optional<Bebida> optionalBebida = pegarBebidaOpcional(pedidoEntity.getBebida());
         Optional<Acompanhamento> optionalAcompanhamento = pegarAcompanhamentoOpcional(pedidoEntity.getAcompanhamento());
         Optional<Sobremesa> optionalSobremesa = pegarSobremesaOpcional(pedidoEntity.getSobremesa());
-        Optional<Cliente> clienteOptional = pegarCliente(pedidoEntity.getUsuario());
+        Optional<Cliente> clienteOptional = pegarCliente(pedidoEntity.getCliente());
 
         return new Pedido(pedidoEntity.getId(),
                 optionalLanche,
@@ -74,7 +74,7 @@ public class PedidoMapper {
         }
 
         if(pedido.getCliente().isPresent()){
-            pedidoEntity.setUsuario(ClienteMapper.converterParaClienteEntity(pedido.getCliente().get()));
+            pedidoEntity.setCliente(ClienteMapper.converterParaClienteEntity(pedido.getCliente().get()));
         }
         if(pedido.getLanche().isPresent()){
             pedidoEntity.setLanche(LancheMapper.converterParaLancheEntity(pedido.getLanche().get())) ;

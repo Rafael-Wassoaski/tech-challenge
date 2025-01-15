@@ -2,18 +2,21 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
 import com.google.gson.Gson;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto.TokenDTO;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Bebida;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Lanche;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -45,6 +48,8 @@ public class BebidaControllerTest {
     private String senhaUsuario = "senha";
     private String cpf = "000.000.000-00";
     private String nome = "teste";
+    @Value("${custom.sal}")
+    private String sal;
 
     @BeforeEach
     public void setUp() {
@@ -84,13 +89,8 @@ public class BebidaControllerTest {
     void deveriaCriarUmaBebida() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
 
         Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
         Usuario usuarioSalvo = usuarioSalvoOptional.get();
@@ -127,13 +127,8 @@ public class BebidaControllerTest {
     void deveriaRetornarUmErroQuandoUmClienteTentarCriarUmaBebida() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/login")
@@ -163,13 +158,8 @@ public class BebidaControllerTest {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         double precoOriginal = 10;
         Bebida bebida = new Bebida("bebida1", precoOriginal, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
 
         Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
         Usuario usuarioSalvo = usuarioSalvoOptional.get();
@@ -214,16 +204,11 @@ public class BebidaControllerTest {
     @Test
     void deveriaRetornarUmErroQuandoUmClienteTentarAtualizarUmaBebida() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
         double precoOriginal = 10;
         Bebida bebida = new Bebida("bebida1", precoOriginal, "categoria");
         bebidaPersistenceItemRepository.salvar(bebida);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/login")
@@ -254,13 +239,8 @@ public class BebidaControllerTest {
     void deveriaDeletarUmaBebida() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
 
         Optional<Usuario> usuarioSalvoOptional = persistenceUsuarioRepository.buscarPorEmail(usuario.getEmail());
         Usuario usuarioSalvo = usuarioSalvoOptional.get();
@@ -303,13 +283,8 @@ public class BebidaControllerTest {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
         Bebida bebida = new Bebida("bebida1", 10, "categoria");
         bebidaPersistenceItemRepository.salvar(bebida);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+        UsuarioService usuarioService = new UsuarioService(persistenceUsuarioRepository, new Encriptador(sal));
+        usuarioService.criar(usuario);
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/login")

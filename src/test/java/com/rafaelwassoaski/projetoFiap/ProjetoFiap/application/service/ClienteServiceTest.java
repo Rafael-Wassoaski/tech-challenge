@@ -2,6 +2,7 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Cliente;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.MapPersistenceClienteForTests;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service.ClienteDomainService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -44,7 +45,8 @@ public class ClienteServiceTest {
         String cpf = "000.000.000-00";
 
         Cliente cliente = new Cliente(cpf);
-        String identificador = clienteService.pegarIdentificador(cliente);
+        ClienteDomainService clienteDomainService = new ClienteDomainService();
+        String identificador = clienteDomainService.pegarIdentificador(cliente);
 
         Assertions.assertEquals(identificador, cpf);
     }
@@ -57,7 +59,8 @@ public class ClienteServiceTest {
         String nome = "teste";
 
         Cliente cliente = new Cliente(email, nome);
-        String identificador = clienteService.pegarIdentificador(cliente);
+        ClienteDomainService clienteDomainService = new ClienteDomainService();
+        String identificador = clienteDomainService.pegarIdentificador(cliente);
 
         Assertions.assertEquals(identificador, email);
     }

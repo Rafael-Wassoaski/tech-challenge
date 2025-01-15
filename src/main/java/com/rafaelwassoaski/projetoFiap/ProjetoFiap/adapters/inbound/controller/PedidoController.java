@@ -13,6 +13,7 @@ import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.Persistence
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceItemRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistencePedidoRepository;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service.ClienteDomainService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.JWTService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.utils.CookiesUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,7 +65,8 @@ public class PedidoController {
     public Pedido criarPedido(@RequestBody Cliente cliente) {
         try {
             ClienteUseCase clienteUseCase = new ClienteService(persistenceClienteRepository);
-            String identificador = clienteUseCase.pegarIdentificador(cliente);
+            ClienteDomainService clienteDomainService = new ClienteDomainService();
+            String identificador = clienteDomainService.pegarIdentificador(cliente);
             Cliente clienteSalvo = clienteUseCase.buscarCliente(identificador);
 
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
@@ -144,12 +146,12 @@ public class PedidoController {
 
     @GetMapping("/buscar/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Pedido buscarPedidoPorId(@PathVariable Integer id, HttpServletRequest request) {
+    public Pedido buscarPedidoPorId(@PathVariable Integer id, @RequestBody Cliente cliente) {
         try {
-            String token = CookiesUtils.extractTokenCookie(request).get();
-            String cpf = jwtService.getUsername(token);
             ClienteUseCase clienteUseCase = new ClienteService(persistenceClienteRepository);
-            Cliente cliente = clienteUseCase.buscarCliente(cpf);
+            ClienteDomainService clienteDomainService = new ClienteDomainService();
+            String identificador = clienteDomainService.pegarIdentificador(cliente);
+            Cliente clienteSalvo = clienteUseCase.buscarCliente(identificador);
 
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
@@ -157,7 +159,7 @@ public class PedidoController {
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
 
-            return pedidoService.buscarPorId(id, cliente);
+            return pedidoService.buscarPorId(id, clienteSalvo);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 

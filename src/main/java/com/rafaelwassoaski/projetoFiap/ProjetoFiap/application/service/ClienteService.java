@@ -38,13 +38,4 @@ public class ClienteService implements ClienteUseCase {
         return cliente.orElseThrow(
                 () -> new Exception("Cliente não existe"));
     }
-
-    @Override
-    public String pegarIdentificador(Cliente cliente) {
-        if(cliente.getCpf() != null){
-            return cliente.getCpf();
-        }
-
-        return cliente.getEmail();
-    }
 }

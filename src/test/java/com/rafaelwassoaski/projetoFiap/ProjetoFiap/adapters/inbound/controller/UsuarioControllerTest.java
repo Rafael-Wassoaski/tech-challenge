@@ -1,14 +1,17 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.inbound.controller;
 
 import com.google.gson.Gson;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service.UsuarioService;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.enums.Papel;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Usuario;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.PersistenceUsuarioRepository;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security.Encriptador;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -33,6 +36,8 @@ public class UsuarioControllerTest {
     private MockMvc mockMvc;
     String emailUsuario = "email@email.com";
     String senhaUsuario = "senha";
+    @Value("${custom.sal}")
+    private String sal;
 
     @BeforeEach
     public void setUp() {
@@ -45,45 +50,10 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    void deveriaCriarUmUsuarioComEmailESenha() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isCreated());
-
-        Optional<Usuario> usuarioCadastrado = mapPersistenceUsuarioForTests.buscarPorEmail(emailUsuario);
-
-        Assertions.assertTrue(usuarioCadastrado.isPresent());
-        Assertions.assertEquals(emailUsuario, usuarioCadastrado.get().getEmail());
-        Assertions.assertNotNull(usuarioCadastrado.get().getSenha());
-    }
-
-    @Test
-    void naoDeveriaCriarUmUsuarioGerentePelaApi() throws Exception {
-        Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
-        usuario.setPapel(Papel.GERENTE);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/usuarios/cadastro")
-                        .content(new Gson().toJson(usuario))
-                        .contentType("application/json")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isCreated());
-
-        Optional<Usuario> usuarioCadastrado = mapPersistenceUsuarioForTests.buscarPorEmail(emailUsuario);
-
-        Assertions.assertNotEquals(Papel.GERENTE, usuarioCadastrado.get().getPapel());
-    }
-
-    @Test
     void deveriaFazerLoginComUmUsuarioCadastrado() throws Exception {
         Usuario usuario = new Usuario(emailUsuario, senhaUsuario);
+        UsuarioService usuarioService = new UsuarioService(mapPersistenceUsuarioForTests, new Encriptador(sal));
+        usuarioService.criar(usuario);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/usuarios/cadastro")
