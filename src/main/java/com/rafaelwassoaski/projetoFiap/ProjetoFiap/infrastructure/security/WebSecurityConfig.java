@@ -28,9 +28,7 @@ public class WebSecurityConfig {
         http.httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/usuarios/cadastro").permitAll()
-                                .requestMatchers("/usuarios/login").permitAll()
-                                .requestMatchers("/pedidos/criar").permitAll()
+                                .anyRequest().permitAll()
                 )
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.disable())

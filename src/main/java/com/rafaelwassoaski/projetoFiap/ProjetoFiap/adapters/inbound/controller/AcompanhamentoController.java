@@ -46,7 +46,7 @@ public class AcompanhamentoController {
 
     @PostMapping("/criar")
     @ResponseStatus(HttpStatus.CREATED)
-    public void buscarTodosOsAcompanhamentos(@RequestBody Acompanhamento acompanhamento, HttpServletRequest request){
+    public Acompanhamento criarAcompanhamento(@RequestBody Acompanhamento acompanhamento, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
             String email = jwtService.getUsername(token);
@@ -54,7 +54,7 @@ public class AcompanhamentoController {
             Usuario usuario = usuarioService.buscarUsuario(email);
             AcompanhamentoService acompanhamentoService = new AcompanhamentoService(acompanhamentoPersistenceItemRepository);
 
-            acompanhamentoService.criar(acompanhamento, usuario);
+            return acompanhamentoService.criar(acompanhamento, usuario);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 
@@ -64,7 +64,7 @@ public class AcompanhamentoController {
 
     @PostMapping("/atualizar")
     @ResponseStatus(HttpStatus.OK)
-    public void atualizarAcompanhamento(@RequestBody Acompanhamento  acompanhamento, HttpServletRequest request){
+    public Acompanhamento atualizarAcompanhamento(@RequestBody Acompanhamento  acompanhamento, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
             String email = jwtService.getUsername(token);
@@ -72,7 +72,7 @@ public class AcompanhamentoController {
             Usuario usuario = usuarioService.buscarUsuario(email);
             AcompanhamentoService acompanhamentoService = new AcompanhamentoService(acompanhamentoPersistenceItemRepository);
 
-            acompanhamentoService.atualizar(acompanhamento, usuario);
+            return acompanhamentoService.atualizar(acompanhamento, usuario);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 

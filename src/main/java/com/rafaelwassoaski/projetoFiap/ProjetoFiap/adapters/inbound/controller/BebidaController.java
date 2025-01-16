@@ -44,7 +44,7 @@ public class BebidaController {
 
     @PostMapping("/criar")
     @ResponseStatus(HttpStatus.CREATED)
-    public void buscarTodasAsBebida(@RequestBody Bebida bebida, HttpServletRequest request){
+    public Bebida criarBebida(@RequestBody Bebida bebida, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
             String email = jwtService.getUsername(token);
@@ -52,7 +52,7 @@ public class BebidaController {
             Usuario usuario = usuarioService.buscarUsuario(email);
             BebidaService bebidaService = new BebidaService(bebidaPersistenceItemRepository);
 
-            bebidaService.criar(bebida, usuario);
+            return bebidaService.criar(bebida, usuario);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 
@@ -62,7 +62,7 @@ public class BebidaController {
 
     @PostMapping("/atualizar")
     @ResponseStatus(HttpStatus.OK)
-    public void atualizarBebida(@RequestBody Bebida bebida, HttpServletRequest request){
+    public Bebida atualizarBebida(@RequestBody Bebida bebida, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
             String email = jwtService.getUsername(token);
@@ -70,7 +70,7 @@ public class BebidaController {
             Usuario usuario = usuarioService.buscarUsuario(email);
             BebidaService bebidaService = new BebidaService(bebidaPersistenceItemRepository);
 
-            bebidaService.atualizar(bebida, usuario);
+            return bebidaService.atualizar(bebida, usuario);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 

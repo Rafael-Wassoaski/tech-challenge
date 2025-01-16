@@ -44,7 +44,7 @@ public class SobremesaController {
 
     @PostMapping("/criar")
     @ResponseStatus(HttpStatus.CREATED)
-    public void buscarTodosOsSobremesas(@RequestBody Sobremesa sobremesa, HttpServletRequest request){
+    public Sobremesa criarSobremesa(@RequestBody Sobremesa sobremesa, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
             String email = jwtService.getUsername(token);
@@ -52,7 +52,7 @@ public class SobremesaController {
             Usuario usuario = usuarioService.buscarUsuario(email);
             SobremesaService sobremesaService = new SobremesaService(sobremesaPersistenceItemRepository);
 
-            sobremesaService.criar(sobremesa, usuario);
+            return sobremesaService.criar(sobremesa, usuario);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 

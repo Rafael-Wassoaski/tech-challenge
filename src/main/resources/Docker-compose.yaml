@@ -1,9 +1,14 @@
 version: '3.9'
 
+#volumes:
+#  mysql_data:
+
 services:
   mysql:
     container_name: 'guide-mysql'
     image: 'mysql:latest'
+#    volumes:
+#      - mysql_data:/var/lib/mysql
     environment:
       - 'MYSQL_DATABASE=restaurante'
       - 'MYSQL_PASSWORD=teste'

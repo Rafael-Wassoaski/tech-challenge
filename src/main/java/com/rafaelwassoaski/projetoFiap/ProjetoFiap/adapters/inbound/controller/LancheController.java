@@ -46,7 +46,7 @@ public class LancheController {
 
     @PostMapping("/criar")
     @ResponseStatus(HttpStatus.CREATED)
-    public void buscarTodosOsLanches(@RequestBody Lanche  lanche, HttpServletRequest request){
+    public Lanche criarLanche(@RequestBody Lanche  lanche, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
             String email = jwtService.getUsername(token);
@@ -54,7 +54,7 @@ public class LancheController {
             Usuario usuario = usuarioService.buscarUsuario(email);
             LancheService lancheService = new LancheService(lanchePersistenceItemRepository);
 
-            lancheService.criar(lanche, usuario);
+            return lancheService.criar(lanche, usuario);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 
@@ -64,7 +64,7 @@ public class LancheController {
 
     @PostMapping("/atualizar")
     @ResponseStatus(HttpStatus.OK)
-    public void atualizarLanche(@RequestBody Lanche  lanche, HttpServletRequest request){
+    public Lanche atualizarLanche(@RequestBody Lanche  lanche, HttpServletRequest request){
         try {
             String token = CookiesUtils.extractTokenCookie(request).get();
             String email = jwtService.getUsername(token);
@@ -72,7 +72,7 @@ public class LancheController {
             Usuario usuario = usuarioService.buscarUsuario(email);
             LancheService lancheService = new LancheService(lanchePersistenceItemRepository);
 
-            lancheService.atualizar(lanche, usuario);
+            return lancheService.atualizar(lanche, usuario);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao criar o pedido", e);
 
