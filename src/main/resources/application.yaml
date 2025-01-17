@@ -3,25 +3,25 @@ spring:
     name: ProjetoFiap
 
   datasource:
-    url: jdbc:mysql://localhost:3306/restaurante
+    url: ${DATABASE_URL}
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: "teste"
-    password: "teste"
-  sql:
-    init:
-      mode: always
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
   jpa:
+    defer-datasource-initialization: true
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
+  sql:
+    init:
+      mode: always
 
 custom:
-  sal: salParaTeste
+  sal: ${SAL}
 
 security:
   jwt:
     expiration: 50000
-#    esta é uma chave para testes, não é utilizada além do ambiente de testes
-    signatureKey: "CoVixxWQ+xzC9tQ5ym90aBfmB+MhTT+4FEw3gPY0oTRo+Ys5wLqEuH/gqFv3R1diRSiwFY9Qw+WL/CAIlsZN0w=="
-
+    signatureKey: ${SIGNATURE_KEY}

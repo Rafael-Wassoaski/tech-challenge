@@ -473,4 +473,80 @@ public class PedidoControllerTest {
         Assertions.assertEquals(sobremesa.getNome(), pedido.getSobremesa().get().getNome());
     }
 
+    @Test
+    void deveriaIniciarOPreparoDeUmPedido() throws Exception {
+        Cliente cliente = new Cliente(cpf);
+        persistenceClienteRepository.salvar(cliente);
+
+        MockHttpSession session = new MockHttpSession();
+
+        Lanche lanche = new Lanche("lanche 1", 10);
+        lanchePersistenceItemRepository.salvar(lanche);
+        LancheDTO lancheDTO = new LancheDTO(lanche.getNome());
+
+        Bebida bebida = new Bebida("bebida 1", 10);
+        bebidaPersistenceItemRepository.salvar(bebida);
+        BebidaDTO bebidaDTO = new BebidaDTO(bebida.getNome());
+
+        Acompanhamento acompanhamento = new Acompanhamento("acompanhamento 1", 10);
+        acompanhamentoPersistenceItemRepository.salvar(acompanhamento);
+        AcompanhamentoDTO acompanhamentoDTO = new AcompanhamentoDTO(acompanhamento.getNome());
+
+        Sobremesa sobremesa = new Sobremesa("sobremesa 1", 10);
+        sobremesaPersistenceItemRepository.salvar(sobremesa);
+        SobremesaDTO sobremesaDTO = new SobremesaDTO(sobremesa.getNome());
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/pedidos/criar")
+                        .content(new Gson().toJson(cliente))
+                        .contentType("application/json")
+                        .session(session)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        PedidoEntity pedidoEntity = new Gson().fromJson(result.getResponse().getContentAsString(), PedidoEntity.class);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/pedidos/adicionar/lanche/" + pedidoEntity.getId())
+                        .content(new Gson().toJson(lancheDTO))
+                        .contentType("application/json")
+                        .session(session)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/pedidos/adicionar/bebida/" + pedidoEntity.getId())
+                        .content(new Gson().toJson(bebidaDTO))
+                        .contentType("application/json")
+                        .session(session)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/pedidos/adicionar/acompanhamento/" + pedidoEntity.getId())
+                        .content(new Gson().toJson(acompanhamentoDTO))
+                        .contentType("application/json")
+                        .session(session)
+                        .accept(MediaType.APPLICATION_JSON));
+
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/pedidos/adicionar/sobremesa/" + pedidoEntity.getId())
+                        .content(new Gson().toJson(sobremesaDTO))
+                        .contentType("application/json")
+                        .session(session)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/pedidos/preparar/" + pedidoEntity.getId())
+                .contentType("application/json")
+                .session(session)
+                .accept(MediaType.APPLICATION_JSON));
+
+        Optional<Pedido> optionalPedido = persistencePedidoRepository.buscarPorId(pedidoEntity.getId());
+
+        Assertions.assertTrue(optionalPedido.isPresent());
+        Pedido pedido = optionalPedido.get();
+        Assertions.assertNotNull(pedido.getLanche());
+        Assertions.assertEquals(StatusPedido.EM_PREPARACAO, pedido.getStatusPedido());
+    }
+
 }

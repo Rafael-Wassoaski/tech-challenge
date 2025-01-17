@@ -10,9 +10,9 @@ services:
 #    volumes:
 #      - mysql_data:/var/lib/mysql
     environment:
-      - 'MYSQL_DATABASE=restaurante'
-      - 'MYSQL_PASSWORD=teste'
-      - 'MYSQL_ROOT_PASSWORD=testeRoot'
-      - 'MYSQL_USER=teste'
+      - MYSQL_DATABASE=restaurante
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_USER=${DATABASE_USERNAME}
     ports:
       - '3306:3306'

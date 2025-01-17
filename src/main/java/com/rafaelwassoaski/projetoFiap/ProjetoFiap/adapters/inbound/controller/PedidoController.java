@@ -144,7 +144,7 @@ public class PedidoController {
         }
     }
 
-    @GetMapping("/buscar/{id}")
+    @PostMapping("/buscar/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Pedido buscarPedidoPorId(@PathVariable Integer id, @RequestBody Cliente cliente) {
         try {
@@ -223,7 +223,7 @@ public class PedidoController {
                     acompanhamentoPersistenceItemRepository,
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
-            return pedidoService.definirSobremesa(sobremesaDTO.getNomeDoSobremesa(), id);
+            return pedidoService.definirSobremesa(sobremesaDTO.getNomeDaSobremesa(), id);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao adicionar o acompanhamento ao pedido", e);
 
@@ -231,15 +231,15 @@ public class PedidoController {
         }
     }
 
-    @PostMapping("/preparar")
-    public Pedido prepararPedido(Pedido pedido) {
+    @PostMapping("/preparar/{id}")
+    public Pedido prepararPedido(@PathVariable int id) {
         try {
             PedidoService pedidoService = new PedidoService(lanchePersistenceItemRepository,
                     bebidaPersistenceItemRepository,
                     acompanhamentoPersistenceItemRepository,
                     sobremesaPersistenceItemRepository,
                     persistencePedidoRepository);
-            return pedidoService.prepararPedido(pedido.getId());
+            return pedidoService.prepararPedido(id);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao adicionar o acompanhamento ao pedido", e);
 

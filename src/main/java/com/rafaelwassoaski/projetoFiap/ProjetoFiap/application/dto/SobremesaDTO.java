@@ -1,13 +1,13 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.dto;
 
 public class SobremesaDTO {
-    String nomeDoSobremesa;
+    String nomeDaSobremesa;
 
-    public SobremesaDTO(String nomeDoSobremesa) {
-        this.nomeDoSobremesa = nomeDoSobremesa;
+    public SobremesaDTO(String nomeDaSobremesa) {
+        this.nomeDaSobremesa = nomeDaSobremesa;
     }
 
-    public String getNomeDoSobremesa() {
-        return nomeDoSobremesa;
+    public String getNomeDaSobremesa() {
+        return nomeDaSobremesa;
     }
 }
