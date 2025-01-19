@@ -23,12 +23,22 @@ public class MapPersistenceClienteForTests implements PersistenceClienteReposito
     @Override
     public Optional<Cliente> buscarPorEmail(String nome) {
         Cliente usuario = clienteMap.get(nome);
+
+        if(usuario == null){
+            return Optional.empty();
+        }
+
         return Optional.of(usuario);
     }
 
     @Override
     public Optional<Cliente> buscarPorCpf(String cpf) {
         Cliente usuario = clienteMap.get(cpf);
+
+        if(usuario == null){
+            return Optional.empty();
+        }
+
         return Optional.of(usuario);
     }
 

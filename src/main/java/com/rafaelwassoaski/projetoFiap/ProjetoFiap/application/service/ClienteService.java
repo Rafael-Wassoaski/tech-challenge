@@ -17,25 +17,38 @@ public class ClienteService implements ClienteUseCase {
     public Cliente criar(Cliente cliente) throws Exception {
         ClienteDomainService clienteDomainService = new ClienteDomainService();
 
+        String identificador = clienteDomainService.pegarIdentificador(cliente);
+        Optional<Cliente> clienteSalvo = buscarClientePorCPFOuEmail(identificador);
         clienteDomainService.clienteEhValido(cliente);
+
+        if(clienteSalvo.isPresent()){
+            throw new Exception("Já existe um cliente com este identificador");
+        }
+
 
         return persistenceClienteRepository.salvar(cliente);
     }
 
     @Override
     public Cliente buscarCliente(String identificador) throws Exception {
+        Optional<Cliente> cliente = buscarClientePorCPFOuEmail(identificador);
 
+        return cliente.orElseThrow(
+                () -> new Exception("Cliente não existe"));
+    }
+
+    private Optional<Cliente> buscarClientePorCPFOuEmail(String identificador){
         Optional<Cliente> cliente;
 
         cliente = persistenceClienteRepository.buscarPorCpf(identificador);
 
         if(cliente.isPresent()){
-            return cliente.get();
+            return cliente;
         }
 
         cliente = persistenceClienteRepository.buscarPorEmail(identificador);
 
-        return cliente.orElseThrow(
-                () -> new Exception("Cliente não existe"));
+        return cliente;
+
     }
 }

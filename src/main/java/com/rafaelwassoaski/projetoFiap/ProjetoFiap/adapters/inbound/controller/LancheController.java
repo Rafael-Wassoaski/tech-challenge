@@ -56,7 +56,7 @@ public class LancheController {
 
             return lancheService.criar(lanche, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao criar o lanche", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -74,7 +74,7 @@ public class LancheController {
 
             return lancheService.atualizar(lanche, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao atualizar o lanche", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -92,7 +92,7 @@ public class LancheController {
 
             lancheService.deletarPorNome(nomeLanche, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao deletar o lanche", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

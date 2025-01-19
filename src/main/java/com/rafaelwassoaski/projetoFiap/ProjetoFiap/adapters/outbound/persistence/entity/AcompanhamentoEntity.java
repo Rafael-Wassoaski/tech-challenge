@@ -1,17 +1,9 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Acompanhamento;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Bebida;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+import java.util.List;
+
 @Entity
 public class AcompanhamentoEntity {
 
@@ -24,6 +16,8 @@ public class AcompanhamentoEntity {
     private double preco;
     @Column
     private String categoria;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PedidoEntity> pedidos;
 
     public AcompanhamentoEntity(){}
 
@@ -81,5 +75,13 @@ public class AcompanhamentoEntity {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public List<PedidoEntity> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<PedidoEntity> pedidos) {
+        this.pedidos = pedidos;
     }
 }

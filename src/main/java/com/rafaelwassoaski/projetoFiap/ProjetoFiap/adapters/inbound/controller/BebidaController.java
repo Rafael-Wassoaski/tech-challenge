@@ -54,7 +54,7 @@ public class BebidaController {
 
             return bebidaService.criar(bebida, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao criar a bebida", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -72,7 +72,7 @@ public class BebidaController {
 
             return bebidaService.atualizar(bebida, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao atualizar a bebida", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -90,7 +90,7 @@ public class BebidaController {
 
             bebidaService.deletarPorNome(nomeBebida, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao deletar a bebida", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

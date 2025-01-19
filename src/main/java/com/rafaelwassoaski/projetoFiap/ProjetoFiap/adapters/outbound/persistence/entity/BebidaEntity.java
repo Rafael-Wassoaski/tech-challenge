@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 public class BebidaEntity {
 
@@ -20,6 +22,8 @@ public class BebidaEntity {
     private double preco;
     @Column
     private String categoria;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PedidoEntity> pedidos;
 
     public BebidaEntity() {
     }
@@ -78,5 +82,13 @@ public class BebidaEntity {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public List<PedidoEntity> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<PedidoEntity> pedidos) {
+        this.pedidos = pedidos;
     }
 }

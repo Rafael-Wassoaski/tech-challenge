@@ -190,7 +190,7 @@ public class PedidoControllerTest {
 
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/pedidos/buscar/" + pedido.getId())
+                        .post("/pedidos/buscar/" + pedido.getId())
                         .contentType("application/json")
                         .content(new Gson().toJson(cliente))
                         .accept(MediaType.APPLICATION_JSON))

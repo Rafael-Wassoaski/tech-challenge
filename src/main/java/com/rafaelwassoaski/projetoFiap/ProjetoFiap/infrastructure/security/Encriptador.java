@@ -1,10 +1,7 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.infrastructure.security;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
-
-import java.util.Base64;
 
 public class Encriptador {
 

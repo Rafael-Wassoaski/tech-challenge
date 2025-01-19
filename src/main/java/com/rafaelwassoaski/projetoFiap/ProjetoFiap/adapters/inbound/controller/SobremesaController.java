@@ -54,7 +54,7 @@ public class SobremesaController {
 
             return sobremesaService.criar(sobremesa, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao criar a sobremesa", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -72,7 +72,7 @@ public class SobremesaController {
 
             sobremesaService.atualizar(sobremesa, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao atualizar a sobremesa", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -90,7 +90,7 @@ public class SobremesaController {
 
             sobremesaService.deletarPorNome(nomeSobremesa, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao deletar a sobremesa", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

@@ -1,12 +1,8 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistence.entity;
 
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Lanche;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Sobremesa;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 public class SobremesaEntity {
@@ -20,6 +16,8 @@ public class SobremesaEntity {
     private double preco;
     @Column
     private String categoria;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PedidoEntity> pedidos;
 
     public SobremesaEntity() {
     }
@@ -78,5 +76,13 @@ public class SobremesaEntity {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public List<PedidoEntity> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<PedidoEntity> pedidos) {
+        this.pedidos = pedidos;
     }
 }

@@ -3,6 +3,7 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistenc
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Lanche;
 import jakarta.persistence.*;
 
+import java.util.List;
 
 
 @Entity
@@ -17,6 +18,8 @@ public class LancheEntity {
     private double preco;
     @Column
     private String categoria;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PedidoEntity> pedidos;
 
     public LancheEntity() {
     }
@@ -75,5 +78,13 @@ public class LancheEntity {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public List<PedidoEntity> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<PedidoEntity> pedidos) {
+        this.pedidos = pedidos;
     }
 }

@@ -8,16 +8,16 @@ public class PedidoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "lanche_id")
     private LancheEntity lanche;
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bebida_id")
     private BebidaEntity bebida;
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "acompanhamento_id")
     private AcompanhamentoEntity acompanhamento;
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sobremesa_id")
     private SobremesaEntity sobremesa;
     @ManyToOne(cascade = CascadeType.MERGE)

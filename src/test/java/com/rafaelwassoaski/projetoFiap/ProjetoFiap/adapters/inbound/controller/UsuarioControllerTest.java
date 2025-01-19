@@ -35,7 +35,7 @@ public class UsuarioControllerTest {
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
     String emailUsuario = "email@email.com";
-    String senhaUsuario = "senha";
+    String senhaUsuario = "projetoFiap";
     @Value("${custom.sal}")
     private String sal;
 

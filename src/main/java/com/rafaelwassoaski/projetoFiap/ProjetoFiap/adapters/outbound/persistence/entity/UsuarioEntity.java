@@ -11,6 +11,7 @@ public class UsuarioEntity {
     private int id;
     @Column(unique = true)
     private String email;
+    @Column
     private String nome;
     @Column(nullable = true)
     private String senha;

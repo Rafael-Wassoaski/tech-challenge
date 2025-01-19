@@ -2,6 +2,8 @@ package com.rafaelwassoaski.projetoFiap.ProjetoFiap.adapters.outbound.persistenc
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class ClienteEntity {
 
@@ -14,6 +16,8 @@ public class ClienteEntity {
     private String nome;
     @Column
     private String email;
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<PedidoEntity> pedidos;
 
     public ClienteEntity() {
     }
@@ -69,4 +73,12 @@ public class ClienteEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
+//    public List<PedidoEntity> getPedidos() {
+//        return pedidos;
+//    }
+//
+//    public void setPedidos(List<PedidoEntity> pedidos) {
+//        this.pedidos = pedidos;
+//    }
 }

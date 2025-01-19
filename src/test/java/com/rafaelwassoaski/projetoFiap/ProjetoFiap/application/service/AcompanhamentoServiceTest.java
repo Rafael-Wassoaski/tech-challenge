@@ -1,8 +1,7 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.application.service;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Acompanhamento;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Item;
-import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Sobremesa;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Bebida;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.repository.MapPersistenceItemForTests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,6 +25,21 @@ public class AcompanhamentoServiceTest {
 
         Assertions.assertNotNull(AcompanhamentoCriado);
         Assertions.assertInstanceOf(Acompanhamento.class, AcompanhamentoCriado);
+    }
+
+    @Test
+    public void naoDeveriaCriarDuasBebidasComOMesmoNome() throws Exception {
+        MapPersistenceItemForTests mapPersistenceForTests = new MapPersistenceItemForTests();
+        acompanhamentoService = new AcompanhamentoService(mapPersistenceForTests);
+        String nomeAcompanhamento = "Nome 1";
+        double valor = 10;
+        Acompanhamento acompanhamento = new Acompanhamento(nomeAcompanhamento, valor);
+
+        acompanhamentoService.criar(acompanhamento);
+
+        Assertions.assertThrows(Exception.class, () -> {
+            acompanhamentoService.criar(acompanhamento);
+        });
     }
 
 

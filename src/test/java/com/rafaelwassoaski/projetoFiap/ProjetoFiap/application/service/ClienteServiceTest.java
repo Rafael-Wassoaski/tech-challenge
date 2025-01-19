@@ -24,6 +24,20 @@ public class ClienteServiceTest {
     }
 
     @Test
+    void naoDeveriaCriarDoisUsuariosComOMesmoCPF() throws Exception {
+        mapPersistenceClienteForTests = new MapPersistenceClienteForTests();
+        clienteService = new ClienteService(mapPersistenceClienteForTests);
+        String cpf = "000.000.000-00";
+
+        Cliente cliente = new Cliente(cpf);
+        clienteService.criar(cliente);
+
+        Assertions.assertThrows(Exception.class, () -> {
+            clienteService.criar(cliente);
+        });
+    }
+
+    @Test
     void deveriaCriarUmUsuarioComEmailENomeMasSemCPF() throws Exception {
         mapPersistenceClienteForTests = new MapPersistenceClienteForTests();
         clienteService = new ClienteService(mapPersistenceClienteForTests);
@@ -37,6 +51,22 @@ public class ClienteServiceTest {
         Assertions.assertEquals(email, clienteSalvo.getEmail());
         Assertions.assertEquals(nome, clienteSalvo.getNome());
     }
+
+    @Test
+    void naoDeveriaCriarDoisUsuariosComOMesmoEmail() throws Exception {
+        mapPersistenceClienteForTests = new MapPersistenceClienteForTests();
+        clienteService = new ClienteService(mapPersistenceClienteForTests);
+        String email = "teste@teste.com";
+        String nome = "teste";
+
+        Cliente cliente = new Cliente(email, nome);
+        clienteService.criar(cliente);
+
+        Assertions.assertThrows(Exception.class, () -> {
+            clienteService.criar(cliente);
+        });
+    }
+
 
     @Test
     void deveriaRetornarOCpfComoIndetificador() throws Exception {

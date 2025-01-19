@@ -1,14 +1,14 @@
 version: '3.9'
 
-#volumes:
-#  mysql_data:
+volumes:
+  mysql_data: {}
 
 services:
   mysql:
     container_name: 'guide-mysql'
     image: 'mysql:latest'
-#    volumes:
-#      - mysql_data:/var/lib/mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=restaurante
       - MYSQL_PASSWORD=${DATABASE_PASSWORD}
@@ -16,3 +16,11 @@ services:
       - MYSQL_USER=${DATABASE_USERNAME}
     ports:
       - '3306:3306'
+  projeto_fiap:
+    container_name: 'restaurante'
+    image: 'rafaelwassoaski/projeto-fiap:1.0'
+    ports:
+      - '8080:8080'
+    restart: always
+    depends_on:
+      - "mysql"

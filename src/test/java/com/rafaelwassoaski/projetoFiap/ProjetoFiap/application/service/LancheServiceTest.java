@@ -27,6 +27,22 @@ public class LancheServiceTest {
         Assertions.assertInstanceOf(Lanche.class, lancheCriado);
     }
 
+    @Test
+    public void naoDeveriaCriarDoisLanchesComOMesmoNome() throws Exception {
+        MapPersistenceItemForTests mapPersistenceForTests = new MapPersistenceItemForTests();
+        lancheService = new LancheService(mapPersistenceForTests);
+        String nomeLanche = "Nome 1";
+        double valor = 10;
+        Lanche lanche = new Lanche(nomeLanche, valor);
+
+        lancheService.criar(lanche);
+
+
+        Assertions.assertThrows(Exception.class, () -> {
+            lancheService.criar(lanche);
+        });
+    }
+
 
     @Test
     void deveriaRetornarTodosOsItensSalvos() throws Exception {

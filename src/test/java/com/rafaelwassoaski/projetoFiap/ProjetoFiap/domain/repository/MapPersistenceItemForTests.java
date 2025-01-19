@@ -21,6 +21,10 @@ public class MapPersistenceItemForTests implements PersistenceItemRepository {
     @Override
     public Optional<Item> buscarPorNome(String nome) {
         Item item = this.itens.get(nome);
+
+        if(item == null){
+            return Optional.empty();
+        }
         return Optional.of(item);
     }
 

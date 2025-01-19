@@ -56,7 +56,7 @@ public class AcompanhamentoController {
 
             return acompanhamentoService.criar(acompanhamento, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao criar o acompanhamento", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -74,7 +74,7 @@ public class AcompanhamentoController {
 
             return acompanhamentoService.atualizar(acompanhamento, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao atualizar o acompanhamento", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -92,7 +92,7 @@ public class AcompanhamentoController {
 
             acompanhamentoService.deletarPorNome(nomeAcompanhamento, usuario);
         } catch (Exception e) {
-            log.error("Ocorreu um erro ao criar o pedido", e);
+            log.error("Ocorreu um erro ao deletar o acompanhamento", e);
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
