@@ -15,7 +15,7 @@ public class ClienteServiceTest {
     void deveriaCriarUmUsuarioApenasComCPF() throws Exception {
         mapPersistenceClienteForTests = new MapPersistenceClienteForTests();
         clienteService = new ClienteService(mapPersistenceClienteForTests);
-        String cpf = "000.000.000-00";
+        String cpf = "304.091.730-70";
 
         Cliente cliente = new Cliente(cpf);
         Cliente clienteSalvo = clienteService.criar(cliente);
@@ -27,7 +27,7 @@ public class ClienteServiceTest {
     void naoDeveriaCriarDoisUsuariosComOMesmoCPF() throws Exception {
         mapPersistenceClienteForTests = new MapPersistenceClienteForTests();
         clienteService = new ClienteService(mapPersistenceClienteForTests);
-        String cpf = "000.000.000-00";
+        String cpf = "304.091.730-70";
 
         Cliente cliente = new Cliente(cpf);
         clienteService.criar(cliente);
@@ -100,7 +100,7 @@ public class ClienteServiceTest {
     void deveriaBuscarUmUsuarioPorCPF() throws Exception {
         mapPersistenceClienteForTests = new MapPersistenceClienteForTests();
         clienteService = new ClienteService(mapPersistenceClienteForTests);
-        String cpf = "000.000.000-00";
+        String cpf = "304.091.730-70";
 
         Cliente cliente = new Cliente(cpf);
         clienteService.criar(cliente);

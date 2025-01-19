@@ -33,7 +33,7 @@ public class ClienteServiceTest {
     void deveriaValidarUmClienteComCpf() throws Exception {
         mapPersistenceUsuarioForTests = new MapPersistenceUsuarioForTests();
         clienteDomainService = new ClienteDomainService();
-        String cpf = "000.000.000-00";
+        String cpf = "304.091.730-70";
         Cliente cliente = new Cliente(cpf);
 
         Assertions.assertTrue(() -> {

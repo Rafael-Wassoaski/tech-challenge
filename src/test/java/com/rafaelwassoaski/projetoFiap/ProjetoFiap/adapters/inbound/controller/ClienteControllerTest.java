@@ -32,7 +32,7 @@ public class ClienteControllerTest {
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
     String emailCliente = "email@email.com";
-    String cpf = "000.000.000-00";
+    String cpf = "304.091.730-70";
     String nome = "teste";
 
     @BeforeEach

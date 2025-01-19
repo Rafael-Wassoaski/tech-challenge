@@ -1,6 +1,7 @@
 package com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.service;
 
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.model.Cliente;
+import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.validation.ValidardorCpf;
 import com.rafaelwassoaski.projetoFiap.ProjetoFiap.domain.validation.ValidardorEmail;
 
 public class ClienteDomainService {
@@ -24,8 +25,10 @@ public class ClienteDomainService {
     }
 
     private void validarCpf(String cpf) throws Exception {
-        if (cpf == null || cpf.isEmpty()) {
-            throw new Exception("Usuário deve ter CPF para ser criado");
+        ValidardorCpf validardorCpf = new ValidardorCpf();
+
+        if (!validardorCpf.validarCpf(cpf)) {
+            throw new Exception("Usuário deve ter um CPF válido para ser criado");
         }
     }
 
