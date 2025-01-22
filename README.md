@@ -1,7 +1,7 @@
 # Como executar o projeto
 
 1. Clone o repositório GitHub do projeto:  
-   [fiap-tech-challenge-1](https://github.com/Rafael-Wassoaski/fiap-tech-challenge-1)
+   [fiap-tech-challenge-1](https://github.com/Rafael-Wassoaski/tech-challange)
 
 2. Acesse a pasta `src\main\resources`.
 
