@@ -1,0 +1,423 @@
+openapi: 3.0.0
+info:
+  title: Projeto pós
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - bearerAuth: []
+tags:
+  - name: cliente
+  - name: usuário
+  - name: lanche
+  - name: bebida
+  - name: acompanhamento
+  - name: sobremesa
+  - name: pedido
+paths:
+  /clientes/cadastro:
+    post:
+      tags:
+        - cliente
+      summary: Criar cliente
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: rafael@teste.com
+                nome: rafael
+                cpf: 304.091.730-70
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json: {}
+  /usuarios/login:
+    post:
+      tags:
+        - usuário
+      summary: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: projetoFiap@projetoFiap.com
+                senha: projetoFiap
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /lanches/criar:
+    post:
+      tags:
+        - lanche
+      summary: Criar lanche
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nome: lanche 2
+                preco: 25
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json: {}
+  /lanches/atualizar:
+    post:
+      tags:
+        - lanche
+      summary: Atualizar lanche
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nome: lanche 2
+                preco: 50
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /lanches:
+    get:
+      tags:
+        - lanche
+      summary: Buscar todos os lanches
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /lanches/deletar/lanche 2:
+    delete:
+      tags:
+        - lanche
+      summary: Deletar lanche
+      responses:
+        '204':
+          description: Successful response
+          content:
+            application/json: {}
+  /bebidas/criar:
+    post:
+      tags:
+        - bebida
+      summary: Criar bebida
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nome: bebida 2
+                preco: 25
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json: {}
+  /bebidas/atualizar:
+    post:
+      tags:
+        - bebida
+      summary: Atualizar bebida
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nome: bebida 2
+                preco: 50
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /bebidas:
+    get:
+      tags:
+        - bebida
+      summary: Buscar todas as bebidas
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /bebidas/deletar/bebida 2:
+    delete:
+      tags:
+        - bebida
+      summary: Deletar bebida
+      responses:
+        '204':
+          description: Successful response
+          content:
+            application/json: {}
+  /acompanhamentos/criar:
+    post:
+      tags:
+        - acompanhamento
+      summary: Criar acompanhamento
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nome: acompanhamento 2
+                preco: 25
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json: {}
+  /acompanhamentos/atualizar:
+    post:
+      tags:
+        - acompanhamento
+      summary: Atualizar acompanhamento
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nome: acompanhamento 2
+                preco: 50
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /acompanhamentos:
+    get:
+      tags:
+        - acompanhamento
+      summary: Buscar todos os acompanhamentos
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /acompanhamentos/deletar/acompanhamento 2:
+    delete:
+      tags:
+        - acompanhamento
+      summary: Deletar acompanhamento
+      responses:
+        '204':
+          description: Successful response
+          content:
+            application/json: {}
+  /sobremesas/criar:
+    post:
+      tags:
+        - sobremesa
+      summary: Criar sobremesa
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nome: sobremesa 2
+                preco: 25
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json: {}
+  /sobremesas/atualizar:
+    post:
+      tags:
+        - sobremesa
+      summary: Atualizar sobremesa
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nome: sobremesa 2
+                preco: 50
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /sobremesas:
+    get:
+      tags:
+        - sobremesa
+      summary: Buscar todoas as sobremesas
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /sobremesas/deletar/sobremesa 2:
+    delete:
+      tags:
+        - sobremesa
+      summary: Deletar sobremesa
+      responses:
+        '204':
+          description: Successful response
+          content:
+            application/json: {}
+  /pedidos/criar:
+    post:
+      tags:
+        - pedido
+      summary: criar pedido cpf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: rafael@teste.com
+                nome: rafael
+                cpf: 000.000.000-00
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json: {}
+  /pedidos/criar/anonimo:
+    post:
+      tags:
+        - pedido
+      summary: criar pedido anonimo
+      requestBody:
+        content: {}
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json: {}
+  /pedidos/buscar/1:
+    post:
+      tags:
+        - pedido
+      summary: buscar pedido por id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: rafael@teste.com
+                nome: rafael
+                cpf: 000.000.000-00
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /pedidos/buscar/todos:
+    get:
+      tags:
+        - pedido
+      summary: buscar todos os pedidos
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /pedidos/preparar/1:
+    post:
+      tags:
+        - pedido
+      summary: preparar pedido
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /pedidos/adicionar/lanche/1:
+    post:
+      tags:
+        - pedido
+      summary: adicionar lanche
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nomeDoLanche: lanche Teste
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /pedidos/adicionar/bebida/1:
+    post:
+      tags:
+        - pedido
+      summary: adicionar bebida
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nomeDaBebida: bebida Teste
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /pedidos/adicionar/sobremesa/1:
+    post:
+      tags:
+        - pedido
+      summary: adicionar sobremesa
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nomeDaSobremesa: sobremesa Teste
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /pedidos/adicionar/acompanhamento/1:
+    post:
+      tags:
+        - pedido
+      summary: adicionar acompanhamento
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                nomeDoAcompanhamento: acompanhamento Teste
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
