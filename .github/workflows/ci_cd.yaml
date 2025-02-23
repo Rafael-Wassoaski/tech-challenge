@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -20,7 +20,12 @@ jobs:
           password: ${{secrets.docker_hub}}
           
 
-      - name: docker build
-        uses: actions/setup-node@v2
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v6.14.0
+        with:
+          tags: latest
+          context: .
+          push: true
+          
     
           
