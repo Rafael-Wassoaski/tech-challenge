@@ -23,7 +23,7 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v6.14.0
         with:
-          tags: latest
+          tags: rafaelwassoaski/projeto-fiap:latest
           context: .
           push: true
           
